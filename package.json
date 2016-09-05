@@ -1,0 +1,37 @@
+{
+  "name": "chartaccent",
+  "version": "0.0.1",
+  "description": "A annotation creation tool.",
+  "main": "index.js",
+  "scripts": {
+    "build:chartaccent": "node chart-accent/compile.js chart-accent/module.js build/chart-accent.js",
+    "build:pegjs": "pegjs -e Expression.Parser --format globals --allowed-start-rules start,string_start chart-accent/expression/parser.pegjs",
+    "build:less": "lessc chart-accent/styles/chart-accent.less build/chart-accent.css",
+    "build:standalone": "browserify standalone/js/standalone.js -o standalone/chartaccent.js && lessc standalone/css/styles.less standalone/styles.css",
+    "build": "npm run build:less && npm run build:pegjs && npm run build:chartaccent && npm run build:standalone"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chartaccent/chartaccent.git"
+  },
+  "keywords": [
+    "visualization",
+    "annotation"
+  ],
+  "author": "Donghao Ren",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chartaccent/chartaccent/issues"
+  },
+  "homepage": "https://github.com/chartaccent/chartaccent#readme",
+  "devDependencies": {
+    "browserify": "^13.1.0",
+    "chroma-js": "^1.2.1",
+    "d3": "^3.0.0",
+    "jquery": "^3.1.0",
+    "knockout": "^3.4.0",
+    "less": "^2.7.1",
+    "pegjs": "^0.10.0",
+    "typeahead.js-browserify": "^1.0.7"
+  }
+}

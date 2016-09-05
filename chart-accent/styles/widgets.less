@@ -1,0 +1,385 @@
+.chartaccent-widgets {
+    .float-right { float: right; }
+
+    header, footer, section, h1, h2, h3, h4, p, div, span, label {
+        margin: 0; padding: 0; border: none; background: none;
+        font-size: 1em;
+        line-height: 1em;
+    }
+
+    header {
+        font-size: 14px;
+        background: linear-gradient(#666, #555);
+        color: white;
+        padding: 5px 3px;
+    }
+
+    p, ul, ol {
+        margin: 4px 0;
+        padding: 0 3px;
+    }
+
+    dl {
+        margin: 2px 0;
+        padding: 0 3px;
+    }
+
+    ul, ol {
+        list-style-type: none;
+    }
+
+    .inline-widgets { line-height: 28px; }
+
+    dl {
+        @width: 45px;
+        dd, dt {
+            margin: 0;
+            padding: 0;
+        }
+        dt {
+            display: block;
+            float: left;
+            font-size: 12px;
+            width: @width;
+            box-sizing: border-box;
+            padding-right: 2px;
+            line-height: 28px;
+            text-align: right;
+        }
+        dd {
+            display: block;
+            margin-left: @width + 2px;
+            line-height: 28px;
+        }
+    }
+
+    input {
+        margin: 0;
+        padding: 0;
+        outline: 0;
+        font-size: 14px;
+        line-height: 14px;
+        height: 24px;
+        padding: 0px 3px;
+        border: 1px solid #CCC;
+        background: white;
+        &:focus, &:hover {
+            border: 1px solid #AAA;
+            box-shadow: 0 0 3px rgba(0, 0, 0, 0.2) inset;
+        }
+        box-sizing: border-box;
+        width: 100%;
+        font-family: Helvetica, Arial, sans-serif;
+        border-radius: 2px;
+    }
+    .input-updown {
+        display: inline-block;
+        height: 24px;
+        input {
+            border: 1px solid #CCC;
+            border-radius: 2px 0 0 2px;
+            border-right: none;
+        }
+        & > span {
+            display: inline-block;
+            height: 24px;
+            width: 12px;
+            vertical-align: top;
+            border-radius: 0 2px 2px 0;
+            overflow: hidden;
+            .btn-up, .btn-down {
+                display: block;
+                top: 0; left: 0;
+                width: 12px;
+                height: 12px;
+                font-size: 9px;
+                line-height: 12px;
+                text-align: center;
+                cursor: pointer;
+                background: #CCC;
+                &:hover, &.active {
+                    background-color: rgba(0, 0, 0, 0.6);
+                    color: white;
+                }
+                &:active {
+                    background-color: rgba(0, 0, 0, 0.9);
+                    color: white;
+                }
+                &:hover.active {
+                }
+                &:hover.active {
+                    background-color: rgba(0, 0, 0, 0.9);
+                }
+            }
+        }
+    }
+    .input-fontsize {
+        display: inline-block;
+        height: 24px;
+        input {
+            border: 1px solid #CCC;
+            border-radius: 2px 0 0 2px;
+            border-right: none;
+        }
+        .dropdown {
+            display: inline-block;
+            height: 24px;
+            width: 14px;
+            line-height: 24px;
+            font-size: 12px;
+            vertical-align: top;
+            cursor: pointer;
+            background: #DDD;
+            border-radius: 0 2px 2px 0;
+            &:hover, &.active {
+                background-color: rgba(0, 0, 0, 0.6);
+                color: white;
+            }
+            &:active {
+                background-color: rgba(0, 0, 0, 0.9);
+                color: white;
+            }
+            &:hover.active {
+            }
+            &:hover.active {
+                background-color: rgba(0, 0, 0, 0.9);
+            }
+        }
+        .btn {
+            margin-left: 1px;
+        }
+    }
+    section.annotations {
+        position: relative;
+
+        .position-separator {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        & > div > div.annotation {
+            margin: 0; padding: 0 3px;
+            font-size: 14px;
+            height: 24px;
+            line-height: 24px;
+
+            .btn {
+                padding: 2px 2px;
+                font-size: 10px;
+                line-height: 12px;
+                font-size: 12px;
+                margin: 4px 0;
+                vertical-align: top;
+                border: none;
+                &.btn-danger {
+                    background: lighten(#d62728, 30%);
+                    color: darken(#d62728, 30%);
+                    &:hover {
+                        background: #d62728;
+                        color: white;
+                    }
+                }
+            }
+            .icon {
+                display: inline-block;
+                padding: 2px 2px;
+                font-size: 10px;
+                line-height: 12px;
+                font-size: 12px;
+                margin: 4px 0;
+                vertical-align: top;
+                border: none;
+            }
+            .left {
+                float: left;
+            }
+            label {
+                display: block;
+                margin-left: 32px;
+                margin-right: 24px;
+                line-height: 24px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                cursor: pointer;
+            }
+            .right {
+                float: right;
+            }
+            &:not(:last-child) {
+                border-bottom: 1px solid #F0F0F0;
+            }
+
+            cursor: pointer;
+            background-color: #FFFFFF;
+            &.active {
+                background-color: #E0E0E0;
+            }
+            &:hover {
+                background-color: #F0F0F0;
+                &.active {
+                    background-color: #D8D8D8;
+                }
+            }
+        }
+    }
+    section.editor {
+    }
+
+    .arrayeditor-container {
+        overflow: hidden;
+        // .right {
+        //     width: 21px;
+        //     float: right;
+        //     .btn {
+        //         padding: 2px 2px;
+        //         font-size: 10px;
+        //         line-height: 12px;
+        //         font-size: 12px;
+        //         margin: 4px 2px;
+        //         vertical-align: top;
+        //         border: none;
+        //     }
+        // }
+        // .left {
+        //     .right();
+        //     float: left;
+        // }
+        // .middle {
+        //     margin-right: 21px;
+        //     margin-left: 21px;
+        // }
+        .clearfix();
+    }
+    .arrayeditor-none, p.nothing {
+        margin: 4px 0;
+        padding: 0 3px;
+        font-size: 12px;
+        color: gray;
+    }
+
+    .btn {
+        display: inline-block;
+        vertical-align: baseline;
+        padding: 4px 6px;
+        padding-top: 5px;
+        background-color: rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        border-radius: 2px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+        &:hover, &.active {
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+        }
+        &:active {
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+        }
+        &:hover.active {
+        }
+        &:hover.active {
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        &.btn-toggle {
+            @color_active: #606060;
+            @color_normal: #F0F0F0;
+
+            background-color: @color_normal;
+            color: black;
+            &.active {
+                background-color: @color_active;
+                color: white;
+            }
+            &:hover {
+                background-color: darken(@color_normal, 10%);
+                color: black;
+                &.active {
+                    background-color: darken(@color_active, 10%);
+                    color: white;
+                }
+            }
+            &:active {
+                background-color: darken(darken(@color_normal, 10%), 10%);
+                color: black;
+                &.active {
+                    background-color: lighten(@color_active, 10%);
+                    color: white;
+                }
+            }
+        }
+    }
+
+    .btn-group-switch {
+        display: inline-block;
+        vertical-align: baseline;
+        background-color: rgba(0, 0, 0, 0.05);
+        cursor: pointer;
+        border-radius: 2px;
+        padding-top: 1px;
+        padding-bottom: 1px;
+        box-shadow: 0 0 2px rgba(0, 0, 0, 0.5) inset;
+
+        & > span {
+            display: inline-block;
+            vertical-align: baseline;
+            padding: 4px 6px;
+            border-radius: 2px;
+
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.2);
+            }
+            &.active {
+                background-color: rgba(0, 0, 0, 0.6);
+                color: white;
+            }
+            &:active {
+                background-color: rgba(0, 0, 0, 0.9);
+                color: white;
+            }
+
+            &:not(:last-child) {
+                margin-right: 1px;
+            }
+            &:first-child { margin-left: 1px; }
+            &:last-child { margin-right: 1px; }
+        }
+    }
+
+    .toggle-btn {
+        display: inline-block;
+        vertical-align: baseline;
+        padding: 4px 6px;
+        padding-top: 5px;
+        cursor: pointer;
+        border-radius: 2px;
+        @color_active: #606060;
+        @color_normal: #F0F0F0;
+
+        // background-color: @color_normal;
+        color: black;
+        &.active {
+            background-color: @color_active;
+            color: white;
+        }
+        &:hover {
+            background-color: darken(@color_normal, 10%);
+            color: black;
+            &.active {
+                background-color: darken(@color_active, 10%);
+                color: white;
+            }
+        }
+        &:active {
+            background-color: darken(darken(@color_normal, 10%), 10%);
+            color: black;
+            &.active {
+                background-color: lighten(@color_active, 10%);
+                color: white;
+            }
+        }
+    }
+}

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>ChartAccent: Create and Annotate Charts</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script type="text/javascript" src="js/FileSaver.min.js"></script>
+    <script type="text/javascript" src="js/gif.js"></script>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="navigation">
+        <a href="index.html" class="title" style="float: right">ChartAccent</a>
+        <span data-bind="foreach: stages"><button class="stage" data-bind="
+            css: {
+                active: $root.current_stage() == $data,
+                fade: $root.stages.indexOf($root.current_stage()) > $root.stages.indexOf($data),
+            },
+            click: function() {
+                if($root.stages.indexOf($root.current_stage()) > $root.stages.indexOf($data)) {
+                    $root.set_current_stage($data)
+                }
+            }
+        "><span class="text" data-bind="text: strings.stages[$data]"></span><span class="arrow">&raquo;</span></button></span>
+    </div>
+
+    <div class="stage-tab" data-bind="css: { active: $root.current_stage() == 'import' }">
+        <div data-bind="ifnot: data_columns">
+            <section>
+                <h2>Choose data file (CSV)</h2>
+                <p>
+                    <label class="btn" for="file-upload">Choose File</label>
+                    <input id="file-upload" style="display: none;" type="file" accept=".csv" data-bind="event: { change: function() { importCSV($element.files[0]) } }" />
+                </p>
+                <p>Your file will NOT be uploaded to our server.</p>
+                <p>Load sample data:
+                    <span data-bind="foreach: sample_datasets">
+                        <button class="btn-inline" style="margin-left: 10px" data-bind="click: function() { $root.importCSVFromURL($data.csv); }, text: $data.name"></button>
+                    </span>
+                </p>
+            </section>
+        </div>
+        <div data-bind="if: data_columns">
+            <section>
+                <h2>Check column types and digits</h2>
+                <p>ChartAccent automatically detect data types and set the number of displayed digits.</p>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr class="column-name" data-bind="foreach: data_columns">
+                                <th data-bind="text: $data.name"></th>
+                            </tr>
+                            <tr class="column-type" data-bind="foreach: data_columns">
+                                <th>
+                                    <select data-bind="value: $data.type">
+                                        <option value="text">Text</option>
+                                        <option value="number">Number</option>
+                                    </select>
+                                    <span data-bind="visible: $data.type() == 'number'">
+                                        <button class="btn-inline" data-bind="click: IncrementObservable.bind(null, $data.digits, -1, 0, 10)">.0</button>
+                                        <button class="btn-inline" data-bind="click: IncrementObservable.bind(null, $data.digits, +1, 0, 10)">.00</button>
+                                    </span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: data_rows">
+                            <tr data-bind="foreach: $root.data_columns">
+                                <td data-bind="
+                                    text: FormatTableItem($data, $parent[$data.name]),
+                                    css: {
+                                        type_number: $data.type() == 'number',
+                                        type_text: $data.type() == 'text'
+                                    }
+                                "></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <p style="text-align: right"><button class="btn" data-bind="click: $root.set_current_stage.bind($root, 'visualization')">Create Chart &raquo;</button></p>
+        </div>
+    </div>
+    <div class="stage-tab" data-bind="css: { active: $root.current_stage() == 'visualization' }">
+        <section>
+            <h2>Choose chart</h2>
+            <p data-bind="foreach: chart_types" style="text-align: left;">
+                <span class="chart-type" data-bind="
+                    css: {
+                        active: $root.chart_type() == $data.id,
+                    },
+                    click: function() { $root.set_chart_type($data.id); }
+                ">
+                    <img data-bind="attr: { src: $data.image }" />
+                    <span data-bind="text: $data.name"></span>
+                </span>
+            </p>
+        </section>
+        <div data-bind="if: chart_type" class="row">
+            <section>
+                <div class="col-8">
+                    <h2>Preview Chart</h2>
+                    <div data-bind="if: chart_information">
+                        <div class="chart-container" data-bind="chartaccent_chart: chart_information"></div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <h2>Specify chart options</h2>
+                    <h3>General</h3>
+                    <p-widget-row>
+                        <p-widget-col class="col-12">
+                            <label>Title</label>
+                            <input type="text" data-bind="value: $root.chart_options.title" />
+                        <p-widget-col>
+                    </p-widget-row>
+                    <p-widget-row>
+                        <p-widget-col class="col-6">
+                            <label>Width</label>
+                            <input type="text" style="text-align: right;" data-bind="numeric, value: $root.chart_options.width" /> px
+                        </p-widget-col>
+                        <p-widget-col class="col-6">
+                            <label>Height</label>
+                            <input type="text" style="text-align: right;" data-bind="numeric, value: $root.chart_options.height" /> px
+                        </p-widget-col>
+                    </p-widget-row>
+                    <div data-bind="if: chart_type() == 'barchart' || chart_type() == 'linechart'">
+                        <h3>X Axis</h3>
+                        <p-widget-row>
+                            <p-widget-col class="col-12">
+                                <label>Column</label>
+                                <select data-bind="
+                                    options: $root.data_columns_all,
+                                    value: $root.chart_options.x_column
+                                    "></select>
+                                <span class="error" data-bind="if: bar_chart_x_column_multiple_value"> &larr; Must contain unique values.</span>
+                            </p-widget-col>
+                        </p-widget-row>
+                        <h3>Y Axis</h3>
+                        <p-widget-row>
+                            <p-widget-col class="col-6">
+                                <label>Min</label>
+                                <input type="text" placeholder="0" style="text-align: right;" data-bind="numeric, value: $root.chart_options.scale_y_min" />
+                            </p-widget-col>
+                            <p-widget-col class="col-6">
+                                <label>Max</label>
+                                <input type="text" placeholder="auto" style="text-align: right;" data-bind="numeric, value: $root.chart_options.scale_y_max" />
+                            </p-widget-col>
+                        </p-widget-row>
+                        <p-widget-row>
+                            <p-widget-col class="col-12">
+                                <label>Label</label>
+                                <input type="text" data-bind="value: $root.chart_options.scale_y_label" />
+                            </p-widget-col>
+                        </p-widget-row>
+                        <h3>Columns</h3>
+                        <div data-bind="foreach: $root.chart_options.y_columns">
+                            <p-widget-row><p-widget-col class="col-12">
+                                <label>Column <span data-bind="text: $index() + 1"></span></label>
+                                <select data-bind="
+                                    options: $root.data_columns_number,
+                                    value: $rawData
+                                "></select>
+                                <button class="btn-inline" style="margin-left: 3px" data-bind="click: function() { $root.chart_options.y_columns.remove($rawData); }">Remove</button>
+                            </p-widget-col></p-widget-row>
+                        </div>
+                        <p>
+                            <p-widget-row><p-widget-col class="col-12">
+                                <label></label>
+                                <button class="btn-inline" data-bind="click: function() { $root.chart_options.y_columns.push(ko.observable()); }">Add Column</button>
+                                <span class="ca-error" data-bind="if: $root.chart_options.y_columns().length == 0"> &larr; At least one column is needed.<span>
+                            </p-widget-col></p-widget-row>
+                        </p>
+                    </div>
+                    <div data-bind="if: chart_type() == 'scatterplot'">
+                        <h3>X Axis</h3>
+                        <p-widget-row>
+                            <p-widget-col class="col-12">
+                                <label>Column</label>
+                                <select data-bind="
+                                    options: $root.data_columns_number,
+                                    value: $root.chart_options.x_column
+                                    "></select>
+                            </p-widget-col>
+                        </p-widget-row>
+                        <p-widget-row>
+                            <p-widget-col class="col-6">
+                                <label>Min</label>
+                                <input type="text" placeholder="auto" style="text-align: right;" data-bind="numeric, value: $root.chart_options.scale_x_min" />
+                            </p-widget-col>
+                            <p-widget-col class="col-6">
+                                <label>Max</label>
+                                <input type="text" placeholder="auto" style="text-align: right;" data-bind="numeric, value: $root.chart_options.scale_x_max" />
+                            </p-widget-col>
+                        </p-widget-row>
+                        <p-widget-row>
+                            <p-widget-col class="col-12">
+                                <label>Label</label>
+                                <input type="text" data-bind="value: $root.chart_options.scale_x_label" />
+                            </p-widget-col>
+                        </p-widget-row>
+                        <h3>Y Axis</h3>
+                        <p-widget-row>
+                            <p-widget-col class="col-12">
+                                <label>Column</label>
+                                <select data-bind="
+                                    options: $root.data_columns_number,
+                                    value: $root.chart_options.y_column
+                                    "></select>
+                            </p-widget-col>
+                        </p-widget-row>
+                        <p-widget-row>
+                            <p-widget-col class="col-6">
+                                <label>Min</label>
+                                <input type="text" placeholder="auto" style="text-align: right;" data-bind="numeric, value: $root.chart_options.scale_y_min" />
+                            </p-widget-col>
+                            <p-widget-col class="col-6">
+                                <label>Max</label>
+                                <input type="text" placeholder="auto" style="text-align: right;" data-bind="numeric, value: $root.chart_options.scale_y_max" />
+                            </p-widget-col>
+                        </p-widget-row>
+                        <p-widget-row>
+                            <p-widget-col class="col-12">
+                                <label>Label</label>
+                                <input type="text" data-bind="value: $root.chart_options.scale_y_label" />
+                            </p-widget-col>
+                        </p-widget-row>
+                        <h3>Points</h3>
+                        <p-widget-row>
+                            <p-widget-col class="col-12">
+                                <label>Name</label>
+                                <select data-bind="
+                                    options: $root.data_columns_all,
+                                    value: $root.chart_options.name_column
+                                    "></select>
+                            </p-widget-col>
+                        </p-widget-row>
+                        <p-widget-row>
+                            <p-widget-col class="col-12">
+                                <label>Color</label>
+                                <select data-bind="
+                                    options: $root.data_columns_all,
+                                    optionsCaption: 'Please select...',
+                                    value: $root.chart_options.color_column
+                                    "></select>
+                            </p-widget-col>
+                        </p-widget-row>
+                        <p-widget-row>
+                            <p-widget-col class="col-12">
+                                <label>Size</label>
+                                <select data-bind="
+                                    options: $root.data_columns_number,
+                                    optionsCaption: 'Please select...',
+                                    value: $root.chart_options.size_column
+                                    "></select>
+                                <input type="text" style="text-align: right; width: 5em;" data-bind="numeric, value: $root.chart_options.size_scale" /> x
+                            </p-widget-col>
+                        </p-widget-row>
+                    </div>
+                </div>
+                <div style="clear: both"></div>
+            </section>
+            <p style="text-align: right"><button class="btn" data-bind="click: $root.set_current_stage.bind($root, 'annotation')">Annotate and Export &raquo;</button></p>
+
+        </div>
+    </div>
+    <div class="stage-tab" data-bind="css: { active: $root.current_stage() == 'annotation' }">
+        <section>
+            <h2>Annotate the Chart
+            </h2>
+            <div data-bind="if: chart_information() && $root.current_stage() == 'annotation'">
+                <div class="chart-accent-container" data-bind="chartaccent_annotate_chart: chart_information"></div>
+                <div style="clear: both"></div>
+            </div>
+        </section>
+        <p style="text-align: right">
+            <button class="btn" data-bind="click: $root.export_as.bind($root, 'gif')">Export Animated GIF</button>
+            <button class="btn" data-bind="click: $root.export_as.bind($root, 'png')">Export PNG</button>
+            <button class="btn" data-bind="click: $root.export_as.bind($root, 'svg')">Export SVG</button>
+        </p>
+    </div>
+</div>
+<script type="text/javascript" src="chartaccent.js"></script>
+</body>
+</html>
