@@ -11,7 +11,7 @@
 
 <div class="wrapper">
     <div class="navigation">
-        <a href="index.html" class="title" style="float: right">ChartAccent</a>
+        <a href="index.html" class="title" style="float: right">About</a>
         <span data-bind="foreach: stages"><button class="stage" data-bind="
             css: {
                 active: $root.current_stage() == $data,
@@ -33,7 +33,7 @@
                     <label class="btn" for="file-upload">Choose File</label>
                     <input id="file-upload" style="display: none;" type="file" accept=".csv" data-bind="event: { change: function() { importCSV($element.files[0]) } }" />
                 </p>
-                <p>Your file will NOT be uploaded to our server.</p>
+                <p style="color: #888">Your file will NOT be uploaded to our server.</p>
                 <p>Load sample data:
                     <span data-bind="foreach: sample_datasets">
                         <button class="btn-inline" style="margin-left: 10px" data-bind="click: function() { $root.importCSVFromURL($data.csv); }, text: $data.name"></button>
@@ -277,6 +277,7 @@
             <button class="btn" data-bind="click: $root.export_as.bind($root, 'png')">Export PNG</button>
             <button class="btn" data-bind="click: $root.export_as.bind($root, 'svg')">Export SVG</button>
         </p>
+        <p style="text-align: right" data-bind="text: $root.export_status"></p>
     </div>
 </div>
 <script type="text/javascript" src="chartaccent.js"></script>

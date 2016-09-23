@@ -78,9 +78,10 @@ function BaseChart(element, info, config) {
     });
 
     var p_buttons = element.append("p").style("clear", "both").style("text-align", "right");
-    var export_as = function(type) {
+    var export_as = function(type, callback_complete) {
         var do_download = function(url) {
             saveAs(url, "chartaccent." + type);
+            callback_complete();
         };
         if(type == "svg") {
             var blob = self.chartaccent.getSVGDataBlob();

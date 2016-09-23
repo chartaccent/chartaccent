@@ -1,0 +1,54 @@
+@import "reset.less";
+@import "../../node_modules/bootstrap/less/bootstrap.less";
+
+// Custom rules:
+h1.section-title {
+    text-align: center;
+    margin-top: 100px;
+}
+h2.section-title {
+    text-align: center;
+    margin-top: 100px;
+}
+
+.btn-chartaccent {
+  //.button-variant(@btn-primary-color; @btn-primary-bg; @btn-primary-border);
+  .button-variant(white; #ff7f0e; darken(#ff7f0e, 10%));
+}
+
+h1 {
+    margin: 1em 0;
+    font-size: 48px;
+}
+
+h2 {
+    margin: 1em 0;
+    font-size: 36px;
+}
+
+p {
+    margin: 1em 0;
+}
+
+.lead {
+    margin-top: 50px;
+}
+
+.page-section {
+    min-height: 600px;
+}
+
+.page-section-title {
+    background-color: #FFF; // don't change, video has white background.
+}
+
+.page-section-examples, .page-section-team {
+    background-color: #F8F8F8;
+}
+
+.page-section-tutorial {
+    img {
+        box-shadow: 0 0 5px #CCC;
+        border-radius: 4px;
+    }
+}

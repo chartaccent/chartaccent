@@ -166,8 +166,12 @@ function ChartAccentStandaloneModel() {
         self.chart_type(id);
     };
 
+    self.export_status = ko.observable("");
     self.export_as = function(type) {
-        if(G_export_as) G_export_as(type);
+        self.export_status("Exporting...");
+        if(G_export_as) G_export_as(type, function() {
+            self.export_status("");
+        });
     }
 
     // Computed columns.
