@@ -49,6 +49,7 @@ function IncrementObservable(o, step, min, max) {
 
 window.IncrementObservable = IncrementObservable;
 
+// Custom binding: display a chart.
 ko.bindingHandlers.chartaccent_chart = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
         // This will be called when the binding is first applied to an element
@@ -68,6 +69,7 @@ ko.bindingHandlers.chartaccent_chart = {
     }
 };
 
+// Custom binding: display a chart with ChartAccent panels.
 ko.bindingHandlers.chartaccent_annotate_chart = {
     init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
         // This will be called when the binding is first applied to an element
@@ -107,7 +109,8 @@ function ChartAccentStandaloneModel() {
         { name: "Temperature (try BarChart)", csv: "datasets/temperature.csv" },
         { name: "Beijing Air Quality (try LineChart)", csv: "datasets/beijingair.csv" },
         { name: "Iris (try Scatterplot)", csv: "datasets/iris.csv" },
-        { name: "Auto MPG (try Scatterplot)", csv: "datasets/car.csv" }
+        { name: "Auto MPG (try Scatterplot)", csv: "datasets/car.csv" },
+        { name: "Gapminder", csv: "datasets/gapminder.csv" }
     ];
     self.chart_types = [
         { name: "Bar Chart", id: "barchart", image: "images/barchart.png" },

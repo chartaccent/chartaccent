@@ -16,13 +16,15 @@ var ChartRepresentation = function(owner, info) {
     .attr("transform", "translate(" + info.bounds.origin_x + "," + info.bounds.origin_y + ")");
 
     if(owner.panel) {
+        if(owner.toolbar) {
+            this.toolbar = owner.toolbar.append("chartaccent-toolbar");
+        } else {
+            this.toolbar = owner.panel.append("chartaccent-toolbar");
+        }
         this.panel = owner.panel.append("chartaccent-panel");
 
-        this.panel.append("header").call(IconFont.addIcon("shape-image1")).append("span").text(" ChartAccent");
-        this.panel_controls = this.panel.append("section").classed("controls", true);
-
-        this.panel_controls_tree = appendTreeOnce(this.panel_controls.append("p"), [
-            [ "p", [
+        this.panel_controls_tree = appendTreeOnce(this.toolbar.append("span"), [
+            [ "span", { classed: { "group": true } }, [
                 [ "span.btn", { $: "btn_undo", classed: { "btn-toggle": true, "chartaccent-export-button": true }, text: "Undo" } ],
                 [ "span", { text: " " } ],
                 [ "span.btn", { $: "btn_redo", classed: { "btn-toggle": true, "chartaccent-export-button": true }, text: "Redo" } ]
@@ -31,11 +33,10 @@ var ChartRepresentation = function(owner, info) {
             ]]
         ]);
 
-        this.panel.append("header").call(IconFont.addIcon("shape-image")).append("span").text(" Labels and Shapes");
-        this.panel_shapes = this.panel.append("section").classed("shapes", true);
+        this.toolbar.append("span").classed("sep", true);
 
-        this.panel_shapes_tree = appendTreeOnce(this.panel_shapes.append("p"), [
-            [ "p", [
+        this.panel_shapes_tree = appendTreeOnce(this.toolbar.append("span"), [
+            [ "span", { classed: { "group": true } }, [
                 [ "span.btn", { $: "add_line", classed: { "btn-toggle": true } }, [ IconFont.iconDesc("shape-line") ] ],
                 [ "span", { text: " " } ],
                 [ "span.btn", { $: "add_arrow", classed: { "btn-toggle": true } }, [ IconFont.iconDesc("shape-arrow") ] ],

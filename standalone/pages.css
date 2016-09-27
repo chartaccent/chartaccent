@@ -6932,6 +6932,7 @@ p {
 }
 .page-section {
   min-height: 600px;
+  padding-bottom: 100px;
 }
 .page-section-title {
   background-color: #FFF;
@@ -6940,7 +6941,10 @@ p {
 .page-section-team {
   background-color: #F8F8F8;
 }
+.page-section-tutorial {
+  background-color: #F4F4F4;
+}
+.page-section-examples img,
 .page-section-tutorial img {
-  box-shadow: 0 0 5px #CCC;
-  border-radius: 4px;
+  border: 1px solid #E8E8E8;
 }

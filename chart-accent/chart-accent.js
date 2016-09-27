@@ -19,6 +19,7 @@ var ChartAccent = function(info) {
     this.layer_annotation = resolveToSVGSelection(info.layer_annotation);
     this.layer_background = resolveToSVGSelection(info.layer_background);
     this.panel = info.panel;
+    this.toolbar = info.toolbar;
     // Find the SVG node containing layer_annotation
     var svg = this.layer_annotation.node();
     while(svg.tagName != "svg") {

@@ -9,6 +9,14 @@ function ApplyAxisStyle(sel) {
     });
 }
 
+var measureTextCanvas = document.createElement("canvas");
+var measureTextCanvasCtx = measureTextCanvas.getContext("2d");
+measureTextCanvasCtx.font = "14px Helvetica";
+function MeasureLegend(columns) {
+    console.log(columns);
+    return d3.max(columns, function(d) { return measureTextCanvasCtx.measureText(d).width; });
+}
+
 function CreateLegend(g, columns, colors) {
     var sel = g.selectAll("g.legend").data(columns);
     var enter = sel.enter().append("g").attr("class", "legend");
@@ -47,7 +55,8 @@ function BaseChart(element, info, config) {
     this.config = config;
 
     // Margin.
-    this.margin = { top: 80, right: 120, bottom: 40, left: 80 };
+
+    this.margin = { top: 80, right: this._measure_legend_width() + 80, bottom: 40, left: 80 };
 
     // Prepare svg.
     // width and height are chart area size.
@@ -57,6 +66,7 @@ function BaseChart(element, info, config) {
     // Chartaccent panel.
     if(config.chartaccent) {
         this.panel = element.append("div").classed("panel", true);
+        this.toolbar = element.append("div").classed("toolbar", true);
     }
     var div_chart = element.append("div");
     this.svg = div_chart.classed("chart", true).append("svg")
@@ -134,6 +144,34 @@ BaseChart.prototype._determine_xy_format = function() {
     return "." + max_digits + "f";
 };
 
+BaseChart.prototype._measure_legend_width = function() {
+    var info = this.info;
+    if(info.type == "barchart") {
+        return MeasureLegend(info.y_columns);
+    }
+    if(info.type == "linechart") {
+        return MeasureLegend(info.y_columns);
+    }
+    if(info.type == "scatterplot") {
+        if(info.color_column) {
+            var group_values = { };
+            var groups = [];
+            info.rows.forEach(function(row) {
+                var value = row[info.color_column];
+                if(value !== null && value !== undefined) {
+                    if(!group_values[value]) {
+                        group_values[value] = true;
+                        groups.push(value);
+                    }
+                }
+            });
+            groups.sort();
+            return MeasureLegend(groups);
+        }
+    }
+    return 0;
+}
+
 BaseChart.prototype._create_barchart = function() {
     var config = this.config;
     var info = this.info;
@@ -210,7 +248,8 @@ BaseChart.prototype._create_barchart = function() {
         var chart_accent = ChartAccent.Create({
             layer_background: this.actual_svg.insert("g", ":first-child"),
             layer_annotation: this.actual_svg.append("g"),
-            panel: this.panel
+            panel: this.panel,
+            toolbar: this.toolbar
         });
         // Annotatable chart.
         var chart = chart_accent.AddChart({
@@ -361,7 +400,8 @@ BaseChart.prototype._create_linechart = function() {
         var chart_accent = ChartAccent.Create({
             layer_background: this.actual_svg.insert("g", ":first-child"),
             layer_annotation: this.actual_svg.append("g"),
-            panel: this.panel
+            panel: this.panel,
+            toolbar: this.toolbar
         });
         // Annotatable chart.
         var chart = chart_accent.AddChart({
@@ -544,7 +584,8 @@ BaseChart.prototype._create_scatterplot = function() {
         var chart_accent = ChartAccent.Create({
             layer_background: this.actual_svg.insert("g", ":first-child"),
             layer_annotation: this.actual_svg.append("g"),
-            panel: this.panel
+            panel: this.panel,
+            toolbar: this.toolbar
         });
         // Annotatable chart.
         var chart = chart_accent.AddChart({
