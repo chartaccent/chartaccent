@@ -128,7 +128,7 @@
                         <p-widget-row>
                             <p-widget-col class="col-12">
                                 <label>Column</label>
-                                <select data-bind="
+                                <select title="Specify the column to show as the horizontal (X) axis of the chart." data-bind="
                                     options: $root.data_columns_all,
                                     value: $root.chart_options.x_column
                                     "></select>
@@ -156,7 +156,7 @@
                         <div data-bind="foreach: $root.chart_options.y_columns">
                             <p-widget-row><p-widget-col class="col-12">
                                 <label>Column <span data-bind="text: $index() + 1"></span></label>
-                                <select data-bind="
+                                <select title="Specify the columns for the bars." data-bind="
                                     options: $root.data_columns_number,
                                     value: $rawData
                                 "></select>
@@ -176,7 +176,7 @@
                         <p-widget-row>
                             <p-widget-col class="col-12">
                                 <label>Column</label>
-                                <select data-bind="
+                                <select title="Specify the horizontal (X) axis of the scatterplot." data-bind="
                                     options: $root.data_columns_number,
                                     value: $root.chart_options.x_column
                                     "></select>
@@ -202,7 +202,7 @@
                         <p-widget-row>
                             <p-widget-col class="col-12">
                                 <label>Column</label>
-                                <select data-bind="
+                                <select title="Specify the vertical (Y) axis of the scatterplot." data-bind="
                                     options: $root.data_columns_number,
                                     value: $root.chart_options.y_column
                                     "></select>
@@ -228,7 +228,7 @@
                         <p-widget-row>
                             <p-widget-col class="col-12">
                                 <label>Name</label>
-                                <select data-bind="
+                                <select title="Specify the column to show as point labels." data-bind="
                                     options: $root.data_columns_all,
                                     value: $root.chart_options.name_column
                                     "></select>
@@ -237,7 +237,7 @@
                         <p-widget-row>
                             <p-widget-col class="col-12">
                                 <label>Color</label>
-                                <select data-bind="
+                                <select title="Specify the column to color the points." data-bind="
                                     options: $root.data_columns_all,
                                     optionsCaption: 'Please select...',
                                     value: $root.chart_options.color_column
@@ -247,7 +247,7 @@
                         <p-widget-row>
                             <p-widget-col class="col-12">
                                 <label>Size</label>
-                                <select data-bind="
+                                <select title="Specify the column to size the points." data-bind="
                                     options: $root.data_columns_number,
                                     optionsCaption: 'Please select...',
                                     value: $root.chart_options.size_column
