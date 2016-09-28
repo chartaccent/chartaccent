@@ -110,7 +110,8 @@ function ChartAccentStandaloneModel() {
         { name: "Beijing Air Quality (try LineChart)", csv: "datasets/beijingair.csv" },
         { name: "Iris (try Scatterplot)", csv: "datasets/iris.csv" },
         { name: "Auto MPG (try Scatterplot)", csv: "datasets/car.csv" },
-        { name: "Gapminder", csv: "datasets/gapminder.csv" }
+        { name: "Gapminder (try Scatterplot)", csv: "datasets/gapminder.csv" },
+        { name: "Orange Sales (try BarChart/LineChart with error bars)", csv: "datasets/oranges.csv" },
     ];
     self.chart_types = [
         { name: "Bar Chart", id: "barchart", image: "images/barchart.png" },

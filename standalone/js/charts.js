@@ -203,7 +203,7 @@ BaseChart.prototype._create_barchart = function() {
     scale_y.domain([
         (info.scale_y_min !== undefined ? info.scale_y_min : 0),
         (info.scale_y_max !== undefined ? info.scale_y_max : d3.max(y_columns, function(c) {
-            return d3.max(rows, function(d) { return d[c]; })
+            return d3.max(rows, function(d) { return d3.max([d[c + "_lower"], d[c + "_upper"], d[c]]); })
         }))
     ]);
     scale_y.nice();
@@ -214,6 +214,7 @@ BaseChart.prototype._create_barchart = function() {
     var bars = info.y_columns.map(function(y_column, i) {
         var spacing = Math.round(scale_x.rangeBand() / y_columns.length);
         var border = 2;
+
         var bars = svg.append("g").selectAll(".bar")
             .data(rows)
           .enter().append("rect")
@@ -223,6 +224,29 @@ BaseChart.prototype._create_barchart = function() {
             .attr("y", function(d) { return Math.round(scale_y(d[y_column])); })
             .attr("height", function(d) { return height - 0.5 - Math.round(scale_y(d[y_column])); })
             .style("fill", colors[i]);
+
+        // Show error bars.
+        if(rows.every(function(d) { return d[y_column + "_lower"] != null && d[y_column + "_upper"] != null; })) {
+            var error_bars = svg.append("g").selectAll(".errorbar")
+                .data(rows)
+            .enter().append("path")
+            .attr("class", "errorbar")
+            .attr("d", function(d) {
+                var bar_x = Math.round(scale_x(d[x_column])) + spacing * (i + 0.5);
+                var y1 = scale_y(d[y_column + "_lower"]);
+                var y2 = scale_y(d[y_column + "_upper"]);
+                var errorbar_width = Math.min(10, spacing - border);
+                return [
+                    "M", bar_x, y1,
+                    "L", bar_x, y2,
+                    "M", bar_x - errorbar_width / 2, y1,
+                    "L", bar_x + errorbar_width / 2, y1,
+                    "M", bar_x - errorbar_width / 2, y2,
+                    "L", bar_x + errorbar_width / 2, y2
+                ].join(" ");
+            })
+            .style("fill", "none").style("stroke", "black")
+        }
         return bars;
     });
 
@@ -348,7 +372,7 @@ BaseChart.prototype._create_linechart = function() {
     scale_y.domain([
         (info.scale_y_min !== undefined ? info.scale_y_min : 0),
         (info.scale_y_max !== undefined ? info.scale_y_max : d3.max(y_columns, function(c) {
-            return d3.max(rows, function(d) { return d[c]; })
+            return d3.max(rows, function(d) { return d3.max([d[c + "_lower"], d[c + "_upper"], d[c]]); })
         }))
     ]);
     scale_y.nice();
@@ -358,7 +382,32 @@ BaseChart.prototype._create_linechart = function() {
 
     var lines = info.y_columns.map(function(y_column, i) {
         var sp = scale_x.rangeBand() / 2;
+
+        // Show error bars.
+        if(rows.every(function(d) { return d[y_column + "_lower"] != null && d[y_column + "_upper"] != null; })) {
+            var error_bars = svg.append("g").selectAll(".errorbar")
+                .data(rows)
+            .enter().append("path")
+            .attr("class", "errorbar")
+            .attr("d", function(d) {
+                var bar_x = scale_x(d[x_column]) + sp;
+                var y1 = scale_y(d[y_column + "_lower"]);
+                var y2 = scale_y(d[y_column + "_upper"]);
+                var errorbar_width = 10;
+                return [
+                    "M", bar_x, y1,
+                    "L", bar_x, y2,
+                    "M", bar_x - errorbar_width / 2, y1,
+                    "L", bar_x + errorbar_width / 2, y1,
+                    "M", bar_x - errorbar_width / 2, y2,
+                    "L", bar_x + errorbar_width / 2, y2
+                ].join(" ");
+            })
+            .style("fill", "none").style("stroke", colors[i])
+        }
+
         var c = svg.append("g");
+
         var line = c.append("path").attr("class", "line")
             .datum(rows)
             .attr("d", d3.svg.line().x(function(d) { return scale_x(d[x_column]) + sp; }).y(function(d) { return scale_y(d[y_column]); }))
@@ -375,6 +424,7 @@ BaseChart.prototype._create_linechart = function() {
             .attr("cx", function(d) { return scale_x(d[x_column]) + sp; })
             .attr("cy", function(d) { return scale_y(d[y_column]); })
             .attr("r", 4).style("fill", colors[i]);
+
         return [line, dots];
     });
 

@@ -34,11 +34,12 @@
                     <input id="file-upload" style="display: none;" type="file" accept=".csv" data-bind="event: { change: function() { importCSV($element.files[0]) } }" />
                 </p>
                 <p style="color: #888">Your file will NOT be uploaded to our server.</p>
-                <p>Load sample data:
-                    <span data-bind="foreach: sample_datasets">
+                <p>Load sample data:</p>
+                <ul data-bind="foreach: sample_datasets">
+                    <li>
                         <button class="btn-inline" style="margin-left: 10px" data-bind="click: function() { $root.importCSVFromURL($data.csv); }, text: $data.name"></button>
-                    </span>
-                </p>
+                    </li>
+                </ul>
             </section>
         </div>
         <div data-bind="if: data_columns">
