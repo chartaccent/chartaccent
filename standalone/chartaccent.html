@@ -274,9 +274,12 @@
             </div>
         </section>
         <p style="text-align: right">
-            <button class="btn" data-bind="click: $root.export_as.bind($root, 'gif')">Export Animated GIF</button>
-            <button class="btn" data-bind="click: $root.export_as.bind($root, 'png')">Export PNG</button>
-            <button class="btn" data-bind="click: $root.export_as.bind($root, 'svg')">Export SVG</button>
+            <span class="btn-group">
+                <span class="icon chartaccent-icons-export">
+                <button class="btn" data-bind="click: $root.export_as.bind($root, 'gif')">Animated GIF</button>
+                <button class="btn" data-bind="click: $root.export_as.bind($root, 'png')">PNG</button>
+                <button class="btn" data-bind="click: $root.export_as.bind($root, 'svg')">SVG</button>
+            </span>
         </p>
         <p style="text-align: right" data-bind="text: $root.export_status"></p>
     </div>

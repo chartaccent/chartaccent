@@ -247,6 +247,29 @@ button.btn-inline, label.btn-inline {
     }
 }
 
+.btn-group {
+    border-radius: 2px;
+    display: inline-block;
+    height: 32px;
+    line-height: 32px;
+    font-size: 16px;
+    padding: 0px 12px;
+    background-color: lighten(@primary_color, 10%);
+    border: 1px solid lighten(@primary_color, 10%);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    color: white;
+    .icon {
+        color: white;
+    }
+    .btn {
+        color: white;
+        box-shadow: none;
+        background-color: transparent;
+        border: 1px solid transparent;
+        &:focus { box-shadow: none; }
+    }
+}
+
 input[type="text"] {
     border: none;
     outline: none;

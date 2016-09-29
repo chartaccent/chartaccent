@@ -479,6 +479,7 @@ var MakeColorPicker = function(sel, color, onchange, clickout_handlers) {
         var element = this;
         var colorpicker = CreateEditorPopup("ColorPicker", {
             anchor: this,
+            align: "right",
             parent_clickout_handlers: clickout_handlers,
             color: color
         });
@@ -521,6 +522,7 @@ var MakeStrokeColorPicker = function(sel, color, onchange, clickout_handlers) {
         var element = this;
         var colorpicker = CreateEditorPopup("ColorPicker", {
             anchor: this,
+            align: "right",
             parent_clickout_handlers: clickout_handlers,
             color: color
         });
