@@ -25,9 +25,9 @@ var ChartRepresentation = function(owner, info) {
 
         this.panel_controls_tree = appendTreeOnce(this.toolbar.append("span"), [
             [ "span", { classed: { "group": true } }, [
-                [ "span.btn", { $: "btn_undo", classed: { "btn-toggle": true, "chartaccent-export-button": true }, text: "Undo" } ],
+                [ "span.btn", { $: "btn_undo", classed: { "btn-toggle": true, "chartaccent-export-button": true } }, [ IconFont.iconDesc("undo"), [ "span", { text: " Undo" } ] ] ],
                 [ "span", { text: " " } ],
-                [ "span.btn", { $: "btn_redo", classed: { "btn-toggle": true, "chartaccent-export-button": true }, text: "Redo" } ]
+                [ "span.btn", { $: "btn_redo", classed: { "btn-toggle": true, "chartaccent-export-button": true } }, [ IconFont.iconDesc("redo"), [ "span", { text: " Redo" } ] ] ]
                 // [ "span", { text: " " } ],
                 // [ "span.btn", { $: "btn_reset", classed: { "btn-toggle": true, "chartaccent-export-button": true }, text: "Reset" } ]
             ]]

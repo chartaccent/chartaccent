@@ -3,9 +3,13 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
-<polyline fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
-	21,12 21,21 3,21 3,3 12,3 "/>
-<polyline fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="
-	16,3 21,3 21,8 "/>
-<line fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="21" y1="3" x2="12" y2="12"/>
+<g>
+	<path d="M21,10.75c-0.69,0-1.25,0.56-1.25,1.25v7.75H4.25V4.25H12c0.69,0,1.25-0.56,1.25-1.25S12.69,1.75,12,1.75H3
+		C2.31,1.75,1.75,2.31,1.75,3v18c0,0.69,0.56,1.25,1.25,1.25h18c0.69,0,1.25-0.56,1.25-1.25v-9C22.25,11.31,21.69,10.75,21,10.75z"
+		/>
+	<path d="M22.153,2.522c-0.126-0.306-0.37-0.549-0.676-0.676C21.325,1.783,21.163,1.75,21,1.75h-5c-0.69,0-1.25,0.56-1.25,1.25
+		S15.31,4.25,16,4.25h1.982l-6.866,6.866c-0.488,0.488-0.488,1.279,0,1.768C11.36,13.128,11.68,13.25,12,13.25
+		s0.64-0.122,0.884-0.366l6.866-6.866V8c0,0.69,0.56,1.25,1.25,1.25S22.25,8.69,22.25,8V3C22.25,2.837,22.217,2.675,22.153,2.522z"
+		/>
+</g>
 </svg>
