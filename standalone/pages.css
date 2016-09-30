@@ -6918,6 +6918,7 @@ fieldset[disabled] .btn-chartaccent.focus {
 }
 h1 {
   margin: 1em 0;
+  margin-bottom: 0.3em;
   font-size: 48px;
 }
 h2 {
@@ -6928,7 +6929,7 @@ p {
   margin: 1em 0;
 }
 .lead {
-  margin-top: 50px;
+  margin-top: 20px;
 }
 .page-section {
   min-height: 600px;
