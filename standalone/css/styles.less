@@ -157,6 +157,30 @@ p-widget-row {
     color: #d62728;
 }
 
+.sample-datasets {
+    & > li {
+        border: 1px solid #EEE;
+        display: inline-block;
+        width: 250px;
+        padding: 5px;
+        border-radius: 3px;
+        box-shadow: 0 0 5px #EEE;
+
+        cursor: pointer;
+
+        span { display: block; }
+        .name { color: #000; }
+        .hint { color: #888; margin-top: 2px; font-size: 0.8em; }
+        img { width: 100%; opacity: 0.4 }
+
+        &:hover {
+            border: 1px solid @primary_color;
+            box-shadow: 0 0 5px @primary_color_light;
+            img { opacity: 1; }
+        }
+    }
+}
+
 .table-container {
     overflow: scroll;
     border: 1px solid #EEE;

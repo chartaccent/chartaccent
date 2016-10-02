@@ -652,7 +652,7 @@ BaseChart.prototype._create_scatterplot = function() {
             selection_mode: "lasso",
             default_lasso_label_expression: 'format("' + value_format + '", value)',
             tables: [
-                { name: "data", data: info.data, isDefault: true }
+                { name: "data", data: info.rows, isDefault: true }
             ],
             palette: groups ? colors.slice(0, groups.length) : colors.slice(0, 5)
         });

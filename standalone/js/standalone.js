@@ -106,12 +106,12 @@ function ChartAccentStandaloneModel() {
         "annotation"
     ];
     self.sample_datasets = [
-        { name: "Temperature (try BarChart)", csv: "datasets/temperature.csv" },
-        { name: "Beijing Air Quality (try LineChart)", csv: "datasets/beijingair.csv" },
-        { name: "Iris (try Scatterplot)", csv: "datasets/iris.csv" },
-        { name: "Auto MPG (try Scatterplot)", csv: "datasets/car.csv" },
-        { name: "Gapminder (try Scatterplot)", csv: "datasets/gapminder.csv" },
-        { name: "Orange Sales (try BarChart/LineChart with error bars)", csv: "datasets/oranges.csv" },
+        { name: "Average Monthly Temperature", hint: "try BarChart", csv: "datasets/temperature.csv", example: "datasets/temperature.png" },
+        { name: "Beijing Air Quality", hint: "try LineChart", csv: "datasets/beijingair.csv", example: "datasets/beijingair.png" },
+        { name: "Iris Flowers", hint: "try Scatterplot", csv: "datasets/iris.csv", example: "datasets/iris.png" },
+        { name: "Auto MPG", hint: "try Scatterplot", csv: "datasets/car.csv", example: "datasets/car.png" },
+        { name: "Gapminder", hint: "try Scatterplot", csv: "datasets/gapminder.csv", example: "datasets/gapminder.png" },
+        { name: "Orange Sales", hint: "try BarChart/LineChart with error bars", csv: "datasets/oranges.csv", example: "datasets/oranges.png" },
     ];
     self.chart_types = [
         { name: "Bar Chart", id: "barchart", image: "images/barchart.png" },

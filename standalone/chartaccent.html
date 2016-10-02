@@ -35,9 +35,11 @@
                 </p>
                 <p style="color: #888">Your file will NOT be uploaded to our server.</p>
                 <p>Load sample data:</p>
-                <ul data-bind="foreach: sample_datasets">
-                    <li>
-                        <button class="btn-inline" style="margin-left: 10px" data-bind="click: function() { $root.importCSVFromURL($data.csv); }, text: $data.name"></button>
+                <ul data-bind="foreach: sample_datasets" class="sample-datasets">
+                    <li data-bind="click: function() { $root.importCSVFromURL($data.csv); }">
+                        <span class="name" data-bind="text: name"></span>
+                        <span class="hint" data-bind="text: hint"></span>
+                        <img data-bind="attr: { src: $data.example }"></img>
                     </li>
                 </ul>
             </section>
