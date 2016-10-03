@@ -6946,6 +6946,10 @@ p {
   background-color: #F4F4F4;
 }
 .page-section-examples img,
-.page-section-tutorial img {
+.page-section-tutorial img,
+.page-section-examples video,
+.page-section-tutorial video {
   border: 1px solid #E8E8E8;
+  width: 100%;
+  max-width: 800px;
 }
