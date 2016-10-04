@@ -26,4 +26,4 @@ Then, go to <http://localhost:4000/index.html>.
 
 # License
 
-Open source license, TBD.
+Open source license, TBD...
