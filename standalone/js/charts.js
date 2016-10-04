@@ -28,10 +28,9 @@ function CreateLegend(g, columns, colors) {
     sel.exit().remove();
     sel.select("text")
     .text(function(d) { return d; })
-    .attr("x", 10).attr("y", 0)
+    .attr("x", 10).attr("y", 5)
     .style({
         "font-size": 14,
-        "alignment-baseline": "central",
         "text-anchor": "start"
     });
     sel.select("circle")
