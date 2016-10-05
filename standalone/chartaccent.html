@@ -11,7 +11,7 @@
 
 <div class="wrapper">
     <div class="navigation">
-        <a href="index.html" class="title" style="float: right">About</a>
+        <a href="index.html" class="title" style="float: right">ChartAccent Home</a>
         <span data-bind="foreach: stages"><button class="stage" data-bind="
             css: {
                 active: $root.current_stage() == $data,
@@ -262,7 +262,7 @@
                 </div>
                 <div style="clear: both"></div>
             </section>
-            <p style="text-align: right"><button class="btn" data-bind="click: $root.set_current_stage.bind($root, 'annotation')">Annotate and Export &raquo;</button></p>
+            <p style="text-align: right"><button class="btn" data-bind="click: $root.set_current_stage.bind($root, 'annotation')">Annotate &raquo;</button></p>
 
         </div>
     </div>
@@ -276,12 +276,9 @@
             </div>
         </section>
         <p style="text-align: right">
-            <span class="btn-group">
-                <span class="icon chartaccent-icons-export">
-                <button class="btn" data-bind="click: $root.export_as.bind($root, 'gif')">Animated GIF</button>
-                <button class="btn" data-bind="click: $root.export_as.bind($root, 'png')">PNG</button>
-                <button class="btn" data-bind="click: $root.export_as.bind($root, 'svg')">SVG</button>
-            </span>
+            <button class="btn" data-bind="click: $root.export_as.bind($root, 'gif')"><span class="icon chartaccent-icons-export"> Animated GIF</button>
+            <button class="btn" data-bind="click: $root.export_as.bind($root, 'png')"><span class="icon chartaccent-icons-export"> PNG</button>
+            <button class="btn" data-bind="click: $root.export_as.bind($root, 'svg')"><span class="icon chartaccent-icons-export"> SVG</button>
         </p>
         <p style="text-align: right" data-bind="text: $root.export_status"></p>
     </div>

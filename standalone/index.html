@@ -1,97 +1,159 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <title>ChartAccent</title>
-        <link rel="stylesheet" type="text/css" href="pages.css" />
-    </head>
-    <body>
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+
+<head>
+    <meta charset="utf-8" />
+    <title>ChartAccent</title>
+    <link rel="stylesheet" type="text/css" href="pages.css" />
+</head>
+
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#"><img src="images/chartaccent-logo.svg" style="opacity: 0.7; height: 1em; vertical-align: top; display: inline" /> ChartAccent</a>
-                </div>
-                <div>
-                    <div class="collapse navbar-collapse" id="myNavbar">
-                        <ul class="nav navbar-nav">
-                            <li><a href="#section-title">Home</a></li>
-                            <li><a href="#section-examples">Examples</a></li>
-                            <li><a href="#section-tutorial">Tutorial</a></li>
-                            <li><a href="#section-team">Team</a></li>
-                        </ul>
-                    </div>
+                <a class="navbar-brand" href="#"><img src="images/chartaccent-logo.svg" style="opacity: 0.7; height: 1em; vertical-align: top; display: inline"
+                    /> ChartAccent</a>
+            </div>
+            <div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#section-title">Home</a></li>
+                        <li><a href="#section-examples">Examples</a></li>
+                        <li><a href="#section-tutorial">Tutorial</a></li>
+                        <li><a href="#section-team">Team</a></li>
+                    </ul>
                 </div>
             </div>
-        </nav>
+        </div>
+    </nav>
 
-        <div class="page-section page-section-title" id="section-title">
-          <div class="container">
+    <div class="page-section page-section-title" id="section-title">
+        <div class="container">
             <h1 class="section-title"> <img src="images/chartaccent-logo.svg" style="height: 1em; vertical-align: top" /> ChartAccent</h1>
             <p class="lead text-center"><img src="images/chartaccent-lead.svg" style="height: 2.7em; vertical-align: top" /></p>
             <p class="text-center"><a class="btn btn-chartaccent btn-lg" href="chartaccent.html">Open ChartAccent</a></p>
             <p class="text-center"><small>Works best with the <a href="https://www.google.com/chrome/" target="_blank">Google Chrome</a> browser</small></p>
-          </div>
-          <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <p><video src="images/v1.mp4" style="width: 100%; max-width: 800px; border: 1px solid #EEE" autoplay loop></video><p>
-                    <p class="text-center">Data-driven annotations</p>
-                </div>
-                <div class="col-md-6">
-                    <p><video src="images/v2.mp4" style="width: 100%; max-width: 800px; border: 1px solid #EEE" autoplay loop></video><p>
-                    <p class="text-center">Rich annotation forms</p>
-                </div>
-            </div>
-          </div>
         </div>
+        <div class="container">
+            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                </ol>
 
-        <div class="page-section page-section-examples" id="section-examples">
-          <div class="container">
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner" role="listbox">
+                    <div class="item active">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><img src="images/v1.png" style="width: 100%; max-width: 800px; border: 1px solid #EEE" />
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p>
+                                    <video src="images/v1.mp4" style="width: 100%; max-width: 800px; border: 1px solid #EEE" autoplay loop></video>
+                                </p>
+                            </div>
+                        </div>
+                        <p class="text-center">Data-driven annotations</p>
+                    </div>
+                    <div class="item">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><img src="images/v2.png" style="width: 100%; max-width: 800px; border: 1px solid #EEE" />
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p>
+                                    <video src="images/v2.mp4" style="width: 100%; max-width: 800px; border: 1px solid #EEE" autoplay loop></video>
+                                </p>
+                            </div>
+                        </div>
+                        <p class="text-center">Rich annotation forms</p>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="page-section page-section-examples" id="section-examples">
+        <div class="container">
             <h2 class="section-title">Examples</h2>
             <p class="lead text-center">Created and annotated with ChartAccent</p>
             <div class="row">
-                <div class="col-xs-6"><p><img src="images/barchart.png" style="width: 100%" /></p></div>
-                <div class="col-xs-6"><p><img src="images/linechart.png" style="width: 100%" /></p></div>
+                <div class="col-xs-6">
+                    <p><img src="images/barchart.png" style="width: 100%" /></p>
+                </div>
+                <div class="col-xs-6">
+                    <p><img src="images/linechart.png" style="width: 100%" /></p>
+                </div>
             </div>
             <div class="row">
-                <div class="col-md-6"><p><img src="images/scatterplot.png" style="width: 100%" /></p></div>
-                <div class="col-md-6"><p><img src="images/scatterplot2.png" style="width: 100%" /></p></div>
+                <div class="col-md-6">
+                    <p><img src="images/scatterplot.png" style="width: 100%" /></p>
+                </div>
+                <div class="col-md-6">
+                    <p><img src="images/scatterplot2.png" style="width: 100%" /></p>
+                </div>
             </div>
-          </div>
         </div>
+    </div>
 
-        <div class="page-section page-section-tutorial" id="section-tutorial">
-          <div class="container">
+    <div class="page-section page-section-tutorial" id="section-tutorial">
+        <div class="container">
             <h2 class="section-title">Tutorial</h2>
             <div class="row">
-                <div class="col-md-6"><p><img src="images/tutorial1.png" /></p></div>
-                <div class="col-md-6"><p><img src="images/tutorial2.png" /></p></div>
+                <div class="col-md-6">
+                    <p><img src="images/tutorial1.png" /></p>
+                </div>
+                <div class="col-md-6">
+                    <p><img src="images/tutorial2.png" /></p>
+                </div>
             </div>
             <div class="row">
-                <div class="col-md-6"><p><img src="images/tutorial3.png" /></p></div>
-                <div class="col-md-6"><p><video src="images/tutorial4.mp4" preload controls></video></p></div>
+                <div class="col-md-6">
+                    <p><img src="images/tutorial3.png" /></p>
+                </div>
+                <div class="col-md-6">
+                    <p>
+                        <video src="images/tutorial4.mp4" preload controls></video>
+                    </p>
+                </div>
             </div>
-          </div>
         </div>
+    </div>
 
-        <div class="page-section page-section-team" id="section-team">
-          <div class="container">
+    <div class="page-section page-section-team" id="section-team">
+        <div class="container">
             <h2 class="section-title">Team</h2>
             <p class="lead text-center">
                 (Anonymized for paper submission)
             </p>
-          </div>
         </div>
+    </div>
 
-        <script type="text/javascript" src="d3.v3.min.js"></script>
-        <script type="text/javascript" src="jquery.min.js"></script>
-        <script type="text/javascript" src="bootstrap.min.js"></script>
-        <script type="text/javascript">
+    <script type="text/javascript" src="d3.v3.min.js"></script>
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="bootstrap.min.js"></script>
+    <script type="text/javascript">
           // Auto resize sections.
           d3.select(window).on("resize.mainframe", function() {
             var win_height = window.innerHeight; // minus the navbar height.
@@ -113,6 +175,10 @@
                 window.location.hash = hash;
                 });
             });
+            $("#carousel-example-generic").carousel({
+                interval: 8000
+            });
         </script>
-    </body>
+</body>
+
 </html>

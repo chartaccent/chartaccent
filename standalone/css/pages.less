@@ -1,5 +1,7 @@
 @import "reset.less";
 @import "../../node_modules/bootstrap/less/bootstrap.less";
+@icon-font-path: "./fonts/";
+@import "../../node_modules/bootstrap/less/glyphicons.less";
 
 // Custom rules:
 h1.section-title {
@@ -59,5 +61,28 @@ p {
         border: 1px solid #E8E8E8;
         width: 100%;
         max-width: 800px;
+    }
+}
+
+.carousel-control.left, .carousel-control.right {
+    background-image: none
+}
+.carousel-caption {
+    color: #444;
+    text-shadow: 0 0 3px white;
+    bottom: -32px;
+}
+
+.carousel-indicators li {
+    background-color: #CCC;
+    &.active {
+        background-color: #444;
+    }
+}
+
+.carousel {
+    p.text-center {
+        margin: 0;
+        padding-bottom: 55px;
     }
 }
