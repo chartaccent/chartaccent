@@ -236,7 +236,7 @@ var ChartRepresentation = function(owner, info) {
     this.default_lasso_label_expression = info.default_lasso_label_expression;
 
     this.default_lasso_label = "item-label";
-    this.default_lasso_label_expression = 'value';
+    // this.default_lasso_label_expression = 'value';
 
     var context_items = { };
     if(info.tables) {

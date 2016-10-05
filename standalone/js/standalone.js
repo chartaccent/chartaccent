@@ -19,7 +19,7 @@ var strings = {
     stages: {
         "import": "Import Data",
         "visualization": "Create Chart",
-        "annotation": "Annotate and Export"
+        "annotation": "Annotate"
     },
     types: {
         "text": "Text",

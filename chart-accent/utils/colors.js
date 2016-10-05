@@ -123,7 +123,7 @@ var Styles = {
         // if(obj.paint_order === undefined) obj.paint_order = "fill";
         // if(obj.blending_mode === undefined) obj.blending_mode = "normal";
         if(obj.font_family === undefined) obj.font_family = "Helvetica";
-        if(obj.font_size === undefined) obj.font_size = 16;
+        if(obj.font_size === undefined) obj.font_size = 14;
         return obj;
     },
     applyStyle: function(style, selection) {
@@ -173,7 +173,7 @@ var Styles = {
                 stroke: null,
                 stroke_width: 2,
                 font_family: "Helvetica",
-                font_size: 20
+                font_size: 14
             };
         }
         if(type == "item-label") {

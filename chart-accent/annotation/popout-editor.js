@@ -645,11 +645,11 @@ Annotation.prototype.startPopoutEditor = function(RC) {
                     [ "dt", { text: "Line" } ],
                     [ "dd", [
                         [ "span", { $: "input_label_line" } ]
+                    ]],
+                    [ "dt", { text: "Anchor" } ],
+                    [ "dd", [
+                        [ "span", { $: "input_label_anchor" } ]
                     ]]
-                    // [ "dt", { text: "Anchor" } ],
-                    // [ "dd", [
-                    //     [ "span", { $: "input_label_anchor" } ]
-                    // ]]
                 ]]
             ]);
             MakeEasyStringExpressionInput(tree.input_label_text, component.text, function(expr) {

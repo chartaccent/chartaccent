@@ -209,7 +209,9 @@
                 window.location.hash = hash;
                 });
             });
-            $('#main-carousel').carousel('pause');
+            $(window).load(function() {
+                $('#main-carousel').carousel('pause');
+            })
         </script>
 </body>
 

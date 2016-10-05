@@ -537,6 +537,12 @@ BaseChart.prototype._create_scatterplot = function() {
     var size_column = info.size_column;
 
     var value_format = this._determine_xy_format();
+    var name_format = "value";
+    if(name_column) {
+        if(typeof(rows[0][name_column]) == "number") {
+            name_format = 'format(".1f", value)';
+        }
+    }
 
     var scale_x = d3.scale.linear()
         .range([0, width]);
@@ -672,7 +678,7 @@ BaseChart.prototype._create_scatterplot = function() {
                 x: scale_x, y: scale_y     // D3 axis.
             },
             selection_mode: "lasso",
-            default_lasso_label_expression: 'format("' + value_format + '", value)',
+            default_lasso_label_expression: name_format,
             tables: [
                 { name: "data", data: info.rows, isDefault: true }
             ],
