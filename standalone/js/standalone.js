@@ -122,6 +122,7 @@ function ChartAccentStandaloneModel() {
         x_column: ko.observable(null),
         y_column: ko.observable(null),                          // for scatterplot
         name_column: ko.observable(null),
+        connect_points: ko.observable(false),
         color_column: ko.observable(null),
         size_column: ko.observable(null),
         size_scale: ko.observable(1),
@@ -333,6 +334,7 @@ function ChartAccentStandaloneModel() {
                 scale_x_max: parse_scale_limits(self.chart_options.scale_x_max()),
                 scale_y_max: parse_scale_limits(self.chart_options.scale_y_max()),
                 scale_y_label: self.chart_options.scale_y_label(),
+                connect_points: self.chart_options.connect_points(),
                 title: self.chart_options.title(),
                 width: self.chart_options.width(),
                 height: self.chart_options.height()
@@ -349,6 +351,7 @@ ChartAccentStandaloneModel.prototype.resetChartInformation = function() {
     self.chart_options.x_column(null);
     self.chart_options.y_column(null);
     self.chart_options.name_column(null);
+    self.chart_options.connect_points(false);
     self.chart_options.color_column(null);
     self.chart_options.size_column(null);
     self.chart_options.size_scale(1);

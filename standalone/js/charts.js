@@ -603,6 +603,29 @@ BaseChart.prototype._create_scatterplot = function() {
         .style("text-anchor", "end")
         .text(info.scale_y_label);
 
+    if(info.connect_points) {
+        var lines = svg.selectAll(".line")
+            .data(groups == null ? [null] : groups)
+            .enter().append("path").attr("class", "line")
+            .attr("d", function(d) {
+                console.log(d);
+                var items = rows.filter(function(r) {
+                    if(!d) return true;
+                    return r[color_column] == d;
+                });
+                console.log(items);
+                var linef = d3.svg.line()
+                    .x(function(d) { return scale_x(d[x_column]); })
+                    .y(function(d) { return scale_y(d[y_column]); })
+                    .interpolate("linear");
+                console.log(linef);
+                return linef(items);
+            })
+            .style("stroke", function(d, idx) { return colors[idx]; })
+            .style("stroke-width", 2)
+            .style("fill", "none");
+    }
+
     var dots = svg.selectAll(".dot")
         .data(rows)
       .enter().append("circle")
