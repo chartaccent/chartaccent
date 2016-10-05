@@ -173,7 +173,7 @@ function ChartAccentStandaloneModel() {
     self.set_current_stage = function(stage) {
         self.current_stage(stage);
         if(stage == "annotation") {
-            trackEvent("annotation", "start", "chart:" + self.chart_type());
+            trackEvent("annotation/" + self.chart_type(), "start");
         }
     };
 
