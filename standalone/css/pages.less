@@ -78,6 +78,18 @@ p {
     text-shadow: 0 0 3px white;
     bottom: -32px;
 }
+.carousel-control {
+    color: #888;
+    text-shadow: 0 0 3px #CCC;
+    &:hover, &:active {
+        color: #444;
+        text-shadow: 0 0 3px #AAA;
+    }
+}
+.carousel-control .icon-prev, .carousel-control .icon-next, .carousel-control .glyphicon-chevron-left, .carousel-control .glyphicon-chevron-right {
+    bottom: 30px;
+    top: initial;
+}
 
 .carousel-indicators li {
     background-color: #CCC;
@@ -88,7 +100,13 @@ p {
 
 .carousel {
     p.text-center {
-        margin: 0;
+        margin: 0 auto;
+        // width: 500px;
+        // height: 120px;
         padding-bottom: 55px;
     }
+}
+
+.carousel-inner > .item {
+    .transition(1s ease-in-out transform);
 }

@@ -40,11 +40,11 @@
             <p class="text-center"><small>Works best with the <a href="https://www.google.com/chrome/" target="_blank">Google Chrome</a> browser</small></p>
         </div>
         <div class="container">
-            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+            <div id="main-carousel" class="carousel slide" data-ride="carousel">
                 <!-- Indicators -->
                 <ol class="carousel-indicators">
-                    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                    <li data-target="#main-carousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#main-carousel" data-slide-to="1"></li>
                 </ol>
 
                 <!-- Wrapper for slides -->
@@ -61,7 +61,8 @@
                                 </p>
                             </div>
                         </div>
-                        <p class="text-center">Data-driven annotations</p>
+                        <p class="text-center"></p>
+                        <!--<p class="text-center">Emphasizing the months when Charlotte and Seattle's temperatures are higher than New York's average.</p>-->
                     </div>
                     <div class="item">
                         <div class="row">
@@ -75,16 +76,17 @@
                                 </p>
                             </div>
                         </div>
-                        <p class="text-center">Rich annotation forms</p>
+                        <p class="text-center"></p>
+                        <!--<p class="text-center">The relationship between fertility rate and life expectancy, with text and image annotations for the United States, China, and India; countries from North and South America are highlighted in blue.</p>-->
                     </div>
                 </div>
 
                 <!-- Controls -->
-                <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                <a class="left carousel-control" href="#main-carousel" role="button" data-slide="prev">
                     <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                     <span class="sr-only">Previous</span>
                 </a>
-                <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                <a class="right carousel-control" href="#main-carousel" role="button" data-slide="next">
                     <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
                     <span class="sr-only">Next</span>
                 </a>
@@ -207,9 +209,7 @@
                 window.location.hash = hash;
                 });
             });
-            $("#carousel-example-generic").carousel({
-                interval: 8000
-            });
+            $('#main-carousel').carousel('pause');
         </script>
 </body>
 
