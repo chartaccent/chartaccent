@@ -9,6 +9,8 @@ var ChartRepresentation = function(owner, info) {
     this.undo_history = [];
     this.redo_history = [];
 
+    this.event_tracker = info.event_tracker;
+
     this.layer_annotation = owner.layer_annotation.append("g")
     .attr("transform", "translate(" + info.bounds.origin_x + "," + info.bounds.origin_y + ")");
 
@@ -1316,12 +1318,23 @@ ChartRepresentation.prototype.loadState = function(state) {
     this._should_ignore_undo_log = false;
 };
 
+ChartRepresentation.prototype.summarizeState = function(state) {
+    if(state == null) state = this.saveState();
+    var annotations = state.annotations;
+    return annotations.map((function(annotation) {
+        return annotation.summarize();
+    })).join(";");
+}
+
 ChartRepresentation.prototype.saveStateForUndo = function() {
     if(this._should_ignore_undo_log) return;
     var current_time = new Date().getTime() / 1000.0;
     var action = {
         timestamp: current_time,
         state: this.saveState()
+    }
+    if(this.event_tracker != null) {
+        this.event_tracker("state", this.summarizeState(action.state));
     }
     // Action grouping.
     if(this.undo_history.length > 0 && this.undo_history[this.undo_history.length - 1].timestamp > current_time - 0.1) {

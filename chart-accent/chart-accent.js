@@ -28,6 +28,10 @@ var ChartAccent = function(info) {
     this.svg = svg;
 };
 
+ChartAccent.prototype.summarizeState = function() {
+    return this.charts[0].summarizeState();
+}
+
 ChartAccent.prototype.AddChart = function(info) {
     var repr = ChartRepresentation.Create(this, info);
     this.charts.push(repr);

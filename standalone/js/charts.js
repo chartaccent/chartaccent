@@ -106,6 +106,7 @@ function BaseChart(element, info, config) {
                 do_download(blob);
             })
         }
+        this.trackEvent("export:" + type, self.chartaccent.summarizeState());
     };
     if(config.chartaccent) {
         if(config.chartaccent_info && config.chartaccent_info.setExportFunction) {
@@ -130,6 +131,11 @@ BaseChart.prototype._determine_y_format = function() {
     });
     return "." + max_digits + "f";
 };
+
+
+BaseChart.prototype.trackEvent = function(action, label) {
+    trackEvent("annotation:" + this.info.type, action, label);
+}
 
 BaseChart.prototype._determine_xy_format = function() {
     var info = this.info;
@@ -276,6 +282,7 @@ BaseChart.prototype._create_barchart = function() {
         });
         // Annotatable chart.
         var chart = chart_accent.AddChart({
+            event_tracker: this.trackEvent.bind(this),
             bounds: {
                 x: 0, y: 0,
                 width: width + margin.left + margin.right,
@@ -454,6 +461,7 @@ BaseChart.prototype._create_linechart = function() {
         });
         // Annotatable chart.
         var chart = chart_accent.AddChart({
+            event_tracker: this.trackEvent.bind(this),
             bounds: {
                 x: 0, y: 0,
                 width: width + margin.left + margin.right,
@@ -667,6 +675,7 @@ BaseChart.prototype._create_scatterplot = function() {
         });
         // Annotatable chart.
         var chart = chart_accent.AddChart({
+            event_tracker: this.trackEvent.bind(this),
             bounds: {
                 x: 0, y: 0,
                 width: width + margin.left + margin.right,

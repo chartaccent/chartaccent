@@ -164,6 +164,48 @@ Annotation.prototype.toString = function() {
     return "TODO: Description";
 };
 
+Annotation.prototype.summarize = function() {
+    var target = "unknown";
+    if(this.target.type == "range") {
+        var rangeToString = function(range) {
+            if(Expression.isSimpleFunction(range, "range")) {
+                return "range";
+            } else {
+                if(range instanceof Expression.FunctionApply) {
+                    return "@" + range.funcitem.name;
+                }
+                return "value";
+            }
+        };
+        if(this.target_inherit) {
+            var mode_string = {
+                "within": "within",
+                "without": "outside",
+                "above": ">",
+                "below": "<",
+                "within-or-equal": "within or equal",
+                "without-or-equal": "outside or equal",
+                "above-or-equal": ">=",
+                "below-or-equal": "<="
+            };
+            var axis = this.target.axis.mode == "x" ? "X" : "Y";
+            target = axis + ":" + mode_string[this.target_inherit.mode] + "," + rangeToString(this.target.range);
+        } else {
+            var axis = this.target.axis.mode == "x" ? "X" : "Y";
+            target = axis + ":" + rangeToString(this.target.range);
+        }
+    }
+    if(this.target.type == "items") {
+        var total_items = 0;
+        this.target.items.forEach(function(desc) {
+            total_items += desc.items.length;
+        });
+        target = "series:" + this.target.items.length + "," + total_items;
+    }
+    var visibles = this.components.filter(function(d) { return d.visible; }).map(function(d) { return d.type; }).join(",");
+    return target + "|" + visibles;
+}
+
 Annotation.prototype.getAllItems = function() {
     var data_items = new Set();
     this.target.items.forEach(function(desc) {

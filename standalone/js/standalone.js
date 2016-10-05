@@ -172,6 +172,9 @@ function ChartAccentStandaloneModel() {
 
     self.set_current_stage = function(stage) {
         self.current_stage(stage);
+        if(stage == "annotation") {
+            trackEvent("annotation", "start", "chart:" + self.chart_type());
+        }
     };
 
     self.set_chart_type = function(id) {
@@ -421,6 +424,8 @@ ChartAccentStandaloneModel.prototype.importCSVFromText = function(csv_text) {
         return { name: d, type: ko.observable(type), digits: ko.observable(max_digits) }
     }));
     self.data_rows(objects);
+    // Track:
+    trackEvent("dataset", "import", "columns:" + header.length + ",rows:" + objects.length);
 };
 
 ChartAccentStandaloneModel.prototype.importCSVFromURL = function(url, callback) {
