@@ -6970,7 +6970,8 @@ p {
   text-shadow: 0 0 3px #CCC;
 }
 .carousel-control:hover,
-.carousel-control:active {
+.carousel-control:active,
+.carousel-control:focus {
   color: #444;
   text-shadow: 0 0 3px #AAA;
 }
