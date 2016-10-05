@@ -113,6 +113,13 @@ function ChartAccentStandaloneModel() {
         { name: "Gapminder", hint: "try Scatterplot", csv: "datasets/gapminder.csv", example: "datasets/gapminder.png" },
         { name: "Orange Sales", hint: "try BarChart/LineChart with error bars", csv: "datasets/oranges.csv", example: "datasets/oranges.png" },
     ];
+    self.selected_sample_dataset = ko.observable(null);
+    self.selected_sample_dataset.subscribe(function(newValue) {
+        if(newValue != null) {
+            let val = self.sample_datasets.filter(function(d) { return d.name == newValue; })[0];
+            self.importCSVFromURL(val.csv);
+        }
+    });
     self.chart_types = [
         { name: "Bar Chart", id: "barchart", image: "images/barchart.png" },
         { name: "Line Chart", id: "linechart", image: "images/linechart.png" },

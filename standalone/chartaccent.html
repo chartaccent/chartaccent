@@ -26,24 +26,20 @@
     </div>
 
     <div class="stage-tab" data-bind="css: { active: $root.current_stage() == 'import' }">
-        <div data-bind="ifnot: data_columns">
-            <section>
-                <h2>Choose data file (CSV)</h2>
-                <p>
-                    <label class="btn" for="file-upload">Choose File</label>
-                    <input id="file-upload" style="display: none;" type="file" accept=".csv" data-bind="event: { change: function() { importCSV($element.files[0]) } }" />
-                </p>
-                <p style="color: #888">Your file will NOT be uploaded to our server.</p>
-                <p>Load sample data:</p>
-                <ul data-bind="foreach: sample_datasets" class="sample-datasets">
-                    <li data-bind="click: function() { $root.importCSVFromURL($data.csv); }">
-                        <span class="name" data-bind="text: name"></span>
-                        <span class="hint" data-bind="text: hint"></span>
-                        <img data-bind="attr: { src: $data.example }"></img>
-                    </li>
-                </ul>
-            </section>
-        </div>
+        <section>
+            <h2>Choose data file (CSV)</h2>
+            <p>
+                <label class="btn" for="file-upload">Choose File</label>
+                <span style="padding-left: 5px; padding-right: 5px">or</span>
+                <select data-bind="
+                    optionsCaption: 'Load sample dataset...',
+                    options: sample_datasets.map(function(x) { return x.name; }),
+                    value: selected_sample_dataset
+                "></select>
+                <input id="file-upload" style="display: none;" type="file" accept=".csv" data-bind="event: { change: function() { $root.selected_sample_dataset(null); importCSV($element.files[0]) } }" />
+            </p>
+            <p style="color: #888">Your file will NOT be uploaded to our server.</p>
+        </section>
         <div data-bind="if: data_columns">
             <section>
                 <h2>Check column types and digits</h2>
