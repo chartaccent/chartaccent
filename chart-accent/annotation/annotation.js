@@ -51,6 +51,8 @@ import "component-shapes.js";
 
 import "popout-editor.js";
 
+import "serialize.js";
+
 Annotation.prototype.renderComponent = function(RC, RC2, component) {
     if(component.type == "range") this.renderComponentRange(RC, RC2, component);
     if(component.type == "range-line") this.renderComponentRange(RC, RC2, component);

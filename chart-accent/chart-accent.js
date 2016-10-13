@@ -30,13 +30,22 @@ var ChartAccent = function(info) {
 
 ChartAccent.prototype.summarizeState = function() {
     return this.charts[0].summarizeState();
-}
+};
+
+ChartAccent.prototype.saveAnnotations = function() {
+    return deepClone(this.charts[0].serializeAnnotations(this.charts[0].currentState()));
+};
+
+ChartAccent.prototype.loadAnnotations = function(saved) {
+    this.charts[0].loadState(this.charts[0].deserializeAnnotations(saved));
+};
 
 ChartAccent.prototype.AddChart = function(info) {
     var repr = ChartRepresentation.Create(this, info);
     this.charts.push(repr);
     return repr;
 };
+
 ChartAccent.prototype.getSVGDataBlob = function() {
     var s = new XMLSerializer();
     var str = s.serializeToString(this.svg);
@@ -95,7 +104,7 @@ ChartAccent.prototype.getImageDataBlob = function(format, scale, callback) {
 
 ChartAccent.prototype.getAnimatedGIFImages = function(callback) {
     this.charts[0].makeAnimation(callback);
-}
+};
 
 Module.Create = function(info) {
     return new ChartAccent(info);

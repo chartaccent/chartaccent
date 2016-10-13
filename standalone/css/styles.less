@@ -28,7 +28,16 @@ button {
 }
 
 .navigation {
+    @normal_color: #DDD;
+    @normal_border_color: #DDD;
+    @active_color: @primary_color;
+    @active_border_color: @primary_color;
+    @done_color: @primary_color_light;
+    @done_border_color: @primary_color_light;
+
+    border-bottom: 2px solid #EEE;
     padding: 0px;
+    position: relative;
 
     .title {
         font-size: 20px;
@@ -41,14 +50,16 @@ button {
         }
     }
 
-    @normal_color: #DDD;
-    @normal_border_color: #DDD;
-    @active_color: @primary_color;
-    @active_border_color: @primary_color;
-    @done_color: @primary_color_light;
-    @done_border_color: @primary_color_light;
+    .left-side {
+        position: absolute;
+        left: 0;
+    }
+    .right-side {
+        position: absolute;
+        right: 0;
+    }
 
-    border-bottom: 2px solid #EEE;
+
 
     button.stage {
         height: 28px;
@@ -77,6 +88,11 @@ button {
             cursor: pointer;
             .arrow {
                 color: @done_color;
+                text-decoration: none;
+            }
+            &:hover {
+                color: lighten(@active_color, 5%);
+                .text { text-decoration: underline; }
             }
         }
         .arrow {

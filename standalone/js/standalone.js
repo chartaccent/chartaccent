@@ -11,9 +11,9 @@ window.ChartAccent = ChartAccent;
 window.$ = $;
 
 var BaseChart = require("./charts").BaseChart;
-var G_export_as = null;
+var current_chart = null;
 
-ko.options.deferUpdates = true;
+// ko.options.deferUpdates = true;
 
 var strings = {
     stages: {
@@ -78,14 +78,14 @@ ko.bindingHandlers.chartaccent_annotate_chart = {
         d3.select(element).selectAll("*").remove();
         if(value) {
             value = JSON.parse(JSON.stringify(value));
-            var chart = new BaseChart(d3.select(element), value, {
-                chartaccent: true,
-                chartaccent_info: {
-                    setExportFunction: function(f) {
-                        G_export_as = f;
-                    }
-                }
-            });
+            var chart = new BaseChart(d3.select(element), value, { chartaccent: true });
+            if(current_chart) {
+                var annotations = current_chart.saveAnnotations();
+            }
+            current_chart = chart;
+            if(annotations) {
+                current_chart.loadAnnotations(annotations);
+            }
         }
 
     },
@@ -156,17 +156,23 @@ function ChartAccentStandaloneModel() {
     self.chart_type.subscribe(function(val) {
         self.chart_options.x_column(null);
         self.chart_options.y_column(null);
+        current_chart = null;
     });
     // Reset x, y limits when column is changed.
     self.chart_options.x_column.subscribe(function(val) {
         self.chart_options.scale_x_min(null);
         self.chart_options.scale_x_max(null);
         self.chart_options.scale_x_label(val);
+        current_chart = null;
     });
     self.chart_options.y_column.subscribe(function(val) {
         self.chart_options.scale_y_min(null);
         self.chart_options.scale_y_max(null);
         self.chart_options.scale_y_label(val);
+        current_chart = null;
+    });
+    self.chart_options.y_columns.subscribe(function(val) {
+        current_chart = null;
     });
 
 
@@ -183,11 +189,107 @@ function ChartAccentStandaloneModel() {
 
     self.export_status = ko.observable("");
     self.export_as = function(type) {
-        self.export_status("Exporting...");
-        if(G_export_as) G_export_as(type, function() {
-            self.export_status("");
-        });
-    }
+        console.log(current_chart);
+        if(current_chart && current_chart.exportAs) {
+            self.export_status("Exporting...");
+            current_chart.exportAs(type, function() {
+                self.export_status("");
+            });
+        }
+    };
+    self.save_chart = function() {
+        if(!current_chart) return;
+        var annotations = current_chart.saveAnnotations();
+        var chart_info = {
+            x_column: self.chart_options.x_column(),
+            y_column: self.chart_options.y_column(),
+            name_column: self.chart_options.name_column(),
+            connect_points: self.chart_options.connect_points(),
+            color_column: self.chart_options.color_column(),
+            size_column: self.chart_options.size_column(),
+            size_scale: self.chart_options.size_scale(),
+            y_columns: self.chart_options.y_columns().map(function(x) { return x(); }),
+            scale_x_min: self.chart_options.scale_x_min(),
+            scale_y_min: self.chart_options.scale_y_min(),
+            scale_x_max: self.chart_options.scale_x_max(),
+            scale_y_max: self.chart_options.scale_y_max(),
+            scale_x_label: self.chart_options.scale_x_label(),
+            scale_y_label: self.chart_options.scale_y_label(),
+            title: self.chart_options.title(),
+            width: self.chart_options.width(),
+            height: self.chart_options.height(),
+            type: self.chart_type()
+        };
+        var saved = {
+            chart: chart_info,
+            annotations: annotations,
+            data: {
+                rows: self.data_rows(),
+                columns: self.data_columns().map(function(d) {
+                    return {
+                        name: d.name,
+                        type: d.type(),
+                        digits: d.digits()
+                    };
+                })
+            }
+        };
+        var file = new File([ JSON.stringify(saved, null, 2) ], "chartaccent.json", { type: "application/json" });
+        saveAs(file);
+    };
+    self.load_chart_button = function() {
+        d3.select("#loadFile").node().onchange = function() {
+            var files = d3.select("#loadFile").node().files;
+            if(files.length == 1) {
+                var file = files[0];
+                d3.select("#loadFile").node().parentNode.reset();
+                if(file.name.match(/.json$/i)) {
+                    var r = new FileReader();
+                    r.onload = function(e) {
+                        var contents = e.target.result;
+                        self.load_chart(JSON.parse(contents));
+                    }
+                    r.readAsText(file, "utf-8");
+                }
+            }
+        }
+        d3.select("#loadFile").node().click();
+    };
+
+    self.load_chart = function(saved) {
+        var chart_options = saved.chart;
+        self.data_columns(saved.data.columns.map(function(c) {
+            return {
+                name: c.name,
+                type: ko.observable(c.type),
+                digits: ko.observable(c.digits)
+            };
+        }));
+        current_chart = null;
+        self.data_rows(saved.data.rows);
+        self.chart_type(saved.chart.type);
+        self.chart_options.x_column(chart_options.x_column);
+        self.chart_options.y_column(chart_options.y_column);
+        self.chart_options.name_column(chart_options.name_column);
+        self.chart_options.connect_points(chart_options.connect_points);
+        self.chart_options.color_column(chart_options.color_column);
+        self.chart_options.size_column(chart_options.size_column);
+        self.chart_options.size_scale(chart_options.size_scale);
+        self.chart_options.y_columns(chart_options.y_columns.map(function(x) { return ko.observable(x) }));
+        self.chart_options.scale_x_min(chart_options.scale_x_min);
+        self.chart_options.scale_y_min(chart_options.scale_y_min);
+        self.chart_options.scale_x_max(chart_options.scale_x_max);
+        self.chart_options.scale_y_max(chart_options.scale_y_max);
+        self.chart_options.scale_x_label(chart_options.scale_x_label);
+        self.chart_options.scale_y_label(chart_options.scale_y_label);
+        self.chart_options.title(chart_options.title);
+        self.chart_options.width(chart_options.width);
+        self.chart_options.height(chart_options.height);
+        self.current_stage("annotation");
+        if(current_chart) {
+            current_chart.loadAnnotations(saved.annotations);
+        }
+    };
 
     // Computed columns.
     self.data_columns_all = ko.computed(function() {
@@ -384,6 +486,7 @@ ChartAccentStandaloneModel.prototype.resetChartInformation = function() {
     self.chart_options.title("");
     self.chart_options.width(800);
     self.chart_options.height(400);
+    current_chart = null;
 }
 
 ChartAccentStandaloneModel.prototype.importCSVFromText = function(csv_text) {
@@ -449,16 +552,6 @@ ChartAccentStandaloneModel.prototype.importCSV = function(file, callback) {
 
 var model = new ChartAccentStandaloneModel();
 ko.applyBindings(model);
-//
-// model.importCSVFromURL("datasets/iris.csv", function(callback) {
-//     model.current_stage("visualization");
-//     model.chart_type("scatterplot");
-//     model.chart_options.x_column("SepalLength");
-//     model.chart_options.y_column("SepalWidth");
-//     model.chart_options.name_column("species");
-//     model.chart_options.color_column("species");
-//     model.current_stage("annotation");
-// });
 
 window.onload = function () {
     if (typeof history.pushState === "function") {

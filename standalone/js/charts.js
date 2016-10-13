@@ -104,14 +104,14 @@ function BaseChart(element, info, config) {
         if(type == "gif") {
             self.chartaccent.getAnimatedGIFImages(function(blob) {
                 do_download(blob);
-            })
+            });
         }
         this.trackEvent("export/" + type, self.chartaccent.summarizeState());
     };
     if(config.chartaccent) {
-        if(config.chartaccent_info && config.chartaccent_info.setExportFunction) {
-            config.chartaccent_info.setExportFunction(export_as);
-        }
+        self.saveAnnotations = function() { return self.chartaccent.saveAnnotations(); };
+        self.loadAnnotations = function(s) { return self.chartaccent.loadAnnotations(s); };
+        self.exportAs = function(type, callback) { return export_as(type, callback); };
     }
 
 
@@ -119,6 +119,7 @@ function BaseChart(element, info, config) {
     if(info.type == "linechart") this._create_linechart();
     if(info.type == "scatterplot") this._create_scatterplot();
 };
+
 
 BaseChart.prototype._determine_y_format = function() {
     var info = this.info;

@@ -10,8 +10,7 @@
 <body>
 
 <div class="wrapper">
-    <div class="navigation">
-        <a href="index.html" class="title" style="float: right">ChartAccent Home</a>
+    <div class="navigation" style="text-align: center">
         <span data-bind="foreach: stages"><button class="stage" data-bind="
             css: {
                 active: $root.current_stage() == $data,
@@ -23,6 +22,13 @@
                 }
             }
         "><span class="text" data-bind="text: strings.stages[$data]"></span><span class="arrow">&raquo;</span></button></span>
+        <span class="left-side">
+            <a href="index.html" class="title">Home</a>
+        </span>
+        <span class="right-side">
+            <form style="display: none"><input id="loadFile" type="file" style="display: none" /></form>
+            <a href="#" class="title" data-bind="click: $root.load_chart_button.bind($root)"><span class="icon chartaccent-icons-load"> Open...</a>
+        </span>
     </div>
 
     <div class="stage-tab" data-bind="css: { active: $root.current_stage() == 'import' }">
@@ -283,6 +289,9 @@
             <button class="btn" data-bind="click: $root.export_as.bind($root, 'gif')"><span class="icon chartaccent-icons-export"> Animated GIF</button>
             <button class="btn" data-bind="click: $root.export_as.bind($root, 'png')"><span class="icon chartaccent-icons-export"> PNG</button>
             <button class="btn" data-bind="click: $root.export_as.bind($root, 'svg')"><span class="icon chartaccent-icons-export"> SVG</button>
+        </p>
+        <p style="text-align: right">
+            <button class="btn" data-bind="click: $root.save_chart.bind($root)"><span class="icon chartaccent-icons-save"> Save...</button>
         </p>
         <p style="text-align: right" data-bind="text: $root.export_status"></p>
     </div>

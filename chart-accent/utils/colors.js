@@ -112,8 +112,39 @@ var Images = { };
     Images.image_placeholder = "data:image/png;base64," + image;
 })();
 
-
 var Styles = {
+    serializeColorInfo: function(color) {
+        if(color == null) return null;
+        if(color instanceof RGBColor) {
+            return { r: color.r, g: color.g, b: color.b, a: color.a };
+        }
+        return deepClone(color);
+    },
+    deserializeColorInfo: function(serialized) {
+        if(serialized == null) return null;
+        if(serialized.r !== undefined) {
+            return new RGBColor(serialized.r, serialized.g, serialized.b, serialized.a);
+        }
+        return deepClone(serialized);
+    },
+    serializeStyle: function(style) {
+        return {
+            fill: Styles.serializeColorInfo(style.fill),
+            stroke: Styles.serializeColorInfo(style.stroke),
+            stroke_width: style.stroke_width,
+            font_family: style.font_family,
+            font_size: style.font_size
+        };
+    },
+    deserializeStyle: function(style) {
+        return {
+            fill: Styles.deserializeColorInfo(style.fill),
+            stroke: Styles.deserializeColorInfo(style.stroke),
+            stroke_width: style.stroke_width,
+            font_family: style.font_family,
+            font_size: style.font_size
+        };
+    },
     fillDefault: function(obj) {
         if(obj.fill === undefined) obj.fill = new RGBColor("#000");
         if(obj.stroke === undefined) obj.stroke = new RGBColor("#000");

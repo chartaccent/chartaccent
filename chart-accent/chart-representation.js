@@ -1068,6 +1068,7 @@ ChartRepresentation.prototype.setEditingAnnotation = function(annotation) {
 ChartRepresentation.prototype.getAnnotationPosition = function(annotation) {
     return this.annotations.indexOf(annotation);
 };
+
 ChartRepresentation.prototype.addItemsToCurrentAnnotation = function(items) {
     var self = this;
     if(this.editing_annotation) {
@@ -1294,6 +1295,13 @@ ChartRepresentation.prototype.saveState = function() {
     return state;
 };
 
+ChartRepresentation.prototype.currentState = function() {
+    var state = {
+        annotations: this.annotations
+    };
+    return state;
+};
+
 ChartRepresentation.prototype.loadState = function(state) {
     this._should_ignore_undo_log = true;
     this.layers.cleanup();
@@ -1370,6 +1378,56 @@ ChartRepresentation.prototype.redo = function() {
         this.loadState(action.state);
         this.undo_history.push(action);
     }
+};
+
+ChartRepresentation.prototype.serializeAnnotations = function(state) {
+    var self = this;
+    var context = {};
+    context.getChartElementsID = function(element) {
+        return "E" + self.chart_elements.indexOf(element);
+    };
+    context.getDataItemID = function(d) {
+        for(var i = 0; i < self.tables.length; i++) {
+            if(self.tables[i].data.indexOf(d) >= 0) {
+                var index = self.tables[i].data.indexOf(d);
+                return { table: self.tables[i].name, index: index };
+            }
+        }
+    };
+    context.assignOrGetTargetID = function(target) {
+        return getObjectUniqueID(target);
+    };
+    return {
+        annotations: state.annotations.map(function(annotation) {
+            return annotation.serialize(context);
+        })
+    }
+};
+
+ChartRepresentation.prototype.deserializeAnnotations = function(serialized) {
+    var context = {};
+    var self = this;
+    var id2target = {};
+    context.getChartElementsByID = function(elementID) {
+        return self.chart_elements[parseInt(elementID.substr(1))];
+    };
+    context.getDataItemByID = function(idstruct) {
+        for(var i = 0; i < self.tables.length; i++) {
+            if(self.tables[i].name == idstruct.table) {
+                return self.tables[i].data[idstruct.index];
+            }
+        }
+    };
+    context.getTargetByID = function(id, target) {
+        if(id2target[id]) return id2target[id];
+        id2target[id] = target;
+        return target;
+    };
+    return {
+        annotations: serialized.annotations.map(function(item) {
+            return Annotation.deserialize(context, item);
+        })
+    };
 };
 
 ChartRepresentation.prototype.getImageDataURL = function(svg, scale, callback) {
