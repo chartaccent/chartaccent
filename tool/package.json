@@ -1,0 +1,34 @@
+{
+  "name": "chartaccent-standalone",
+  "version": "0.0.1",
+  "description": "ChartAccent Standalone Tool",
+  "main": "index.js",
+  "scripts": {
+    "typings": "typings install",
+    "build:ts": "tsc -p .",
+    "build:webpack": "webpack",
+    "build:sass": "sass sass/chartaccent.scss:assets/css/bundle.css",
+    "build": "npm run build:ts && npm run build:webpack && npm run build:sass",
+    "watch:ts": "tsc -w -p .",
+    "watch:webpack": "webpack -w",
+    "watch:sass": "sass -w sass/main.scss:assets/css/bundle.css",
+    "watch": "multirun"
+  },
+  "author": "Donghao Ren <donghao.ren+npm@gmail.com> (https://donghaoren.org/)",
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "source-map-loader": "^0.1.5",
+    "typescript": "^2.1.4",
+    "webpack": "^1.14.0"
+  },
+  "dependencies": {
+    "@types/d3": "^3.5.36",
+    "@types/fbemitter": "^2.0.32",
+    "@types/react": "^0.14.55",
+    "@types/react-dom": "^0.14.20",
+    "d3": "^3.5.17",
+    "fbemitter": "^2.1.1",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1"
+  }
+}

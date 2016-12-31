@@ -1,0 +1,9 @@
+.invisible {
+    display: none;
+}
+
+@mixin user-select-none {
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
