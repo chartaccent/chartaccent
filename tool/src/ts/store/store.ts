@@ -2,7 +2,7 @@ import { Dataset, Column, Row, Chart } from "../model/model";
 import * as Actions from "./actions";
 import { globalSamples } from "./samples";
 import { parseDataset } from "./utils";
-import { EventEmitter } from "fbemitter";
+import { EventEmitter, EventSubscription } from "fbemitter";
 
 export class MainStore extends EventEmitter {
     private _dataset: Dataset;
@@ -32,11 +32,24 @@ export class MainStore extends EventEmitter {
                     dataset: this._dataset,
                     type: null
                 };
-                this.emit("chart-changed");
+                this.emitChartChanged();
             }
             this._dataset = dataset;
-            this.emit("dataset-changed");
+            this.emitDatasetChanged();
         }
+    }
+
+    public emitDatasetChanged() {
+        this.emit("dataset-changed");
+    }
+    public addDatasetChangedListener(listener: Function): EventSubscription {
+        return this.addListener("dataset-changed", listener);
+    }
+    public emitChartChanged() {
+        this.emit("chart-changed");
+    }
+    public addChartChangedListener(listener: Function): EventSubscription {
+        return this.addListener("chart-changed", listener);
     }
 }
 

@@ -1,3 +1,5 @@
+// Declare sample datasets
+
 export let globalSamples = [
     {
         name: "Average Monthly Temperature",

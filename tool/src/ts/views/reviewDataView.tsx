@@ -57,7 +57,7 @@ export class ReviewDataView extends React.Component<{}, {}> {
                                                 { dataset.columns.map((column, index) => <td key={`c${index}`}>{row[column.name]}</td>) }
                                             </tr>
                                         );
-                                    }
+                                    })
                                 }
                             </tbody>
                         </table>

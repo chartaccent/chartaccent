@@ -12,86 +12,26 @@ body {
     @include user-select-none;
 }
 
-.main-view { }
+.main-wrapper {
+    margin-top: 40px;
+}
 
-.navigation-view {
+.menu-wrapper {
     position: fixed;
     left: 0; right: 0; top: 0; bottom: 0;
+    height: 40px;
+    background: #ffffff;
+    box-shadow: 0 0 3px $gray-800;
+}
 
-    $normal-color: #DDD;
-    $normal-border-color: #DDD;
-    $active-color: $primary-color;
-    $active-border-color: $primary-color;
-    $done-color: $primary-color-light;
-    $done-border-color: $primary-color-light;
+.navigation-view {
+    margin: 0px 10px;
+    height: 40px;
+    line-height: 40px;
+}
 
-    border-bottom: 2px solid #EEE;
-    padding: 0px;
-    position: relative;
-
-    .title {
-        font-size: 20px;
-        line-height: 28px;
-        height: 28px;
-        color: #666;
-        text-decoration: none;
-        &:hover, &:active, &:focus {
-            color: #222;
-        }
-    }
-
-    .left-side {
-        position: absolute;
-        left: 0;
-    }
-    .right-side {
-        position: absolute;
-        right: 0;
-    }
-
-
-
-    button.stage {
-        height: 28px;
-        line-height: 28px;
-        font-size: 16px;
-        background: transparent;
-        display: inline-block;
-        padding-right: 5px;
-        margin-right: 0px;
-        color: $normal-color;
-        background-color: white;
-        box-sizing: border-box;
-        cursor: default;
-        .arrow {
-            margin-left: 5px;
-            color: $normal-color;
-        }
-        &.active {
-            color: $active-color;
-            .arrow {
-                color: $normal-color;
-            }
-        }
-        &.fade {
-            color: $done-color;
-            cursor: pointer;
-            .arrow {
-                color: $done-color;
-                text-decoration: none;
-            }
-            &:hover {
-                color: lighten($active-color, 5%);
-                .text { text-decoration: underline; }
-            }
-        }
-        .arrow {
-            padding-left: 5px;
-        }
-        &:last-child {
-            .arrow { display: none; }
-        }
-    }
+section {
+    margin: 10px 10px;
 }
 
 .table-container {
