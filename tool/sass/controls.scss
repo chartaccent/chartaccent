@@ -53,3 +53,161 @@ button.button-normal {
         border: 1px solid $primary-color-darker;
     }
 }
+
+button.button-chart-type {
+    display: inline-block;
+    border-radius: 2px;
+    width: 30%;
+    max-width: 150px;
+    img {
+        width: 100%;
+    }
+    span {
+        margin-top: 3px;
+        display: block;
+        text-align: center;
+    }
+    background-color: $well-color;
+    margin-right: 10px;
+    padding: 5px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $primary-color-light;
+    }
+    &.active {
+        background-color: $primary-color;
+        span { color: white; }
+    }
+}
+
+button.button-dropdown {
+    display: block;
+    line-height: 23px;
+    width: 100%;
+    text-align: left;
+    margin: 0; padding: 0 10px;
+    border-radius: 2px !important;
+    box-shadow: 0 0 2px #CCC;
+    cursor: pointer;
+    padding-right: 30px;
+    box-sizing: border-box;
+    background: url('../images/triangle.svg') no-repeat right #F8F8F8;
+    &:hover {
+        background: url('../images/triangle-white.svg') no-repeat right $primary-color-light;
+        color: white;
+    }
+    &.active {
+        background: url('../images/triangle-white.svg') no-repeat right $primary-color;
+        color: white;
+    }
+}
+
+button.button-dropdown-list-item {
+    display: block;
+    line-height: 23px;
+    width: 100%;
+    text-align: left;
+    margin: 0; padding: 0 10px;
+    cursor: pointer;
+    &:hover {
+        background-color: $primary-color-light;
+        color: white;
+    }
+    &.active {
+        background-color: $primary-color;
+        color: white;
+    }
+}
+
+input[type="text"], input[type="number"] {
+    border: none;
+    outline: none;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    background-color: #F8F8F8;
+    background-color: #FFF;
+    padding: 2px 5px;
+    border: 1px solid #DDD;
+    border-radius: 2px;
+    width: 100%;
+    box-sizing: border-box;
+    &:focus {
+        border: 1px solid $primary-color;
+        box-shadow: 0 0 5px $primary-color-light;
+    }
+}
+
+.dropdown-widget {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+
+    & > .dropdown-list {
+        display: none;
+        width: 100%;
+        position: absolute;
+        border-radius: 2px;
+        box-shadow: 0 0 2px #CCC;
+        margin: 0; padding: 0;
+        max-height: 125px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        border: 1px solid $gray-500;
+        box-sizing: border-box;
+        outline: none;
+        left: 0px; top: 25px;
+        width: 100%;
+        z-index: 1000000;
+        background: #FFFFFF;
+    }
+}
+
+.chart-view {
+    position: relative;
+    overflow-x: auto;
+    white-space: nowrap;
+    margin: 10px 0;
+
+    & > .toolbar {
+        border: 1px solid $border-color;
+        background-color: $well-color;
+        overflow: hidden;
+        border-radius: 2px 2px 0 0;
+        margin-right: 362px;
+        padding: 4px;
+    }
+    & > .panel {
+        float: right;
+        box-shadow: 0 0 2px #444;
+        border: 1px solid #444;
+        border-radius: 2px;
+        overflow: hidden;
+    }
+    & > .chart {
+        margin-right: 362px;
+        border: 1px solid $border-color;
+        border-top: none;
+        overflow: hidden;
+        overflow-x: scroll;
+        border-radius: 0 0 2px 2px;
+        background: #F8F8F8;
+        & > .chart-container {
+            position: relative;
+            box-sizing: content-box;
+            border: 1px solid #888;
+            margin: 5px;
+            background: #FFF;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+            & > .corner-resize {
+                position: absolute;
+                right: 0; bottom: 0;
+                width: 10px;
+                height: 10px;
+                cursor: nwse-resize;
+            }
+        }
+    }
+
+}

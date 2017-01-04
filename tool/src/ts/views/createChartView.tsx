@@ -1,10 +1,12 @@
 import * as React from "react";
-
-import { globalStore } from "../store/store";
-import * as Actions from "../store/actions";
-
 import * as d3 from "d3";
-import { EventSubscription } from "fbemitter";
+
+import * as Actions from "../store/actions";
+import { Chart, BarChart, Scatterplot, LineChart } from "../model/model";
+
+import * as InputWidgets from "./inputWidgets";
+
+import { HorizontalRule } from "../controls/controls";
 
 export class ChartTypeView extends React.Component<{
     chartType: string;
@@ -16,6 +18,7 @@ export class ChartTypeView extends React.Component<{
             { type: "line-chart", "caption": "Line Chart", thumbnail: "assets/images/line-chart.png" },
             { type: "scatterplot", "caption": "Scatterplot", thumbnail: "assets/images/scatterplot.png" }
         ]
+
         return (
             <p>
             {
@@ -24,7 +27,7 @@ export class ChartTypeView extends React.Component<{
                         className={`button-chart-type ${item.type == this.props.chartType ? "active" : ""}`}
                         onClick={() => {
                             if(this.props.onChange != null) {
-                                this.props.onChange(item.type)
+                                this.props.onChange(item.type);
                             }
                         }}
                     >
@@ -34,47 +37,187 @@ export class ChartTypeView extends React.Component<{
                 ))
             }
             </p>
-        )
+        );
     }
 }
 
-export class CreateChartView extends React.Component<{}, {}> {
+export interface ICreateChartViewProps {
+    chart: Chart;
+}
+
+export class CreateChartView extends React.Component<ICreateChartViewProps, {}> {
     refs: {
         [ name: string ]: Element;
-    }
-
-    private _subscriptions: EventSubscription[] = [];
-
-    public componentDidMount() {
-        this._subscriptions.push(globalStore.addListener("chart-changed", () => this.onChartChanged()));
-    }
-
-    public componentWillUnmount() {
-        for(let sub of this._subscriptions) {
-            sub.remove();
-        }
     }
 
     public onChartChanged() {
         this.forceUpdate();
     }
 
-    public render() {
-        if(globalStore.chart == null) {
-            return (
-                <section className="section-review-data">
-                </section>
-            )
-        } else {
-            let dataset = globalStore.dataset;
-            return (
-                <section className="section-create-chart">
-                    <h2>Create Chart</h2>
-                    <ChartTypeView
-                        chartType={globalStore.chart.type}
-                    />
-                </section>
-            );
+    public renderFor(type: string) {
+        switch(type) {
+            case "line-chart":
+            case "bar-chart": {
+                return this.renderForBarOrLineChart(type);
+            };
+            case "scatterplot": {
+                return this.renderForScatterplot();
+            };
         }
+    }
+
+    public renderForBarOrLineChart(type: "bar-chart" | "line-chart") {
+        let chart = this.props.chart as BarChart | LineChart;
+
+        let xColumnCandidates = chart.dataset.columns
+            .map((d) => d.name);
+
+        let yColumnCandidates = chart.dataset.columns
+            .filter((d) => d.type == "number" || d.type == "integer" || d.type == "date")
+            .map((d) => d.name);
+
+        return (
+            <div>
+                <div className="widget-row widget-row-p">
+                    <InputWidgets.ColumnsWidget
+                        columnCount={4}
+                        text="Series"
+                        title="choose a column for x axis"
+                        columns={chart.yColumns || []}
+                        candidates={yColumnCandidates}
+                        onChange={(newColumns) => new Actions.UpdateChartYColumns(chart, newColumns).dispatch()}
+                    />
+                    <InputWidgets.ColumnWidget
+                        columnCount={4}
+                        text="X Label"
+                        title="choose a column for x axis"
+                        column={chart.xColumn}
+                        candidates={xColumnCandidates}
+                        onChange={(newColumn) => new Actions.UpdateChartXColumn(chart, newColumn).dispatch()}
+                    />
+                    <InputWidgets.LabelWidget
+                        columnCount={4}
+                        text="Y Label"
+                        title="enter the label for Y axis"
+                        label={chart.yLabel}
+                        onChange={(newTitle) => new Actions.UpdateChartYLabel(chart, newTitle).dispatch()}
+                    />
+                </div>
+            </div>
+        );
+    }
+
+    public renderForScatterplot() {
+        let chart = this.props.chart as Scatterplot;
+
+        let xyColumnCandidates = chart.dataset.columns
+            .filter((d) => d.type == "number" || d.type == "integer" || d.type == "date")
+            .map((d) => d.name);
+
+        let groupColumnCandidates = chart.dataset.columns
+            .filter((d) => d.type == "string")
+            .map((d) => d.name);
+
+        return (
+            <div>
+                <div className="widget-row widget-row-p">
+                    <InputWidgets.ColumnWidget
+                        columnCount={3}
+                        text="X"
+                        title="choose a column for x axis"
+                        column={chart.xColumn}
+                        candidates={xyColumnCandidates}
+                        onChange={(newColumn) => new Actions.UpdateChartXColumn(chart, newColumn).dispatch()}
+                    />
+                    <InputWidgets.ColumnWidget
+                        columnCount={3}
+                        text="Y"
+                        title="choose a column for x axis"
+                        column={chart.yColumn}
+                        candidates={xyColumnCandidates}
+                        onChange={(newColumn) => new Actions.UpdateChartYColumn(chart, newColumn).dispatch()}
+                    />
+                    <InputWidgets.ColumnWidget
+                        columnCount={3}
+                        text="Color"
+                        title="choose a column for color"
+                        column={chart.groupColumn}
+                        allowNull={true}
+                        candidates={groupColumnCandidates}
+                        onChange={(newColumn) => new Actions.UpdateChartGroupColumn(chart, newColumn).dispatch()}
+                    />
+                    <InputWidgets.ColumnWidget
+                        columnCount={3}
+                        text="Name"
+                        title="choose a column for name"
+                        allowNull={true}
+                        column={chart.nameColumn}
+                        candidates={groupColumnCandidates}
+                        onChange={(newColumn) => new Actions.UpdateChartNameColumn(chart, newColumn).dispatch()}
+                    />
+                </div>
+                <div className="widget-row widget-row-p">
+                    <InputWidgets.LabelWidget
+                        columnCount={3}
+                        text="X Label"
+                        title="enter the label for X axis"
+                        label={chart.xLabel}
+                        onChange={(newTitle) => new Actions.UpdateChartXLabel(chart, newTitle).dispatch()}
+                    />
+                    <InputWidgets.LabelWidget
+                        columnCount={3}
+                        text="Y Label"
+                        title="enter the label for Y axis"
+                        label={chart.yLabel}
+                        onChange={(newTitle) => new Actions.UpdateChartYLabel(chart, newTitle).dispatch()}
+                    />
+                </div>
+            </div>
+        );
+    }
+
+
+    public render() {
+        let chart = this.props.chart;
+        let dataset = chart.dataset;
+        return (
+            <section className="section-create-chart">
+                <HorizontalRule />
+                <h2>Create Chart</h2>
+                <ChartTypeView
+                    chartType={chart.type}
+                    onChange={(newType) => new Actions.UpdateChartType(chart, newType).dispatch()}
+                />
+                { chart.type != null ?
+                    <div className="chart-options">
+                        <div className="widget-row widget-row-p">
+                            <InputWidgets.LabelWidget
+                                columnCount={5}
+                                text="Title"
+                                title="enter chart title"
+                                label={chart.title}
+                                onChange={(newTitle) => new Actions.UpdateChartTitle(chart, newTitle).dispatch()}
+                            />
+                            <InputWidgets.WidthHeightWidget
+                                columnCount={3}
+                                text="Title"
+                                title="enter chart title"
+                                width={chart.width}
+                                height={chart.height}
+                                onChange={(newWidth, newHeight) => new Actions.UpdateChartWidthHeight(chart, newWidth, newHeight).dispatch()}
+                            />
+                            <InputWidgets.ColorsWidget
+                                columnCount={4}
+                                text="Colors"
+                                title="choose a color palette"
+                                colors={chart.colors || []}
+                                onChange={(newColors) => new Actions.UpdateChartColors(chart, newColors).dispatch()}
+                            />
+                        </div>
+                        { this.renderFor(chart.type) }
+                    </div>
+                : null }
+            </section>
+        );
     }
 }

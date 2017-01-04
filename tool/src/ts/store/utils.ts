@@ -6,34 +6,38 @@ import * as d3 from "d3";
 
 let TESTS: { [ name: string ]: (x: string) => boolean } = {
     boolean: (x: string) => x.toLowerCase() === "true" || x.toLowerCase() === "false",
-    integer: (x: string) => TESTS["number"](x) && (+x) === ~~(+x),
-    number: (x: string) => !isNaN(+x),
+    integer: (x: string) => TESTS["number"](x) && (+x.replace(/\,/g, "")) === ~~(+x.replace(/\,/g, "")),
+    number: (x: string) => !isNaN(+x.replace(/\,/g, "")),
     date: (x: string) => !isNaN(Date.parse(x)),
 };
 
 let CONVERTERS: { [ name: string ]: (x: string) => RowType } = {
     boolean: (x: string) => x.toLowerCase() === "true" ? true : false,
-    integer: (x: string) => +x,
-    number: (x: string) => +x,
+    integer: (x: string) => +x.replace(/\,/g, ""),
+    number: (x: string) => +x.replace(/\,/g, ""),
     date: (x: string) => Date.parse(x),
     string: (x: string) => x
 };
 
 export function inferColumnType(values: string[]): ColumnType {
+    // console.log(values);
     let candidates: ColumnType[] = [ "boolean", "integer", "number", "date" ];
     for(let i = 0; i < values.length; i++) {
         let v = values[i];
         // skip empty values
         if(v == null) continue;
+        v = v.trim();
+        if(v == "") continue;
         // test for remaining candidates
         for(let j = 0; j < candidates.length; j++) {
             if(!TESTS[candidates[j]](v)) {
+                // console.log(candidates[j], "fail at", v);
                 candidates.splice(j, 1);
                 j -= 1;
             }
         }
         // if no types left, return "string"
-        if (candidates.length === 0) return "string";
+        if(candidates.length == 0) return "string";
     }
     return candidates[0];
 }

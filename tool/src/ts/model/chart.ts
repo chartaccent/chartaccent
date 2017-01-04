@@ -9,7 +9,7 @@ export interface Scale {
 export interface Label {
     text: string;
     fontFamily?: string;
-    fontSize?: string;
+    fontSize?: number;
     fontStyle?: string;
     textAlign?: "left" | "right" | "middle";
 }
@@ -22,6 +22,10 @@ export interface Chart {
     type: string;
 
     title?: Label;
+    width: number;
+    height: number;
+
+    colors: string[];
 
     annotations?: any;
 }
@@ -31,11 +35,11 @@ export interface Chart {
 export interface BarChart extends Chart {
     type: "bar-chart";
 
-    xColumns: string[];
+    xColumn: string;
     xScale: Scale;
     xLabel: Label;
 
-    yColumn: string;
+    yColumns: string[];
     yScale: Scale;
     yLabel: Label;
 
@@ -45,11 +49,11 @@ export interface BarChart extends Chart {
 export interface LineChart extends Chart {
     type: "line-chart";
 
-    xColumns: string[];
+    xColumn: string;
     xScale: Scale;
     xLabel: Label;
 
-    yColumn: string;
+    yColumns: string[];
     yScale: Scale;
     yLabel: Label;
 
@@ -66,6 +70,8 @@ export interface Scatterplot extends Chart {
     yColumn: string;
     yScale: Scale;
     yLabel: Label;
+
+    nameColumn: string;
 
     groupColumn?: string;
     legendLabel: Label;

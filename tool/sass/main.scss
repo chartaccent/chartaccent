@@ -4,24 +4,28 @@
 
 @import "controls.scss";
 @import "typography.scss";
+@import "layout.scss";
+@import "widgets.scss";
 
 body {
     font-size: 14px;
     font-family: $main-font;
     cursor: default;
     @include user-select-none;
+    padding-bottom: 500px;
 }
 
 .main-wrapper {
-    margin-top: 40px;
+    margin-top: 50px;
 }
 
 .menu-wrapper {
     position: fixed;
     left: 0; right: 0; top: 0; bottom: 0;
     height: 40px;
-    background: #ffffff;
-    box-shadow: 0 0 3px $gray-800;
+    background: rgba(240, 240, 240, 0.95);
+    box-shadow: 0 0 10px $gray-700;
+    z-index: 100000;
 }
 
 .navigation-view {
@@ -39,7 +43,7 @@ section {
     border: 1px solid #EEE;
     margin: 10px 0;
     width: 100%;
-    height: 400px;
+    max-height: 200px;
     box-sizing: border-box;
 }
 

@@ -1,9 +1,3 @@
-export {
-    FileType, ColumnType, RowType,
-    Column, Row, Dataset
-} from "./dataset";
-
-export {
-    Scale, Label, Chart,
-    BarChart, LineChart, Scatterplot
-} from "./chart";
+export * from "./dataset";
+export * from "./chart";
+export { Defaults } from "./defaults";

@@ -1,11 +1,12 @@
 h2 {
     font-size: 16px;
-    color: #888;
+    color: $gray-200;
     height: 32px;
     line-height: 32px;
     font-size: 24px;
     padding: 0 0;
-    margin: 0 0;
+    margin: 10px 0;
+    font-weight: lighter;
 }
 
 h3 {
@@ -19,10 +20,20 @@ h3 {
 
 p {
     margin: 10px 0;
+    &.note {
+        color: $gray-500;
+    }
 }
 
 ul {
     li {
         margin: 5px 0;
     }
+}
+
+.horizontal-rule {
+    margin: 20px 0px;
+    height: 0px;
+    width: 100%;
+    border-top: 1px solid $border-color;
 }

@@ -1,0 +1,16 @@
+.row {
+    .col-4 {
+        float: left;
+        width: 30%;
+        padding-left: 4px;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+    .col-8 {
+        float: left;
+        width: 70%;
+        padding-right: 4px;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+}

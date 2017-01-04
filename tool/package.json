@@ -5,6 +5,10 @@
   "main": "index.js",
   "scripts": {
     "typings": "typings install",
+    "build:chartaccent:js": "node chart-accent/compile.js chart-accent/module.js build/chartaccent.js",
+    "build:chartaccent:pegjs": "pegjs -e Expression.Parser --format globals --allowed-start-rules start,string_start chart-accent/expression/parser.pegjs",
+    "build:chartaccent:less": "lessc chart-accent/styles/chart-accent.less assets/css/chartaccent.css",
+    "build:chartaccent": "npm run build:chartaccent:pegjs && npm run build:chartaccent:js && npm run build:chartaccent:less",
     "build:ts": "tsc -p .",
     "build:webpack": "webpack",
     "build:sass": "sass sass/chartaccent.scss:assets/css/bundle.css",
@@ -18,6 +22,8 @@
   "author": "Donghao Ren <donghao.ren+npm@gmail.com> (https://donghaoren.org/)",
   "license": "BSD-3-Clause",
   "devDependencies": {
+    "less": "^2.7.1",
+    "pegjs": "^0.10.0",
     "source-map-loader": "^0.1.5",
     "typescript": "^2.1.4",
     "webpack": "^1.14.0"
@@ -25,11 +31,16 @@
   "dependencies": {
     "@types/d3": "^3.5.36",
     "@types/fbemitter": "^2.0.32",
+    "@types/flux": "0.0.34",
     "@types/react": "^0.14.55",
     "@types/react-dom": "^0.14.20",
+    "chroma-js": "^1.2.1",
     "d3": "^3.5.17",
     "fbemitter": "^2.1.1",
+    "flux": "^3.1.2",
+    "jquery": "^3.1.1",
     "react": "^15.4.1",
-    "react-dom": "^15.4.1"
+    "react-dom": "^15.4.1",
+    "typeahead.js-browserify": "^1.0.7"
   }
 }
