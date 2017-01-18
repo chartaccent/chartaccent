@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as d3 from "d3";
 
-import { Chart, Label } from "../model/model";
+import { Chart, Label, Dataset } from "../model/model";
 
 let measureTextCanvas = document.createElement("canvas");
 let measureTextCanvasCtx = measureTextCanvas.getContext("2d");
@@ -38,10 +38,18 @@ export class ChartLabel extends React.Component<{
                     fontSize: label.fontSize || 12,
                     fontWeight: label.fontStyle == "bold" || label.fontStyle == "bold-italic" ? "bold" : "normal",
                     fontStyle: label.fontStyle == "italic" || label.fontStyle == "bold-italic" ? "italic" : "normal",
-                    textAnchor: this.props.anchor || "middle"
+                    textAnchor: this.props.anchor || "middle",
+                    fill: label.color
                 }}
                 >{label.text}</text>
             </g>
         );
     }
+}
+
+export function findColumnFormat(dataset: Dataset, columnName: string): string {
+    for(let column of dataset.columns) {
+        if(column.name == columnName) return column.format;
+    }
+    return ".1f";
 }

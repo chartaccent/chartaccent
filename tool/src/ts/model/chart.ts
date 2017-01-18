@@ -12,6 +12,7 @@ export interface Label {
     fontSize?: number;
     fontStyle?: string;
     textAlign?: "left" | "right" | "middle";
+    color: string;
 }
 
 // The Chart object
@@ -26,8 +27,6 @@ export interface Chart {
     height: number;
 
     colors: string[];
-
-    annotations?: any;
 }
 
 // Declare chart-type-specific fields here:
@@ -70,6 +69,8 @@ export interface Scatterplot extends Chart {
     yColumn: string;
     yScale: Scale;
     yLabel: Label;
+
+    sizeColumn: string;
 
     nameColumn: string;
 

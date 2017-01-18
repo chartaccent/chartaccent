@@ -16,7 +16,7 @@ body {
 }
 
 .main-wrapper {
-    margin-top: 50px;
+    margin-top: 60px;
 }
 
 .menu-wrapper {
@@ -29,13 +29,23 @@ body {
 }
 
 .navigation-view {
-    margin: 0px 10px;
+    margin: 0px 24px;
     height: 40px;
     line-height: 40px;
+    a.title {
+        color: black;
+        margin-right: 15px;
+        font-size: 18px;
+    }
+    .pull-right {
+        float: right;
+        height: 40px;
+        line-height: 40px;
+    }
 }
 
 section {
-    margin: 10px 10px;
+    margin: 10px 24px;
 }
 
 .table-container {
@@ -65,7 +75,11 @@ table {
         background: rgba(0, 0, 0, 0.02);
         border: 1px solid white;
         padding: 4px 8px;
-        &.type_number { text-align: right; }
-        &.type_text { text-align: left; }
+        &.rowtype-number, &.rowtype-integer {
+            text-align: right;
+            font-family: $mono-font;
+            font-size: 13px;
+        }
+        &.rowtype-string { text-align: left; }
     }
 }

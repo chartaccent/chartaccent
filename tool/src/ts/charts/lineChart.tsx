@@ -3,7 +3,7 @@ import * as d3 from "d3";
 
 import { Chart, BarChart, Row } from "../model/model";
 import { BaseChartView } from "./baseChart";
-import { ChartLabel, applyAxisStyle, measureTextWidth } from "./elements";
+import { ChartLabel, applyAxisStyle, measureTextWidth, findColumnFormat } from "./elements";
 
 import * as ChartAccent from "../chartaccent";
 
@@ -93,10 +93,13 @@ export class LineChartView extends BaseChartView {
         let { yScale, yAxis } = this.d3GetYAxis();
 
         let valueFormat = ".1f";
+        if(chart.yColumns && chart.yColumns.length > 0) {
+            valueFormat = findColumnFormat(chart.dataset, chart.yColumns[0]);
+        }
         let valueFormatExpression = 'format("' + valueFormat + '", value)';
 
         let chartRepresentation = chartaccent.AddChart({
-            event_tracker: () => {},
+            event_tracker: this.props.eventTracker,
             bounds: {
                 x: 0, y: 0, width: this.props.chart.width, height: this.props.chart.height,
                 origin_x: 0,

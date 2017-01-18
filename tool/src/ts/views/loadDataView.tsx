@@ -2,6 +2,7 @@ import * as React from "react";
 import * as d3 from "d3";
 
 import { Button } from "../controls/controls";
+import { ColumnWidget } from "./inputWidgets";
 import { MainStore } from "../store/store";
 import * as Actions from "../store/actions";
 
@@ -12,20 +13,17 @@ export class LoadDataView extends React.Component<{
         [ name: string ]: Element;
         inputFile: HTMLInputElement;
         inputFileForm: HTMLFormElement;
-        selectSample: HTMLSelectElement;
     }
 
     public render() {
         return (
             <section className="section-load-data">
                 <h2>Choose Data File (CSV)</h2>
-                <p>
+                <p data-intro="Open your CSV file or load one of our sample datasets.">
                     <Button text="Choose File" onClick={() => {
                         this.refs.inputFileForm.reset();
                         this.refs.inputFile.onchange = () => {
                             if(this.refs.inputFile.files.length == 1) {
-                                this.refs.selectSample.value = "load";
-
                                 let file = this.refs.inputFile.files[0];
                                 let fileName = file.name;
                                 let fileReader = new FileReader();
@@ -41,29 +39,33 @@ export class LoadDataView extends React.Component<{
                         this.refs.inputFile.click();
                     }} />
                     <span> or </span>
-                    <select ref="selectSample" onChange={() => {
-                        let samples = this.props.store.samples.filter((sample) => sample.name == this.refs.selectSample.value);
-                        if(samples.length > 0) {
-                            let sample = samples[0];
-                            d3.text(sample.csv, "text/plain", (err, data) => {
-                                if(!err) {
-                                    new Actions.LoadData(sample.csv, data, "csv").dispatch();
+                    <div style={{ width: "300px", display: "inline-block" }}>
+                        <ColumnWidget
+                            columnCount={6}
+                            candidates={this.props.store.samples.map(d => d.name)}
+                            column={null}
+                            contentOnly={true}
+                            nullText="load sample dataset..."
+                            onChange={(sampleName) => {
+                                let samples = this.props.store.samples.filter((s) => s.name == sampleName);
+                                if(samples.length > 0) {
+                                    let sample = samples[0];
+                                    d3.text(sample.csv, "text/plain", (err, data) => {
+                                        if(!err) {
+                                            let name = sample.csv.slice(sample.csv.lastIndexOf("/") + 1);
+                                            new Actions.LoadData(name, data, "csv").dispatch();
+                                        }
+                                    });
                                 }
-                            });
-                        }
-                    }}>
-                        <option value="load" selected disabled>load sample dataset...</option>
-                        {
-                            this.props.store.samples.map((sample) => (
-                                <option value={sample.name}>{sample.name}</option>
-                            ))
-                        }
-                    </select>
+                            }}
+                            text="or"
+                        />
+                    </div>
                     <form ref="inputFileForm">
                         <input ref="inputFile" className="invisible" type="file" accept=".csv" />
                     </form>
                 </p>
-                <p className="note">Your file will NOT be uploaded to our server.</p>
+                <p className="note">Your file will not be uploaded to our server.</p>
             </section>
         );
     }

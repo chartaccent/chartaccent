@@ -1,4 +1,5 @@
 import { ColumnType, RowType, Column, Row, Dataset } from "../model/model";
+import { isDistinctValues, getUniqueValues } from "../utils/utils";
 import * as d3 from "d3";
 
 // Infer column type.
@@ -72,9 +73,30 @@ export function parseDataset(fileName: string, content: string, type: "csv" | "t
             // Infer column type
             let values = rows.slice(1).map((row) => row[index]);
             let type = inferColumnType(values);
+            let format = undefined;
+            if(type == "integer") format = ".0f";
+            if(type == "number") {
+                let valuesFixed = values.map(d => +d).filter(d => !isNaN(d)).map(d => d.toFixed(10));
+                valuesFixed = valuesFixed.map(d => {
+                    let m = d.match(/\.([0-9]{10})$/);
+                    if(m) return m[1];
+                    else return "0000000000";
+                });
+                let k: number;
+                for(k = 10 - 1; k >= 0; k--) {
+                    if(valuesFixed.every(v => v[k] == "0")) {
+                        continue;
+                    } else {
+                        break;
+                    }
+                }
+                format = `.${k + 1}f`;
+            }
+            if(type == "date") format = "%Y/%m/%d-%H:%M:%S";
             return {
                 name: name,
-                type: type
+                type: type,
+                format: format
             } as Column;
         });
         let outRows = rows.slice(1).map((row) => {
@@ -94,4 +116,30 @@ export function parseDataset(fileName: string, content: string, type: "csv" | "t
         return dataset;
     } else {
     }
+}
+
+export function getColumnsSummary(dataset: Dataset) {
+    return dataset.columns.map((column) => {
+        let values = dataset.rows.filter(row => row[column.name] != null).map(row => row[column.name].toString());
+        let uniqueValues = getUniqueValues(values);
+        return {
+            name: column.name,
+            type: column.type,
+            format: column.format,
+            values: values,
+            uniqueValues: uniqueValues,
+            isDistinctValues: isDistinctValues(values)
+        }
+    });
+}
+
+export function getColumnsForDistinctAxis(dataset: Dataset, maxUniqueValues: number = 1e10) {
+    let summary = getColumnsSummary(dataset);
+    let candidates = summary.filter(c => c.isDistinctValues && c.type == "string" && c.uniqueValues.length <= maxUniqueValues);
+    return candidates.map(c => c.name);
+}
+
+export function getColumnsForContinuousAxis(dataset: Dataset) {
+    let candidates = dataset.columns.filter(d => d.type == "integer" || d.type == "number");
+    return candidates.map(c => c.name);
 }

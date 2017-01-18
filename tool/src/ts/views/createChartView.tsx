@@ -2,15 +2,17 @@ import * as React from "react";
 import * as d3 from "d3";
 
 import * as Actions from "../store/actions";
-import { Chart, BarChart, Scatterplot, LineChart } from "../model/model";
+import { Chart, BarChart, Scatterplot, LineChart, Defaults } from "../model/model";
 
+import { getColumnsForDistinctAxis, getColumnsForContinuousAxis } from "../model/utils";
 import * as InputWidgets from "./inputWidgets";
 
 import { HorizontalRule } from "../controls/controls";
 
 export class ChartTypeView extends React.Component<{
     chartType: string;
-    onChange?: (chartType: string) => void;
+    isEnabled: (chartType: string) => boolean;
+    onChange: (chartType: string) => void;
 }, {}> {
     public render() {
         let chartTypes = [
@@ -20,13 +22,13 @@ export class ChartTypeView extends React.Component<{
         ]
 
         return (
-            <p>
+            <p data-intro="Choose a chart that best suits your dataset. Non-suitable chart types are disabled.">
             {
                 chartTypes.map((item) => (
                     <button
-                        className={`button-chart-type ${item.type == this.props.chartType ? "active" : ""}`}
+                        className={`button-chart-type ${item.type == this.props.chartType ? "active" : ""} ${this.props.isEnabled(item.type) ? "" : "disabled" }`}
                         onClick={() => {
-                            if(this.props.onChange != null) {
+                            if(this.props.onChange != null && this.props.isEnabled(item.type)) {
                                 this.props.onChange(item.type);
                             }
                         }}
@@ -69,12 +71,8 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
     public renderForBarOrLineChart(type: "bar-chart" | "line-chart") {
         let chart = this.props.chart as BarChart | LineChart;
 
-        let xColumnCandidates = chart.dataset.columns
-            .map((d) => d.name);
-
-        let yColumnCandidates = chart.dataset.columns
-            .filter((d) => d.type == "number" || d.type == "integer" || d.type == "date")
-            .map((d) => d.name);
+        let xColumnCandidates = getColumnsForDistinctAxis(chart.dataset);
+        let yColumnCandidates = getColumnsForContinuousAxis(chart.dataset);
 
         return (
             <div>
@@ -110,9 +108,7 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
     public renderForScatterplot() {
         let chart = this.props.chart as Scatterplot;
 
-        let xyColumnCandidates = chart.dataset.columns
-            .filter((d) => d.type == "number" || d.type == "integer" || d.type == "date")
-            .map((d) => d.name);
+        let xyColumnCandidates = getColumnsForContinuousAxis(chart.dataset);
 
         let groupColumnCandidates = chart.dataset.columns
             .filter((d) => d.type == "string")
@@ -148,12 +144,12 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
                     />
                     <InputWidgets.ColumnWidget
                         columnCount={3}
-                        text="Name"
-                        title="choose a column for name"
+                        text="Size"
+                        title="choose a column for size"
+                        column={chart.sizeColumn}
                         allowNull={true}
-                        column={chart.nameColumn}
-                        candidates={groupColumnCandidates}
-                        onChange={(newColumn) => new Actions.UpdateChartNameColumn(chart, newColumn).dispatch()}
+                        candidates={xyColumnCandidates}
+                        onChange={(newColumn) => new Actions.UpdateChartSizeColumn(chart, newColumn).dispatch()}
                     />
                 </div>
                 <div className="widget-row widget-row-p">
@@ -171,6 +167,15 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
                         label={chart.yLabel}
                         onChange={(newTitle) => new Actions.UpdateChartYLabel(chart, newTitle).dispatch()}
                     />
+                    <InputWidgets.ColumnWidget
+                        columnCount={3}
+                        text="Label"
+                        title="choose a column for name"
+                        allowNull={true}
+                        column={chart.nameColumn}
+                        candidates={groupColumnCandidates}
+                        onChange={(newColumn) => new Actions.UpdateChartNameColumn(chart, newColumn).dispatch()}
+                    />
                 </div>
             </div>
         );
@@ -187,9 +192,10 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
                 <ChartTypeView
                     chartType={chart.type}
                     onChange={(newType) => new Actions.UpdateChartType(chart, newType).dispatch()}
+                    isEnabled={(type) => Defaults.isChartValid(dataset, type) }
                 />
                 { chart.type != null ?
-                    <div className="chart-options">
+                    <div className="chart-options" data-intro="Specify chart options such as X/Y axes, data series, chart title, and color scheme.">
                         <div className="widget-row widget-row-p">
                             <InputWidgets.LabelWidget
                                 columnCount={5}

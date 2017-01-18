@@ -4,7 +4,6 @@ import { ControlsTestView } from "./controlsTestView";
 import { LoadDataView } from "./loadDataView";
 import { ReviewDataView } from "./reviewDataView";
 import { CreateChartView } from "./createChartView";
-import { AnnotationView } from "./annotationView";
 import { ChartView } from "../charts/chartView";
 
 import * as Actions from "../store/actions";
@@ -60,13 +59,13 @@ export class MainView extends React.Component<IMainViewProps, IMainViewState> {
         return (
             <div className="wrapper">
                 <div className="menu-wrapper">
-                    <NavigationView />
+                    <NavigationView store={this.props.store} />
                 </div>
                 <div className="main-wrapper">
                     <LoadDataView store={this.props.store} />
                     { this.state.dataset != null ? <ReviewDataView dataset={this.state.dataset} /> : null }
-                    { this.state.chart != null ? <CreateChartView chart={this.state.chart} /> : null }
-                    { this.state.chart != null && this.state.chart.type != null ? <ChartView chart={this.state.chart} /> : null }
+                    { this.state.dataset != null && this.state.chart != null ? <CreateChartView chart={this.state.chart} /> : null }
+                    { this.state.chart != null && this.state.chart.type != null ? <ChartView chart={this.state.chart} store={this.props.store} /> : null }
                 </div>
             </div>
         );

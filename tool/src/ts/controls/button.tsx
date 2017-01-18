@@ -3,6 +3,7 @@ import * as React from "react";
 export interface IButtonProps {
     text: string;
     type?: "normal" | "small" | "text";
+    icon?: string;
     disabled?: boolean;
     onClick?: (button: Button) => void;
     title?: string;
@@ -19,7 +20,7 @@ export class Button extends React.Component<IButtonProps, {}> {
                     }
                 }}
                 title={this.props.title || this.props.text}
-            >{this.props.text}</button>
+            >{this.props.icon ? <span><span className={`icon chartaccent-icons-${this.props.icon}`} /><span> </span></span> : null}{this.props.text}</button>
         );
     }
 }

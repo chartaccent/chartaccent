@@ -14,6 +14,9 @@ select {
         background: url('../images/triangle-white.svg') no-repeat right $primary-color-light;
         color: white;
     }
+    &:focus {
+        box-shadow: 0 0 5px $primary-color-light;
+    }
     box-shadow: 0 0 2px #CCC;
     cursor: pointer;
 }
@@ -79,6 +82,27 @@ button.button-chart-type {
         background-color: $primary-color;
         span { color: white; }
     }
+    &:focus {
+        box-shadow: 0 0 5px $primary-color-light;
+    }
+
+    &.disabled {
+        color: $gray-500;
+        img {
+            filter: grayscale(1);
+        }
+        &:hover {
+            background-color: $gray-800;
+        }
+        &.active {
+            background-color: $gray-800;
+            span { color: white; }
+        }
+        &:focus {
+            box-shadow: 0 0 5px $gray-800;
+        }
+
+    }
 }
 
 button.button-dropdown {
@@ -88,18 +112,53 @@ button.button-dropdown {
     text-align: left;
     margin: 0; padding: 0 10px;
     border-radius: 2px !important;
-    box-shadow: 0 0 2px #CCC;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     padding-right: 30px;
     box-sizing: border-box;
     background: url('../images/triangle.svg') no-repeat right #F8F8F8;
+    border: 1px solid #CCC;
     &:hover {
         background: url('../images/triangle-white.svg') no-repeat right $primary-color-light;
+        border: 1px solid $primary-color;
         color: white;
     }
     &.active {
         background: url('../images/triangle-white.svg') no-repeat right $primary-color;
+        border: 1px solid $primary-color-dark;
         color: white;
+    }
+    &:focus {
+        box-shadow: 0 0 5px $primary-color-light;
+        border: 1px solid $primary-color;
+    }
+}
+
+button.button-small {
+    display: block;
+    line-height: 23px;
+    width: 100%;
+    text-align: left;
+    margin: 0; padding: 0 10px;
+    border-radius: 2px !important;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    box-sizing: border-box;
+    background: #F8F8F8;
+    border: 1px solid #DDD;
+    &:hover {
+        background: $primary-color-light;
+        border: 1px solid $primary-color;
+        color: white;
+    }
+    &.active {
+        background: $primary-color;
+        border: 1px solid $primary-color-dark;
+        color: white;
+    }
+    &:focus {
+        box-shadow: 0 0 5px $primary-color-light;
+        border: 1px solid $primary-color;
     }
 }
 
@@ -120,6 +179,20 @@ button.button-dropdown-list-item {
     }
 }
 
+button.button-text {
+    font-size: 18px;
+    color: $gray-400;
+    padding: 4px 10px;
+    border-radius: 2px;
+    &:hover {
+        color: $primary-color;
+        background-color: transparentize($primary-color, 0.8);
+    }
+    &:focus {
+        box-shadow: 0 0 5px $primary-color-light;
+    }
+}
+
 input[type="text"], input[type="number"] {
     border: none;
     outline: none;
@@ -128,7 +201,7 @@ input[type="text"], input[type="number"] {
     font-size: 14px;
     background-color: #F8F8F8;
     background-color: #FFF;
-    padding: 2px 5px;
+    padding: 3px 5px;
     border: 1px solid #DDD;
     border-radius: 2px;
     width: 100%;
@@ -206,8 +279,73 @@ input[type="text"], input[type="number"] {
                 width: 10px;
                 height: 10px;
                 cursor: nwse-resize;
+                img {
+                    position: absolute; left: 0; top: 0;
+                    width: 10px;
+                    height: 10px;
+                }
             }
         }
     }
+}
 
+input[type="color"] {
+    height: 25px;
+    box-sizing: border-box;
+    border-radius: 2px;
+    width: 50px;
+    padding: 1px;
+    background: #FFF;
+    border: 1px solid #DDD;
+    outline: none;
+    &:focus {
+        border: 1px solid $primary-color;
+        box-shadow: 0 0 5px $primary-color-light;
+    }
+}
+
+.label-widget {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+
+    & > input[type="text"] {
+        width: calc(100% - 32px);
+        border-right: none;
+        border-radius: 2px 0 0 2px;
+        &:focus {
+            border-right: 1px solid $primary-color;
+        }
+    }
+    & > .controls {
+        button {
+            width: 32px;
+            padding: 0;
+            text-align: center;
+            border-radius: 0 2px 2px 0 !important;
+            box-shadow: none;
+            &:focus {
+                box-shadow: 0 0 5px $primary-color-light;
+                border: 1px solid $primary-color;
+            }
+        }
+        float: right;
+    }
+    & > .dropdown {
+        display: none;
+        position: absolute;
+        border-radius: 2px;
+        box-shadow: 0 0 2px #CCC;
+        margin: 0; padding: 0;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        border: 1px solid $gray-500;
+        box-sizing: border-box;
+        outline: none;
+        right: 0px; top: 25px;
+        width: 250px;
+        padding: 0 10px;
+        z-index: 1000000;
+        background: #FFFFFF;
+    }
 }

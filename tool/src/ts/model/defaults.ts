@@ -1,6 +1,8 @@
 import { Chart, Label, BarChart, LineChart, Scatterplot, Scale } from "./chart";
 import { Dataset } from "./dataset";
 
+import { getColumnsForDistinctAxis, getColumnsForContinuousAxis } from "./utils";
+
 import * as d3 from "d3";
 
 import { getUniqueValues } from "../utils/utils";
@@ -15,7 +17,38 @@ export module Defaults {
         { name: "colorbrewer5", colors: [ "#b3e2cd", "#fdcdac", "#cbd5e8", "#f4cae4", "#e6f5c9", "#fff2ae" ] },
         { name: "colorbrewer6", colors: [ "#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33" ] },
         { name: "colorbrewer7", colors: [ "#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854", "#ffd92f" ] },
-        { name: "colorbrewer8", colors: [ "#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462" ] }
+        { name: "colorbrewer8", colors: [ "#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462" ] },
+        { name: "Purple-Gray 12", colors: [ "#7b66d2", "#a699e8", "#dc5fbd", "#ffc0da", "#5f5a41", "#b4b19b", "#995688", "#d898ba", "#ab6ad5", "#d098ee", "#8b7c6e", "#dbd4c5" ] },
+        { name: "Tableau 20", colors: [ "#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c", "#98df8a", "#d62728", "#ff9896", "#9467bd", "#c5b0d5", "#8c564b", "#c49c94", "#e377c2", "#f7b6d2", "#7f7f7f", "#c7c7c7", "#bcbd22", "#dbdb8d", "#17becf", "#9edae5" ] },
+        { name: "Green-Orange 6", colors: [ "#32a251", "#ff7f0f", "#3cb7cc", "#ffd94a", "#39737c", "#b85a0d" ] },
+        { name: "Color Blind 10", colors: [ "#006ba4", "#ff800e", "#ababab", "#595959", "#5f9ed1", "#c85200", "#898989", "#a2c8ec", "#ffbc79", "#cfcfcf" ] },
+        { name: "Blue-Red 6", colors: [ "#2c69b0", "#f02720", "#ac613c", "#6ba3d6", "#ea6b73", "#e9c39b" ] },
+        { name: "Blue-Red 12", colors: [ "#2c69b0", "#b5c8e2", "#f02720", "#ffb6b0", "#ac613c", "#e9c39b", "#6ba3d6", "#b5dffd", "#ac8763", "#ddc9b4", "#bd0a36", "#f4737a" ] },
+        { name: "Tableau 10 Light", colors: [ "#aec7e8", "#ffbb78", "#98df8a", "#ff9896", "#c5b0d5", "#c49c94", "#f7b6d2", "#c7c7c7", "#dbdb8d", "#9edae5" ] },
+        { name: "Purple-Gray 6", colors: [ "#7b66d2", "#dc5fbd", "#94917b", "#995688", "#d098ee", "#d7d5c5" ] },
+        { name: "Tableau 10 Medium", colors: [ "#729ece", "#ff9e4a", "#67bf5c", "#ed665d", "#ad8bc9", "#a8786e", "#ed97ca", "#a2a2a2", "#cdcc5d", "#6dccda" ] },
+        { name: "Green-Orange 12", colors: [ "#32a251", "#acd98d", "#ff7f0f", "#ffb977", "#3cb7cc", "#98d9e4", "#b85a0d", "#ffd94a", "#39737c", "#86b4a9", "#82853b", "#ccc94d" ] },
+        { name: "Tableau 10", colors: [ "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf" ] },
+        { name: "Traffic Light", colors: [ "#b10318", "#dba13a", "#309343", "#d82526", "#ffc156", "#69b764", "#f26c64", "#ffdd71", "#9fcd99" ] },
+        { name: "Gray 5", colors: [ "#60636a", "#a5acaf", "#414451", "#8f8782", "#cfcfcf" ] }
+    ];
+
+    export let defaultColors = [ "#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e", "#e6ab02" ];
+
+    export let fonts = [
+        "Helvetica",
+        "Arial",
+        "Lucida Grande",
+        "Geneva",
+        "Verdana",
+        "Tahoma",
+        "Comic Sans MS",
+        "Impact",
+        "Georgia",
+        "Times",
+        "Palatino",
+        "Consolas",
+        "Lucida Console"
     ];
 
     export function label(text: string = "", fontSize: number = 14): Label {
@@ -23,7 +56,8 @@ export module Defaults {
             text: text,
             fontFamily: "Arial",
             fontSize: fontSize,
-            fontStyle: "regular"
+            fontStyle: "regular",
+            color: "#000000"
         }
     }
 
@@ -34,15 +68,18 @@ export module Defaults {
     }
 
     export function barChart(dataset: Dataset): BarChart {
-        let xColumn = dataset.columns
-            .filter((d) => d.type == "string")[0].name;
+        let xColumnCandidates = getColumnsForDistinctAxis(dataset, 20);
+        let yColumnCandidates = getColumnsForContinuousAxis(dataset);
 
-        let yColumns = dataset.columns
-            .filter((d) => d.type == "number" || d.type == "integer" || d.type == "date").slice(0, 2).map((d) => d.name);
+        if(xColumnCandidates.length == 0 || yColumnCandidates.length == 0) return null;
+
+        let xColumn = xColumnCandidates[0];
+        let yColumns = yColumnCandidates.slice(0, 2);
+
         return {
             dataset: dataset,
             type: "bar-chart",
-            title: Defaults.label(dataset.fileName, 16),
+            title: Defaults.label(dataset.fileName, 20),
             width: 800,
             height: 400,
             xColumn: xColumn,
@@ -52,20 +89,23 @@ export module Defaults {
             xScale: Defaults.scale("categorical"),
             yScale: Defaults.scale("linear"),
             legendLabel: Defaults.label("Series"),
-            colors: Defaults.colors[6].colors,
-            annotations: null
+            colors: Defaults.colors[6].colors
         }
     }
-    export function lineChart(dataset: Dataset): LineChart {
-        let xColumn = dataset.columns
-            .filter((d) => d.type == "string")[0].name;
 
-        let yColumns = dataset.columns
-            .filter((d) => d.type == "number" || d.type == "integer" || d.type == "date").slice(0, 2).map((d) => d.name);
+    export function lineChart(dataset: Dataset): LineChart {
+        let xColumnCandidates = getColumnsForDistinctAxis(dataset, 20);
+        let yColumnCandidates = getColumnsForContinuousAxis(dataset);
+
+        if(xColumnCandidates.length == 0 || yColumnCandidates.length == 0) return null;
+
+        let xColumn = xColumnCandidates[0];
+        let yColumns = yColumnCandidates.slice(0, 2);
+
         return {
             dataset: dataset,
             type: "line-chart",
-            title: Defaults.label(dataset.fileName, 16),
+            title: Defaults.label(dataset.fileName, 20),
             width: 800,
             height: 400,
             xColumn: xColumn,
@@ -75,13 +115,17 @@ export module Defaults {
             xScale: Defaults.scale("categorical"),
             yScale: Defaults.scale("linear"),
             legendLabel: Defaults.label("Series"),
-            colors: Defaults.colors[6].colors,
-            annotations: null
+            colors: Defaults.colors[6].colors
         }
     }
+
     export function scatterplotChart(dataset: Dataset): Scatterplot {
-        let [ xColumn, yColumn ] = dataset.columns
-            .filter((d) => d.type == "number" || d.type == "integer" || d.type == "date").slice(0, 2).map((d) => d.name);
+        let xyColumnCandidates = getColumnsForContinuousAxis(dataset);
+        if(xyColumnCandidates.length < 2) return null;
+
+        let xColumn = xyColumnCandidates[0];
+        let yColumn = xyColumnCandidates[1];
+        let sizeColumn = null; // xyColumnCandidates[2] || null;
 
         let stringColumns = dataset.columns
             .filter((d) => d.type == "string").map((d) => {
@@ -104,11 +148,12 @@ export module Defaults {
         return {
             dataset: dataset,
             type: "scatterplot",
-            title: Defaults.label(dataset.fileName, 16),
+            title: Defaults.label(dataset.fileName, 20),
             width: 800,
             height: 400,
             xColumn: xColumn,
             yColumn: yColumn,
+            sizeColumn: sizeColumn,
             groupColumn: groupColumn,
             nameColumn: nameColumn,
             xLabel: Defaults.label(xColumn),
@@ -116,34 +161,37 @@ export module Defaults {
             xScale: Defaults.scale("linear"),
             yScale: Defaults.scale("linear"),
             legendLabel: Defaults.label("Series"),
-            colors: Defaults.colors[1].colors,
-            annotations: null
+            colors: this.defaultColors
         }
+    }
+
+    export function nullChart(): Chart {
+        return {
+            dataset: null,
+            type: null,
+            title: Defaults.label("", 20),
+            width: 800,
+            height: 400,
+            colors: this.defaultColors
+        };
     }
 
     export function chart(dataset: Dataset): Chart {
         if(dataset != null) {
-            // return Defaults.scatterplotChart(dataset);
-            return {
-                dataset: dataset,
-                type: null,
-                title: Defaults.label(dataset.fileName, 16),
-                width: 800,
-                height: 400,
-                colors: Defaults.colors[1].colors,
-                annotations: null
-            };
+            return Defaults.barChart(dataset) || Defaults.scatterplotChart(dataset) || Defaults.nullChart();
         } else {
-            return {
-                dataset: null,
-                type: null,
-                title: Defaults.label("", 16),
-                width: 800,
-                height: 400,
-                colors: Defaults.colors[1].colors,
-                annotations: null
-            };
+            return Defaults.nullChart();
         }
+    }
+
+    export function isChartValid(dataset: Dataset, chart: string) {
+        if(!dataset) return false;
+        switch(chart) {
+            case "bar-chart": return Defaults.barChart(dataset) ? true : false;
+            case "line-chart": return Defaults.lineChart(dataset) ? true : false;
+            case "scatterplot": return Defaults.scatterplotChart(dataset) ? true : false;
+        }
+        return false;
     }
 
 }

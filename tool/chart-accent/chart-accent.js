@@ -36,8 +36,12 @@ ChartAccent.prototype.saveAnnotations = function() {
     return deepClone(this.charts[0].serializeAnnotations(this.charts[0].currentState()));
 };
 
-ChartAccent.prototype.loadAnnotations = function(saved) {
-    this.charts[0].loadState(this.charts[0].deserializeAnnotations(saved));
+ChartAccent.prototype.loadAnnotations = function(saved, logEvent) {
+    let state = this.charts[0].deserializeAnnotations(saved);
+    this.charts[0].loadState(state);
+    if(logEvent) {
+        this.charts[0].event_tracker("load", this.summarizeState(state));
+    }
 };
 
 ChartAccent.prototype.AddChart = function(info) {

@@ -33,11 +33,12 @@ declare module ChartAccent {
         }): ChartRepresentation;
 
         public saveAnnotations(): SavedAnnotations;
-        public loadAnnotations(annotations: SavedAnnotations): void;
+        public loadAnnotations(annotations: SavedAnnotations, logEvent?: boolean): void;
 
         public getSVGDataBlob(): Blob;
         public getImageDataBlob(mineType: string, scaleFactor: number, callback: (blob: Blob) => void): void;
         public getAnimatedGIFImages(callback: (blob: Blob) => void): void;
+        public summarizeState(): string;
     }
 
     export class ChartRepresentation {

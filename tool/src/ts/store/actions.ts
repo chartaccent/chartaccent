@@ -1,4 +1,5 @@
-import { Chart, Label } from "../model/model";
+import { Chart, Label, AppState } from "../model/model";
+import { ChartAccent } from "../chartaccent";
 import { Dispatcher } from "flux";
 
 export let globalDispatcher = new Dispatcher<Action>();
@@ -8,6 +9,12 @@ export class Action {
         globalDispatcher.dispatch(this);
     }
 };
+
+export class Reset extends Action {
+}
+
+export class StartIntroduction extends Action {
+}
 
 export class LoadData extends Action {
     constructor(
@@ -82,6 +89,15 @@ export class UpdateChartGroupColumn extends UpdateChart {
     }
 }
 
+export class UpdateChartSizeColumn extends UpdateChart {
+    constructor(
+        public chart: Chart,
+        public newSizeColumn: string
+    ) {
+        super(chart);
+    }
+}
+
 export class UpdateChartNameColumn extends UpdateChart {
     constructor(
         public chart: Chart,
@@ -126,3 +142,14 @@ export class UpdateChartColors extends UpdateChart {
         super(chart);
     }
 }
+
+export class SaveState extends Action {
+};
+
+export class LoadState extends Action {
+    constructor(
+        public state: AppState
+    ) {
+        super();
+    }
+};

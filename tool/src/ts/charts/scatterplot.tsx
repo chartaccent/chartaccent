@@ -3,7 +3,7 @@ import * as d3 from "d3";
 
 import { Chart, Scatterplot } from "../model/model";
 import { BaseChartView } from "./baseChart";
-import { ChartLabel, applyAxisStyle, measureTextWidth } from "./elements";
+import { ChartLabel, applyAxisStyle, measureTextWidth, findColumnFormat } from "./elements";
 import { getUniqueValues } from "../utils/utils";
 import * as ChartAccent from "../chartaccent";
 
@@ -34,6 +34,17 @@ export class ScatterplotView extends BaseChartView {
         let { xScale, xAxis } = this.d3GetXAxis();
         let { yScale, yAxis } = this.d3GetYAxis();
 
+        let sizeScale: d3.scale.Pow<number, number> = null;
+        if(chart.sizeColumn) {
+            sizeScale = d3.scale.pow()
+                .domain([
+                    0,
+                    d3.max(chart.dataset.rows, (r) => +r[chart.sizeColumn])
+                ])
+                .range([ 0, 20 ])
+                .exponent(0.5);
+        }
+
         d3.select(this._scatterplotChartXAxis).call(xAxis).call(applyAxisStyle);
         d3.select(this._scatterplotChartYAxis).call(yAxis).call(applyAxisStyle);
 
@@ -44,7 +55,7 @@ export class ScatterplotView extends BaseChartView {
         points.enter().append("circle")
             .attr("cx", d => xScale(+d[chart.xColumn]))
             .attr("cy", d => yScale(+d[chart.yColumn]))
-            .attr("r", 5)
+            .attr("r", chart.sizeColumn ? d => sizeScale(+d[chart.sizeColumn]) : d => 5)
             .style("stroke", "none")
             .style("fill", chart.colors[0]);
 
@@ -100,7 +111,7 @@ export class ScatterplotView extends BaseChartView {
         let nameFormat = chart.nameColumn ? chart.nameColumn : '"Item"';
 
         let chartRepresentation = chartaccent.AddChart({
-            event_tracker: () => {},
+            event_tracker: this.props.eventTracker,
             bounds: {
                 x: 0, y: 0, width: this.props.chart.width, height: this.props.chart.height,
                 origin_x: 0,
@@ -119,12 +130,14 @@ export class ScatterplotView extends BaseChartView {
         chartRepresentation.addAxis({
             axis: "x",
             origin_y: chart.height - this._margin.bottom,
-            name: chart.xLabel.text
+            name: chart.xLabel.text,
+            default_format: findColumnFormat(chart.dataset, chart.xColumn)
         });
         chartRepresentation.addAxis({
             axis: "y",
             origin_x: this._margin.left,
-            name: chart.yLabel.text
+            name: chart.yLabel.text,
+            default_format: findColumnFormat(chart.dataset, chart.yColumn)
         });
         chartRepresentation.addSeriesFromD3Selection({
             name: "Data",
@@ -135,8 +148,8 @@ export class ScatterplotView extends BaseChartView {
                 if(axis == "x") return d[chart.xColumn];
                 if(axis == "y") return d[chart.yColumn];
             },
-            getValue: d => d[chart.nameColumn],
-            itemToString: d => d[chart.nameColumn],
+            getValue: chart.nameColumn ? d => d[chart.nameColumn] : d => "Item",
+            itemToString: chart.nameColumn ? d => d[chart.nameColumn] : d => "Item",
             visibility: (f) => {}
         });
         if(chart.groupColumn) {

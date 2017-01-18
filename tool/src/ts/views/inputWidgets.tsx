@@ -1,11 +1,13 @@
 import * as React from "react";
 import * as d3 from "d3";
 
+import { Button } from "../controls/controls";
 import { Label, Defaults } from "../model/model";
 
 export interface IRowWidgetProps {
     text: string;
     title?: string;
+    contentOnly?: boolean;
     columnCount?: number;
 }
 
@@ -16,13 +18,30 @@ export class RowWidget<PropsType extends IRowWidgetProps, StatesType> extends Re
     }
 
     public render() {
-        return (
-            <div className={`col-${this.props.columnCount || 12}`}>
-                <label title={this.props.title}>{this.props.text}</label>
-                <div className="widget-content">{ this.renderWidget() }</div>
-            </div>
-        );
+        if(this.props.contentOnly) {
+            return this.renderWidget();
+        } else {
+            return (
+                <div className={`col-${this.props.columnCount || 12}`}>
+                    <label title={this.props.title}>{this.props.text}</label>
+                    <div className="widget-content">{ this.renderWidget() }</div>
+                </div>
+            );
+        }
     }
+}
+
+function isTargetInElement(target: any, element: any) {
+    var result = false;
+    var item = target;
+    while(item && item != document.body && item != document) {
+        if(item == element) {
+            result = true;
+            break;
+        }
+        item = item.parentNode;
+    }
+    return result;
 }
 
 export interface ILabelWidgetProps extends IRowWidgetProps {
@@ -35,6 +54,9 @@ export class LabelWidget extends RowWidget<ILabelWidgetProps, {
 }> {
     refs: {
         input: HTMLInputElement;
+        inputColor: HTMLInputElement;
+        dropdownContainer: HTMLDivElement;
+        dropdownButton: HTMLButtonElement;
     }
 
     constructor(props: ILabelWidgetProps) {
@@ -43,6 +65,8 @@ export class LabelWidget extends RowWidget<ILabelWidgetProps, {
         this.state = {
             currentLabel: this.props.label != null ? { ... this.props.label } : Defaults.label("")
         };
+
+        this.onMouseDown = this.onMouseDown.bind(this);
     }
 
     public componentWillReceiveProps(nextProps: ILabelWidgetProps) {
@@ -55,21 +79,87 @@ export class LabelWidget extends RowWidget<ILabelWidgetProps, {
         this.props.onChange(this.state.currentLabel);
     }
 
+    public onMouseDown(e: MouseEvent) {
+        if(!isTargetInElement(e.target, this.refs.dropdownContainer)) {
+            this.completeDropdown();
+        }
+    }
+    public startDropdown() {
+        this.refs.dropdownContainer.style.display = "block";
+        d3.select(this.refs.dropdownButton).classed("active", true);
+        window.addEventListener("mousedown", this.onMouseDown);
+    }
+    public completeDropdown() {
+        this.refs.dropdownContainer.style.display = "none";
+        d3.select(this.refs.dropdownButton).classed("active", false);
+        window.removeEventListener("mousedown", this.onMouseDown);
+    }
+
     public renderWidget() {
         let label = this.state.currentLabel;
         return (
-            <input type="text" ref="input" placeholder={this.props.title} value={label.text}
-                onChange={(e) => {
-                    this.state.currentLabel.text = this.refs.input.value;
-                    this.setState({ currentLabel: this.state.currentLabel });
-                }}
-                onBlur={() => this.sendEvent()}
-                onKeyDown={(e) => {
-                    if(e.keyCode == 13) {
-                        this.sendEvent()
-                    }
-                }}
-            />
+            <span className="label-widget">
+                <input type="text" ref="input" placeholder={this.props.title} value={label.text}
+                    onChange={(e) => {
+                        this.state.currentLabel.text = this.refs.input.value;
+                        this.setState({ currentLabel: this.state.currentLabel });
+                    }}
+                    onBlur={() => this.sendEvent()}
+                    onKeyDown={(e) => {
+                        if(e.keyCode == 13) {
+                            this.sendEvent();
+                        }
+                    }}
+                />
+                <span className="controls">
+                    <button ref="dropdownButton" className="button-small" onClick={(e) => this.startDropdown()}>...</button>
+                </span>
+                <div className="dropdown" ref="dropdownContainer">
+
+                    <div className="widget-row widget-row-p">
+                        <div className="col-12">
+                            <label>Color</label>
+                            <div className="widget-content">
+                                <input ref="inputColor" type="color" value={label.color} onChange={(e) => {
+                                    this.state.currentLabel.color = this.refs.inputColor.value;
+                                    this.setState({ currentLabel: this.state.currentLabel });
+                                    this.sendEvent();
+                                }} />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="widget-row widget-row-p">
+                        <div className="col-12">
+                            <label>Font</label>
+                            <div className="widget-content">
+                                <select
+                                    value={label.fontFamily}
+                                    onChange={(e) => {
+                                        this.state.currentLabel.fontFamily = (e.target as HTMLSelectElement).value;
+                                        this.setState({ currentLabel: this.state.currentLabel });
+                                        this.sendEvent();
+                                    }}
+                                >
+                                { Defaults.fonts.map(f => <option value={f}>{f}</option>) }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="widget-row widget-row-p">
+                        <div className="col-12">
+                            <label>Size</label>
+                            <div className="widget-content">
+                                <input type="number" value={label.fontSize}
+                                    onChange={(e) => {
+                                        this.state.currentLabel.fontSize = +(e.target as HTMLInputElement).value;
+                                        this.setState({ currentLabel: this.state.currentLabel });
+                                        this.sendEvent();
+                                    }} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </span>
         );
     }
 }
@@ -193,20 +283,9 @@ export class DropdownListWidget<PropsType extends IRowWidgetProps, StatesType> e
             </div>
         );
     }
-    public isTargetInElement(target: any, element: any) {
-        var result = false;
-        var item = target;
-        while(item && item != document.body && item != document) {
-            if(item == element) {
-                result = true;
-                break;
-            }
-            item = item.parentNode;
-        }
-        return result;
-    }
+
     public onMouseDown(e: MouseEvent) {
-        if(!this.isTargetInElement(e.target, this.refs.dropdownList)) {
+        if(!isTargetInElement(e.target, this.refs.dropdownList)) {
             this.completeDropdown();
         }
     }
@@ -226,12 +305,13 @@ export interface IColumnWidgetProps extends IRowWidgetProps {
     candidates: string[];
     column: string;
     allowNull?: boolean;
+    nullText?: string;
     onChange: (newColumn: string) => void;
 }
 
 export class ColumnWidget extends DropdownListWidget<IColumnWidgetProps, {}> {
     public renderButton() {
-        return <span>{this.props.column || "(none)"}</span>;
+        return <span>{this.props.column || (this.props.nullText || "(none)")}</span>;
     }
     public renderListItems() {
         let candidates = this.props.candidates.map((d, i) => (
@@ -308,7 +388,7 @@ export class ColorsWidget extends DropdownListWidget<IColorsWidgetProps, {}> {
         return true;
     }
     public renderColors(colors: string[]) {
-        return colors.map((c) => (
+        return colors.slice(0, 6).map((c) => (
             <span style={{ backgroundColor: c, display: "inline-block", width: "10px", height: "1em", margin: "0 2px", verticalAlign: "middle", outline: "1px solid white" }}></span>
         ));
     }
@@ -319,7 +399,7 @@ export class ColorsWidget extends DropdownListWidget<IColorsWidgetProps, {}> {
                 name = d.name;
             }
         });
-        return (<span>{this.renderColors(this.props.colors)} {name}</span>);
+        return (<span>{this.renderColors(this.props.colors.slice(0, 6))} {name}</span>);
     }
     public renderListItems() {
         return Defaults.colors.map((d, i) => (

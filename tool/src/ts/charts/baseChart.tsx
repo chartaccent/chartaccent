@@ -8,6 +8,7 @@ import { ChartLabel, measureTextWidth } from "./elements";
 
 export interface IBaseChartViewProps {
     chart: Chart;
+    eventTracker: (action: string, label: string) => void;
 }
 
 export interface IChartMargin {
