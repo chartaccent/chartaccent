@@ -70,11 +70,12 @@ export class ScatterplotView extends BaseChartView {
     public d3GetXAxis() {
         let chart = this.props.chart as Scatterplot;
         let xScale = d3.scale.linear()
-            .domain([
-                d3.min(chart.dataset.rows, (r) => +r[chart.xColumn]),
-                d3.max(chart.dataset.rows, (r) => +r[chart.xColumn])
-            ])
-            .range([ this._margin.left, chart.width - this._margin.right ]);
+        xScale.range([ this._margin.left, chart.width - this._margin.right ]);
+        xScale.domain([
+            chart.xScale.min != null ? chart.xScale.min : d3.min(chart.dataset.rows, (r) => +r[chart.xColumn]),
+            chart.xScale.max != null ? chart.xScale.max : d3.max(chart.dataset.rows, (r) => +r[chart.xColumn])
+        ]);
+        if(chart.xScale.min != null || chart.xScale.max != null) xScale.nice();
         let xAxis = d3.svg.axis().scale(xScale).orient("bottom");
         return { xScale, xAxis };
     }
@@ -82,12 +83,12 @@ export class ScatterplotView extends BaseChartView {
     public d3GetYAxis() {
         let chart = this.props.chart as Scatterplot;
         let yScale = d3.scale.linear()
-            .domain([
-                d3.min(chart.dataset.rows, (r) => +r[chart.yColumn]),
-                d3.max(chart.dataset.rows, (r) => +r[chart.yColumn])
-            ])
-            .range([ chart.height - this._margin.bottom, this._margin.top ])
-            .nice();
+        yScale.range([ chart.height - this._margin.bottom, this._margin.top ]);
+        yScale.domain([
+            chart.yScale.min != null ? chart.yScale.min : d3.min(chart.dataset.rows, (r) => +r[chart.yColumn]),
+            chart.yScale.max != null ? chart.yScale.max : d3.max(chart.dataset.rows, (r) => +r[chart.yColumn])
+        ]);
+        if(chart.yScale.min != null || chart.yScale.max != null) yScale.nice();
         let yAxis = d3.svg.axis().scale(yScale).orient("left");
         return { yScale, yAxis };
     }

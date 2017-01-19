@@ -1,4 +1,4 @@
-import { Chart, Label, AppState } from "../model/model";
+import { Chart, Label, Scale, AppState } from "../model/model";
 import { ChartAccent } from "../chartaccent";
 import { Dispatcher } from "flux";
 
@@ -133,6 +133,25 @@ export class UpdateChartYLabel extends UpdateChart {
         super(chart);
     }
 }
+
+export class UpdateChartXScale extends UpdateChart {
+    constructor(
+        public chart: Chart,
+        public newXScale: Scale
+    ) {
+        super(chart);
+    }
+}
+
+export class UpdateChartYScale extends UpdateChart {
+    constructor(
+        public chart: Chart,
+        public newYScale: Scale
+    ) {
+        super(chart);
+    }
+}
+
 
 export class UpdateChartColors extends UpdateChart {
     constructor(

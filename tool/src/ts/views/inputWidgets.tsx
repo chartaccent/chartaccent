@@ -1,48 +1,8 @@
 import * as React from "react";
 import * as d3 from "d3";
 
-import { Button } from "../controls/controls";
-import { Label, Defaults } from "../model/model";
-
-export interface IRowWidgetProps {
-    text: string;
-    title?: string;
-    contentOnly?: boolean;
-    columnCount?: number;
-}
-
-export class RowWidget<PropsType extends IRowWidgetProps, StatesType> extends React.Component<PropsType, StatesType> {
-
-    public renderWidget(): JSX.Element {
-        return null;
-    }
-
-    public render() {
-        if(this.props.contentOnly) {
-            return this.renderWidget();
-        } else {
-            return (
-                <div className={`col-${this.props.columnCount || 12}`}>
-                    <label title={this.props.title}>{this.props.text}</label>
-                    <div className="widget-content">{ this.renderWidget() }</div>
-                </div>
-            );
-        }
-    }
-}
-
-function isTargetInElement(target: any, element: any) {
-    var result = false;
-    var item = target;
-    while(item && item != document.body && item != document) {
-        if(item == element) {
-            result = true;
-            break;
-        }
-        item = item.parentNode;
-    }
-    return result;
-}
+import { Button, RowWidget, IRowWidgetProps, DropdownListWidget, isTargetInElement } from "../controls/controls";
+import { Label, Defaults, Scale } from "../model/model";
 
 export interface ILabelWidgetProps extends IRowWidgetProps {
     label: Label;
@@ -256,50 +216,97 @@ export class WidthHeightWidget extends RowWidget<IWidthHeightWidgetProps, {
     }
 }
 
-export class DropdownListWidget<PropsType extends IRowWidgetProps, StatesType> extends RowWidget<PropsType, StatesType> {
+
+export interface IScaleWidgetProps extends IRowWidgetProps {
+    scale: Scale;
+    onChange: (newScale: Scale) => void;
+}
+
+export class ScaleWidget extends RowWidget<IScaleWidgetProps, {
+    min: string;
+    max: string;
+}> {
     refs: {
-        dropdownButton: HTMLButtonElement,
-        dropdownList: HTMLDivElement
+        inputMin: HTMLInputElement;
+        inputMax: HTMLInputElement;
     }
-    constructor(props: PropsType) {
+
+    constructor(props: IScaleWidgetProps) {
         super(props);
-        this.onMouseDown = this.onMouseDown.bind(this);
+
+        this.state = {
+            min: props.scale.min != null ? props.scale.min.toString() : "",
+            max: props.scale.max != null ? props.scale.max.toString() : "",
+        };
     }
-    public renderListItems(): JSX.Element[] {
-        return [];
+
+    public componentWillReceiveProps(nextProps: IScaleWidgetProps) {
+        this.setState({
+            min: nextProps.scale.min != null ? nextProps.scale.min.toString() : "",
+            max: nextProps.scale.max != null ? nextProps.scale.max.toString() : ""
+        });
     }
-    public renderButton(): JSX.Element {
-        return <span>button</span>;
+
+    public parseValue(s: string) {
+        let v = parseFloat(s);
+        if(isNaN(v)) return null;
+        return v;
     }
-    public renderWidget() {
+
+    private sendEvent() {
+        this.props.onChange({
+            min: this.parseValue(this.state.min),
+            max: this.parseValue(this.state.max),
+            type: this.props.scale.type
+        });
+    }
+
+    public render() {
         return (
-            <div className="dropdown-widget">
-                <button className="button-dropdown" onClick={() => this.startDropdown()} ref="dropdownButton">
-                { this.renderButton() }
-                </button>
-                <div className="dropdown-list" ref="dropdownList">
-                { this.renderListItems() }
+            <div className={`col-${this.props.columnCount || 12}`}>
+                <div className="widget-row">
+                    <div className="col-6">
+                        <label title={this.props.title}>{this.props.text} Min</label>
+                        <div className="widget-content">
+                            <input type="text" ref="inputMin" placeholder="auto" value={this.state.min}
+                                onChange={() => {
+                                    this.setState({ min: this.refs.inputMin.value } as any);
+                                }}
+                                onBlur={(e) => {
+                                    this.sendEvent();
+                                }}
+                                onKeyDown={(e) => {
+                                    if(e.keyCode == 13) {
+                                        this.sendEvent()
+                                    }
+                                }}
+                            />
+                        </div>
+                    </div>
+                    <div className="col-6">
+                        <label title={this.props.title}>{this.props.text} Max</label>
+                        <div className="widget-content">
+                            <input type="text" ref="inputMax" placeholder="auto" value={this.state.max}
+                                onChange={() => {
+                                    this.setState({ max: this.refs.inputMax.value } as any);
+                                }}
+                                onBlur={(e) => {
+                                    this.sendEvent();
+                                }}
+                                onKeyDown={(e) => {
+                                    if(e.keyCode == 13) {
+                                        this.sendEvent()
+                                    }
+                                }}
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         );
     }
-
-    public onMouseDown(e: MouseEvent) {
-        if(!isTargetInElement(e.target, this.refs.dropdownList)) {
-            this.completeDropdown();
-        }
-    }
-    public startDropdown() {
-        this.refs.dropdownList.style.display = "block";
-        d3.select(this.refs.dropdownButton).classed("active", true);
-        window.addEventListener("mousedown", this.onMouseDown);
-    }
-    public completeDropdown() {
-        this.refs.dropdownList.style.display = "none";
-        d3.select(this.refs.dropdownButton).classed("active", false);
-        window.removeEventListener("mousedown", this.onMouseDown);
-    }
 }
+
 
 export interface IColumnWidgetProps extends IRowWidgetProps {
     candidates: string[];

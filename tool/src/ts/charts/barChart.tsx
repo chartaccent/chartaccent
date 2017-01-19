@@ -63,13 +63,15 @@ export class BarChartView extends BaseChartView {
 
     public d3GetYAxis() {
         let chart = this.props.chart as BarChart;
-        let yScale = d3.scale.linear()
-            .domain([
-                d3.min(chart.yColumns, (d) => d3.min(chart.dataset.rows, (r) => +r[d])),
-                d3.max(chart.yColumns, (d) => d3.max(chart.dataset.rows, (r) => +r[d]))
-            ])
-            .range([ chart.height - this._margin.bottom, this._margin.top ])
-            .nice();
+        let yScale = d3.scale.linear();
+        yScale.range([ chart.height - this._margin.bottom, this._margin.top ])
+        yScale.domain([
+            chart.yScale.min != null ? chart.yScale.min : d3.min(chart.yColumns, (d) => d3.min(chart.dataset.rows, (r) => +r[d])),
+            chart.yScale.max != null ? chart.yScale.max : d3.max(chart.yColumns, (d) => d3.max(chart.dataset.rows, (r) => +r[d]))
+        ]);
+        if(chart.yScale.min == null && chart.yScale.max == null) {
+            yScale.nice();
+        }
         let yAxis = d3.svg.axis().scale(yScale).orient("left");
         return { yScale, yAxis };
     }

@@ -46,7 +46,10 @@ export class NavigationView extends React.Component<{
                     }
                 }} />
                 <form className="invisible" ref="inputFileForm"><input ref="inputFile" id="loadFile" type="file" /></form>
-                <span className="pull-right"><Button type="text" text="Help..." onClick={() => new Actions.StartIntroduction().dispatch()} /></span>
+                <span className="pull-right">
+                    <Button type="text" text="Feedback..." onClick={() => window.open("https://docs.google.com/forms/d/e/1FAIpQLSf6K0k7frhtSerxEIs4NK2ELzgPoOXMNoRFfJJebeZxn__Zxg/viewform", "_blank")} />
+                    <Button type="text" text="Help..." onClick={() => new Actions.StartIntroduction().dispatch()} />
+                </span>
             </div>
         );
     }

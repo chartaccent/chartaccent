@@ -23,7 +23,7 @@
   "license": "BSD-3-Clause",
   "devDependencies": {
     "less": "^2.7.1",
-    "multirun": "^0.2.1",
+    "multirun": "^0.2.2",
     "pegjs": "^0.10.0",
     "source-map-loader": "^0.1.5",
     "typescript": "^2.1.4",

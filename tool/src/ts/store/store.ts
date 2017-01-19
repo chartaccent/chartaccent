@@ -95,22 +95,27 @@ export class MainStore extends EventEmitter {
             this.logger.log("appstate/reset", "");
         }
         if(action instanceof Actions.StartIntroduction) {
-            let sample = this.samples[4];
-            d3.text(sample.csv, "text/plain", (err, data) => {
-                if(!err) {
-                    this.handleAction(new Actions.LoadData(sample.csv, data, "csv"));
-                    setTimeout(() => {
-                        let intro = introJs();
-                        intro.onexit(() => {
-                            new Actions.Reset().dispatch();
-                        });
-                        intro.oncomplete(() => {
-                            new Actions.Reset().dispatch();
-                        });
-                        intro.start();
-                    }, 100);
-                }
-            });
+            if(this._dataset && this._chart && this._chart.type != null) {
+                let intro = introJs();
+                intro.start();
+            } else {
+                let sample = this.samples[4];
+                d3.text(sample.csv, "text/plain", (err, data) => {
+                    if(!err) {
+                        this.handleAction(new Actions.LoadData(sample.csv, data, "csv"));
+                        setTimeout(() => {
+                            let intro = introJs();
+                            intro.onexit(() => {
+                                new Actions.Reset().dispatch();
+                            });
+                            intro.oncomplete(() => {
+                                new Actions.Reset().dispatch();
+                            });
+                            intro.start();
+                        }, 100);
+                    }
+                });
+            }
         }
 
     }
@@ -163,6 +168,16 @@ export class MainStore extends EventEmitter {
             (this._chart as any).yLabel = Defaults.label(action.newYColumn);
             this.emitChartChanged();
             this.logger.log("chart/ycolumn", "");
+        }
+        if(action instanceof Actions.UpdateChartXScale) {
+            (this._chart as any).xScale = action.newXScale;
+            this.emitChartChanged();
+            this.logger.log("chart/xscale", "");
+        }
+        if(action instanceof Actions.UpdateChartYScale) {
+            (this._chart as any).yScale = action.newYScale;
+            this.emitChartChanged();
+            this.logger.log("chart/yscale", "");
         }
         if(action instanceof Actions.UpdateChartGroupColumn) {
             (this._chart as any).groupColumn = action.newGroupColumn;

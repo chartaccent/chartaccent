@@ -85,13 +85,12 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
                         candidates={yColumnCandidates}
                         onChange={(newColumns) => new Actions.UpdateChartYColumns(chart, newColumns).dispatch()}
                     />
-                    <InputWidgets.ColumnWidget
+                    <InputWidgets.ScaleWidget
                         columnCount={4}
-                        text="X Label"
-                        title="choose a column for x axis"
-                        column={chart.xColumn}
-                        candidates={xColumnCandidates}
-                        onChange={(newColumn) => new Actions.UpdateChartXColumn(chart, newColumn).dispatch()}
+                        text="Y"
+                        title="y range"
+                        scale={chart.yScale}
+                        onChange={(newScale) => new Actions.UpdateChartYScale(chart, newScale).dispatch()}
                     />
                     <InputWidgets.LabelWidget
                         columnCount={4}
@@ -99,6 +98,16 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
                         title="enter the label for Y axis"
                         label={chart.yLabel}
                         onChange={(newTitle) => new Actions.UpdateChartYLabel(chart, newTitle).dispatch()}
+                    />
+                </div>
+                <div className="widget-row widget-row-p">
+                    <InputWidgets.ColumnWidget
+                        columnCount={4}
+                        text="X Label"
+                        title="choose a column for x axis"
+                        column={chart.xColumn}
+                        candidates={xColumnCandidates}
+                        onChange={(newColumn) => new Actions.UpdateChartXColumn(chart, newColumn).dispatch()}
                     />
                 </div>
             </div>
@@ -175,6 +184,22 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
                         column={chart.nameColumn}
                         candidates={groupColumnCandidates}
                         onChange={(newColumn) => new Actions.UpdateChartNameColumn(chart, newColumn).dispatch()}
+                    />
+                </div>
+                <div className="widget-row widget-row-p">
+                    <InputWidgets.ScaleWidget
+                        columnCount={3}
+                        text="X"
+                        title="x range"
+                        scale={chart.xScale}
+                        onChange={(newScale) => new Actions.UpdateChartXScale(chart, newScale).dispatch()}
+                    />
+                    <InputWidgets.ScaleWidget
+                        columnCount={3}
+                        text="Y"
+                        title="y range"
+                        scale={chart.yScale}
+                        onChange={(newScale) => new Actions.UpdateChartYScale(chart, newScale).dispatch()}
                     />
                 </div>
             </div>

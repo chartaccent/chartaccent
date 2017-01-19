@@ -12,4 +12,8 @@ ReactDOM.render(<MainView store={globalStore}/>, document.getElementById("main-v
 
 // We can add some test code here
 
-new Actions.StartIntroduction().dispatch();
+// Show the introduction at first use.
+if("done" != localStorage.getItem("introduction")) {
+    new Actions.StartIntroduction().dispatch();
+    localStorage.setItem("introduction", "done");
+}
