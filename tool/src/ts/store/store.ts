@@ -14,6 +14,7 @@ export class MainStore extends EventEmitter {
     private _chart: Chart;
     private _samples: typeof globalSamples;
     private _chartAccent: ChartAccent;
+    private _exportAs: (type: string, callback: () => void) => void;
 
     public get dataset(): Dataset { return this._dataset; }
     public get chart(): Chart { return this._chart; }
@@ -27,6 +28,16 @@ export class MainStore extends EventEmitter {
 
     public setChartAccent(value: ChartAccent) {
         this._chartAccent = value;
+    }
+
+    public setExportAs(func: (type: string, callback: () => void) => void) {
+        this._exportAs = func;
+    }
+
+    public exportAs(type: string, callback: () => void) {
+        if(this._exportAs) {
+            this._exportAs(type, callback);
+        }
     }
 
     constructor() {

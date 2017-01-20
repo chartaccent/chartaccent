@@ -126,6 +126,7 @@ export class ChartView extends React.Component<IChartViewProps, IChartViewState>
             }
         }
         this.props.store.setChartAccent(this.chartAccent);
+        this.props.store.setExportAs(this.exportAs.bind(this));
     }
 
     public trackEvent(type: string, value: string) {
@@ -170,12 +171,10 @@ export class ChartView extends React.Component<IChartViewProps, IChartViewState>
 
     public render() {
         return (
-            <section>
-                <HorizontalRule />
-                <h2>Annotate</h2>
+            <div>
                 <div className="chart-view" data-intro="Annotate your chart here. <a href='index.html#section-tutorial'>Click to see more details.</a>">
                     <div ref="panelContainer" className="panel" />
-                    <div ref="toolbarContainer"  className="toolbar" />
+                    <div ref="toolbarContainer" className="toolbar" />
                     <div className="chart">
                         <div className="chart-container" style={{ width: this.props.chart.width + "px", height: this.props.chart.height + "px" }}>
                         { this.renderChartView() }
@@ -185,16 +184,7 @@ export class ChartView extends React.Component<IChartViewProps, IChartViewState>
                         </div>
                     </div>
                 </div>
-                <HorizontalRule />
-                <h2>Export</h2>
-                <p data-intro="Export the annotated chart to desired format.">
-                    <Button text="PNG" icon="export" onClick={() => this.exportAs("png", () => {})} />
-                    {" "}
-                    <Button text="SVG" icon="export" onClick={() => this.exportAs("svg", () => {})} />
-                    {" "}
-                    <Button text="Animated GIF" icon="export" onClick={() => this.exportAs("gif", () => {})} />
-                </p>
-            </section>
+            </div>
         );
     }
 

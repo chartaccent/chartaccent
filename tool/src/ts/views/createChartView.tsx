@@ -9,10 +9,11 @@ import * as InputWidgets from "./inputWidgets";
 
 import { HorizontalRule } from "../controls/controls";
 
+import { ChartView } from "../charts/chartView";
+import { MainStore } from "../store/store";
+
 export class ChartTypeView extends React.Component<{
-    chartType: string;
-    isEnabled: (chartType: string) => boolean;
-    onChange: (chartType: string) => void;
+    chart: Chart;
 }, {}> {
     public render() {
         let chartTypes = [
@@ -22,29 +23,33 @@ export class ChartTypeView extends React.Component<{
         ]
 
         return (
-            <p data-intro="Choose a chart that best suits your dataset. Non-suitable chart types are disabled.">
-            {
-                chartTypes.map((item) => (
-                    <button
-                        className={`button-chart-type ${item.type == this.props.chartType ? "active" : ""} ${this.props.isEnabled(item.type) ? "" : "disabled" }`}
-                        onClick={() => {
-                            if(this.props.onChange != null && this.props.isEnabled(item.type)) {
-                                this.props.onChange(item.type);
-                            }
-                        }}
-                    >
-                        <img src={item.thumbnail} />
-                        <span>{item.caption}</span>
-                    </button>
-                ))
-            }
-            </p>
+            <section className="section-choose-chart">
+                <h2>Choose a Chart</h2>
+                <p data-intro="Choose a chart that best suits your dataset. Non-suitable chart types are disabled.">
+                {
+                    chartTypes.map((item) => (
+                        <button
+                            className={`button-chart-type ${item.type == this.props.chart.type ? "active" : ""} ${Defaults.isChartValid(this.props.chart.dataset, item.type) ? "" : "disabled" }`}
+                            onClick={() => {
+                                if(Defaults.isChartValid(this.props.chart.dataset, item.type)) {
+                                    new Actions.UpdateChartType(this.props.chart, item.type).dispatch();
+                                }
+                            }}
+                        >
+                            <img src={item.thumbnail} />
+                            <span>{item.caption}</span>
+                        </button>
+                    ))
+                }
+                </p>
+            </section>
         );
     }
 }
 
 export interface ICreateChartViewProps {
     chart: Chart;
+    store: MainStore;
 }
 
 export class CreateChartView extends React.Component<ICreateChartViewProps, {}> {
@@ -75,40 +80,54 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
         let yColumnCandidates = getColumnsForContinuousAxis(chart.dataset);
 
         return (
-            <div>
-                <div className="widget-row widget-row-p">
-                    <InputWidgets.ColumnsWidget
-                        columnCount={4}
-                        text="Series"
-                        title="choose a column for x axis"
-                        columns={chart.yColumns || []}
-                        candidates={yColumnCandidates}
-                        onChange={(newColumns) => new Actions.UpdateChartYColumns(chart, newColumns).dispatch()}
-                    />
-                    <InputWidgets.ScaleWidget
-                        columnCount={4}
-                        text="Y"
-                        title="y range"
-                        scale={chart.yScale}
-                        onChange={(newScale) => new Actions.UpdateChartYScale(chart, newScale).dispatch()}
-                    />
-                    <InputWidgets.LabelWidget
-                        columnCount={4}
-                        text="Y Label"
-                        title="enter the label for Y axis"
-                        label={chart.yLabel}
-                        onChange={(newTitle) => new Actions.UpdateChartYLabel(chart, newTitle).dispatch()}
-                    />
+            <div className="widget-row">
+                <div className="col-6">
+                    <div className="options-panel">
+                        <h3>X Axis</h3>
+                        <div className="widget-row widget-row-p">
+                            <InputWidgets.ColumnWidget
+                                columnCount={12}
+                                text="Label"
+                                title="choose a column for x axis"
+                                column={chart.xColumn}
+                                candidates={xColumnCandidates}
+                                onChange={(newColumn) => new Actions.UpdateChartXColumn(chart, newColumn).dispatch()}
+                            />
+                        </div>
+                    </div>
                 </div>
-                <div className="widget-row widget-row-p">
-                    <InputWidgets.ColumnWidget
-                        columnCount={4}
-                        text="X Label"
-                        title="choose a column for x axis"
-                        column={chart.xColumn}
-                        candidates={xColumnCandidates}
-                        onChange={(newColumn) => new Actions.UpdateChartXColumn(chart, newColumn).dispatch()}
-                    />
+                <div className="col-6">
+                    <div className="options-panel">
+                        <h3>Y Axis</h3>
+                        <div className="widget-row widget-row-p">
+                            <InputWidgets.ColumnsWidget
+                                columnCount={12}
+                                text="Series"
+                                title="choose a column for x axis"
+                                columns={chart.yColumns || []}
+                                candidates={yColumnCandidates}
+                                onChange={(newColumns) => new Actions.UpdateChartYColumns(chart, newColumns).dispatch()}
+                            />
+                        </div>
+                        <div className="widget-row widget-row-p">
+                            <InputWidgets.ScaleWidget
+                                columnCount={12}
+                                text="Y"
+                                title="y range"
+                                scale={chart.yScale}
+                                onChange={(newScale) => new Actions.UpdateChartYScale(chart, newScale).dispatch()}
+                            />
+                        </div>
+                        <div className="widget-row widget-row-p">
+                            <InputWidgets.LabelWidget
+                                columnCount={12}
+                                text="Label"
+                                title="enter the label for Y axis"
+                                label={chart.yLabel}
+                                onChange={(newTitle) => new Actions.UpdateChartYLabel(chart, newTitle).dispatch()}
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -125,82 +144,109 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
 
         return (
             <div>
-                <div className="widget-row widget-row-p">
-                    <InputWidgets.ColumnWidget
-                        columnCount={3}
-                        text="X"
-                        title="choose a column for x axis"
-                        column={chart.xColumn}
-                        candidates={xyColumnCandidates}
-                        onChange={(newColumn) => new Actions.UpdateChartXColumn(chart, newColumn).dispatch()}
-                    />
-                    <InputWidgets.ColumnWidget
-                        columnCount={3}
-                        text="Y"
-                        title="choose a column for x axis"
-                        column={chart.yColumn}
-                        candidates={xyColumnCandidates}
-                        onChange={(newColumn) => new Actions.UpdateChartYColumn(chart, newColumn).dispatch()}
-                    />
-                    <InputWidgets.ColumnWidget
-                        columnCount={3}
-                        text="Color"
-                        title="choose a column for color"
-                        column={chart.groupColumn}
-                        allowNull={true}
-                        candidates={groupColumnCandidates}
-                        onChange={(newColumn) => new Actions.UpdateChartGroupColumn(chart, newColumn).dispatch()}
-                    />
-                    <InputWidgets.ColumnWidget
-                        columnCount={3}
-                        text="Size"
-                        title="choose a column for size"
-                        column={chart.sizeColumn}
-                        allowNull={true}
-                        candidates={xyColumnCandidates}
-                        onChange={(newColumn) => new Actions.UpdateChartSizeColumn(chart, newColumn).dispatch()}
-                    />
+                <div className="widget-row">
+                    <div className="col-6">
+                        <div className="options-panel">
+                            <h3>X Axis</h3>
+                            <div className="widget-row widget-row-p">
+                                <InputWidgets.ColumnWidget
+                                    columnCount={12}
+                                    text="X"
+                                    title="choose a column for x axis"
+                                    column={chart.xColumn}
+                                    candidates={xyColumnCandidates}
+                                    onChange={(newColumn) => new Actions.UpdateChartXColumn(chart, newColumn).dispatch()}
+                                />
+                            </div>
+                            <div className="widget-row widget-row-p">
+                                <InputWidgets.LabelWidget
+                                    columnCount={12}
+                                    text="Label"
+                                    title="enter the label for X axis"
+                                    label={chart.xLabel}
+                                    onChange={(newTitle) => new Actions.UpdateChartXLabel(chart, newTitle).dispatch()}
+                                />
+                            </div>
+                            <div className="widget-row widget-row-p">
+                                <InputWidgets.ScaleWidget
+                                    columnCount={12}
+                                    text="X"
+                                    title="x range"
+                                    scale={chart.xScale}
+                                    onChange={(newScale) => new Actions.UpdateChartXScale(chart, newScale).dispatch()}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-6">
+                        <div className="options-panel">
+                            <h3>Y Axis</h3>
+                            <div className="widget-row widget-row-p">
+                                <InputWidgets.ColumnWidget
+                                    columnCount={12}
+                                    text="Y"
+                                    title="choose a column for x axis"
+                                    column={chart.yColumn}
+                                    candidates={xyColumnCandidates}
+                                    onChange={(newColumn) => new Actions.UpdateChartYColumn(chart, newColumn).dispatch()}
+                                />
+                            </div>
+                            <div className="widget-row widget-row-p">
+                                <InputWidgets.LabelWidget
+                                    columnCount={12}
+                                    text="Label"
+                                    title="enter the label for Y axis"
+                                    label={chart.yLabel}
+                                    onChange={(newTitle) => new Actions.UpdateChartYLabel(chart, newTitle).dispatch()}
+                                />
+                            </div>
+                            <div className="widget-row widget-row-p">
+                                <InputWidgets.ScaleWidget
+                                    columnCount={12}
+                                    text="Y"
+                                    title="y range"
+                                    scale={chart.yScale}
+                                    onChange={(newScale) => new Actions.UpdateChartYScale(chart, newScale).dispatch()}
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="widget-row widget-row-p">
-                    <InputWidgets.LabelWidget
-                        columnCount={3}
-                        text="X Label"
-                        title="enter the label for X axis"
-                        label={chart.xLabel}
-                        onChange={(newTitle) => new Actions.UpdateChartXLabel(chart, newTitle).dispatch()}
-                    />
-                    <InputWidgets.LabelWidget
-                        columnCount={3}
-                        text="Y Label"
-                        title="enter the label for Y axis"
-                        label={chart.yLabel}
-                        onChange={(newTitle) => new Actions.UpdateChartYLabel(chart, newTitle).dispatch()}
-                    />
-                    <InputWidgets.ColumnWidget
-                        columnCount={3}
-                        text="Label"
-                        title="choose a column for name"
-                        allowNull={true}
-                        column={chart.nameColumn}
-                        candidates={groupColumnCandidates}
-                        onChange={(newColumn) => new Actions.UpdateChartNameColumn(chart, newColumn).dispatch()}
-                    />
-                </div>
-                <div className="widget-row widget-row-p">
-                    <InputWidgets.ScaleWidget
-                        columnCount={3}
-                        text="X"
-                        title="x range"
-                        scale={chart.xScale}
-                        onChange={(newScale) => new Actions.UpdateChartXScale(chart, newScale).dispatch()}
-                    />
-                    <InputWidgets.ScaleWidget
-                        columnCount={3}
-                        text="Y"
-                        title="y range"
-                        scale={chart.yScale}
-                        onChange={(newScale) => new Actions.UpdateChartYScale(chart, newScale).dispatch()}
-                    />
+                <div className="widget-row">
+                    <div className="col-12">
+                        <div className="options-panel">
+                            <h3>Points</h3>
+                            <div className="widget-row widget-row-p">
+                                <InputWidgets.ColumnWidget
+                                    columnCount={4}
+                                    text="Color"
+                                    title="choose a column for color"
+                                    column={chart.groupColumn}
+                                    allowNull={true}
+                                    candidates={groupColumnCandidates}
+                                    onChange={(newColumn) => new Actions.UpdateChartGroupColumn(chart, newColumn).dispatch()}
+                                />
+                                <InputWidgets.ColumnWidget
+                                    columnCount={4}
+                                    text="Size"
+                                    title="choose a column for size"
+                                    column={chart.sizeColumn}
+                                    allowNull={true}
+                                    candidates={xyColumnCandidates}
+                                    onChange={(newColumn) => new Actions.UpdateChartSizeColumn(chart, newColumn).dispatch()}
+                                />
+                                <InputWidgets.ColumnWidget
+                                    columnCount={4}
+                                    text="Label"
+                                    title="choose a column for name"
+                                    allowNull={true}
+                                    column={chart.nameColumn}
+                                    candidates={groupColumnCandidates}
+                                    onChange={(newColumn) => new Actions.UpdateChartNameColumn(chart, newColumn).dispatch()}
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -212,42 +258,52 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
         let dataset = chart.dataset;
         return (
             <section className="section-create-chart">
-                <HorizontalRule />
-                <h2>Create Chart</h2>
-                <ChartTypeView
-                    chartType={chart.type}
-                    onChange={(newType) => new Actions.UpdateChartType(chart, newType).dispatch()}
-                    isEnabled={(type) => Defaults.isChartValid(dataset, type) }
-                />
-                { chart.type != null ?
-                    <div className="chart-options" data-intro="Specify chart options such as X/Y axes, data series, chart title, and color scheme.">
-                        <div className="widget-row widget-row-p">
-                            <InputWidgets.LabelWidget
-                                columnCount={5}
-                                text="Title"
-                                title="enter chart title"
-                                label={chart.title}
-                                onChange={(newTitle) => new Actions.UpdateChartTitle(chart, newTitle).dispatch()}
-                            />
-                            <InputWidgets.WidthHeightWidget
-                                columnCount={3}
-                                text="Title"
-                                title="enter chart title"
-                                width={chart.width}
-                                height={chart.height}
-                                onChange={(newWidth, newHeight) => new Actions.UpdateChartWidthHeight(chart, newWidth, newHeight).dispatch()}
-                            />
-                            <InputWidgets.ColorsWidget
-                                columnCount={4}
-                                text="Colors"
-                                title="choose a color palette"
-                                colors={chart.colors || []}
-                                onChange={(newColors) => new Actions.UpdateChartColors(chart, newColors).dispatch()}
-                            />
+                <h2>Configure and Annotate</h2>
+                <div className="chart-options" data-intro="Specify chart options such as X/Y axes, data series, chart title, and color scheme.">
+                    <div className="widget-row">
+                        <div className="col-4">
+                            <div className="widget-row">
+                                <div className="col-12">
+                                    <div className="options-panel">
+                                        <h3>General</h3>
+                                        <div className="widget-row widget-row-p">
+                                            <InputWidgets.LabelWidget
+                                                columnCount={12}
+                                                text="Title"
+                                                title="enter chart title"
+                                                label={chart.title}
+                                                onChange={(newTitle) => new Actions.UpdateChartTitle(chart, newTitle).dispatch()}
+                                            />
+                                        </div>
+                                        <div className="widget-row widget-row-p">
+                                            <InputWidgets.WidthHeightWidget
+                                                columnCount={12}
+                                                text="Title"
+                                                title="enter chart title"
+                                                width={chart.width}
+                                                height={chart.height}
+                                                onChange={(newWidth, newHeight) => new Actions.UpdateChartWidthHeight(chart, newWidth, newHeight).dispatch()}
+                                            />
+                                        </div>
+                                        <div className="widget-row widget-row-p">
+                                            <InputWidgets.ColorsWidget
+                                                columnCount={12}
+                                                text="Colors"
+                                                title="choose a color palette"
+                                                colors={chart.colors || []}
+                                                onChange={(newColors) => new Actions.UpdateChartColors(chart, newColors).dispatch()}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        <div className="col-8">
                         { this.renderFor(chart.type) }
+                        </div>
                     </div>
-                : null }
+                </div>
+                { chart.type != null ? <ChartView chart={chart} store={this.props.store} /> : null }
             </section>
         );
     }

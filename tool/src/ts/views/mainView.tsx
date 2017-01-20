@@ -3,12 +3,14 @@ import { NavigationView } from "./navigationView";
 import { ControlsTestView } from "./controlsTestView";
 import { LoadDataView } from "./loadDataView";
 import { ReviewDataView } from "./reviewDataView";
-import { CreateChartView } from "./createChartView";
+import { ChartTypeView, CreateChartView } from "./createChartView";
 import { ChartView } from "../charts/chartView";
 
 import * as Actions from "../store/actions";
 import { MainStore } from "../store/store";
 import { EventSubscription } from "fbemitter";
+
+import { Button } from "../controls/controls";
 
 import { Dataset, Chart } from "../model/model";
 
@@ -62,10 +64,19 @@ export class MainView extends React.Component<IMainViewProps, IMainViewState> {
                     <NavigationView store={this.props.store} />
                 </div>
                 <div className="main-wrapper">
-                    <LoadDataView store={this.props.store} />
-                    { this.state.dataset != null ? <ReviewDataView dataset={this.state.dataset} /> : null }
-                    { this.state.dataset != null && this.state.chart != null ? <CreateChartView chart={this.state.chart} /> : null }
-                    { this.state.chart != null && this.state.chart.type != null ? <ChartView chart={this.state.chart} store={this.props.store} /> : null }
+                    <LoadDataView store={this.props.store} dataset={this.state.dataset} />
+                    { this.state.dataset != null && this.state.chart != null ? <ChartTypeView chart={this.state.chart} /> : null }
+                    { this.state.dataset != null && this.state.chart != null ? <CreateChartView chart={this.state.chart} store={this.props.store} /> : null }
+                    { this.state.dataset != null && this.state.chart != null && this.state.chart.type != null ? <section className="section-export">
+                        <h2>Export</h2>
+                        <p data-intro="Export the annotated chart to desired format.">
+                            <Button text="PNG" icon="export" onClick={() => this.props.store.exportAs("png", () => {})} />
+                            {" "}
+                            <Button text="SVG" icon="export" onClick={() => this.props.store.exportAs("svg", () => {})} />
+                            {" "}
+                            <Button text="Animated GIF" icon="export" onClick={() => this.props.store.exportAs("gif", () => {})} />
+                        </p>
+                    </section> : null }
                 </div>
             </div>
         );

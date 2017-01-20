@@ -266,7 +266,7 @@ export class ScaleWidget extends RowWidget<IScaleWidgetProps, {
             <div className={`col-${this.props.columnCount || 12}`}>
                 <div className="widget-row">
                     <div className="col-6">
-                        <label title={this.props.title}>{this.props.text} Min</label>
+                        <label title={this.props.title}>Min</label>
                         <div className="widget-content">
                             <input type="text" ref="inputMin" placeholder="auto" value={this.state.min}
                                 onChange={() => {
@@ -284,7 +284,7 @@ export class ScaleWidget extends RowWidget<IScaleWidgetProps, {
                         </div>
                     </div>
                     <div className="col-6">
-                        <label title={this.props.title}>{this.props.text} Max</label>
+                        <label title={this.props.title}>Max</label>
                         <div className="widget-content">
                             <input type="text" ref="inputMax" placeholder="auto" value={this.state.max}
                                 onChange={() => {

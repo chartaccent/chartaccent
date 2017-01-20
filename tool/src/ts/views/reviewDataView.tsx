@@ -41,30 +41,26 @@ export class ReviewDataView extends React.Component<{
     public render() {
         let dataset = this.props.dataset;
         return (
-            <section className="section-review-data">
-                <HorizontalRule />
-                <h2>Review Data: {this.props.dataset.fileName}</h2>
-                <div className="table-container" data-intro="You can review your dataset before creating a chart.">
-                    <table>
-                        <thead>
-                            <tr className="column-name">
-                                { dataset.columns.map((column, index) => <th key={`c${index}`}>{column.name}</th>) }
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                dataset.rows.map((row, rowIndex) => {
-                                    return (
-                                        <tr key={`r${rowIndex}`}>
-                                            { dataset.columns.map((column, index) => <td key={`c${index}`} className={`rowtype-${column.type}`}>{this.formatValue(column.type, column.format, row[column.name])}</td>) }
-                                        </tr>
-                                    );
-                                })
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+            <div className="table-container" data-intro="You can review your dataset before creating a chart.">
+                <table>
+                    <thead>
+                        <tr className="column-name">
+                            { dataset.columns.map((column, index) => <th key={`c${index}`}>{column.name}</th>) }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            dataset.rows.map((row, rowIndex) => {
+                                return (
+                                    <tr key={`r${rowIndex}`}>
+                                        { dataset.columns.map((column, index) => <td key={`c${index}`} className={`rowtype-${column.type}`}>{this.formatValue(column.type, column.format, row[column.name])}</td>) }
+                                    </tr>
+                                );
+                            })
+                        }
+                    </tbody>
+                </table>
+            </div>
         );
     }
 }
