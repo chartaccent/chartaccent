@@ -8,10 +8,12 @@
     }
 
     header {
-        font-size: 14px;
-        background: linear-gradient(#666, #555);
-        color: white;
+        font-size: 12px;
         padding: 5px 3px;
+        font-weight: bold;
+        color: #888;
+        margin-top: 10px;
+        background: #F8F8F8;
     }
 
     p, ul, ol {
@@ -151,6 +153,8 @@
     }
     section.annotations {
         position: relative;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        background: white;
 
         .position-separator {
             position: absolute;
@@ -228,9 +232,17 @@
     }
     section.editor {
     }
-
+    .target-section {
+        overflow: hidden;
+        margin-bottom: 5px;
+        background: white;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
     .arrayeditor-container {
         overflow: hidden;
+        margin-bottom: 5px;
+        background: white;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
         // .right {
         //     width: 21px;
         //     float: right;
@@ -255,8 +267,8 @@
         .clearfix();
     }
     .arrayeditor-none, p.nothing {
-        margin: 4px 0;
-        padding: 0 3px;
+        margin: 5px 0;
+        padding: 5px 3px;
         font-size: 12px;
         color: gray;
     }

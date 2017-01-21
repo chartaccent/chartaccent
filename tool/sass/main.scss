@@ -48,19 +48,20 @@ body {
 
 section {
     padding: 50px 24px;
+    padding-bottom: 80px;
 
-    &.section-load-data, &.section-export {
+    &.section-load-data {
         background: #F8F8F8;
     }
-    &.section-choose-chart {
+    &.section-choose-chart, &.section-export {
         background: #F0F0F0;
     }
     &.section-create-chart {
-        background: #FCFCFC;
+        background: #F8F8F8;
     }
 }
 
-footer {
+body > footer {
     padding: 50px 24px;
     min-height: 200px;
     color: #CCC;
@@ -81,6 +82,8 @@ footer {
     width: 100%;
     max-height: 200px;
     box-sizing: border-box;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 table {

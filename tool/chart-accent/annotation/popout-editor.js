@@ -491,9 +491,11 @@ Annotation.prototype.startPopoutEditor = function(RC) {
     var clickout_handlers = null;
 
     var tree_wrapper = appendTreeOnce(wrapper, [
-        [ "h2", { $: "target_text", text: "Target" } ],
-        [ "div.section", { $: "target_section" } ],
-        [ "div", { $: "select_items" } ],
+        [ "div.target-section", [
+            [ "h2", { $: "target_text", text: "Target" } ],
+            [ "div.section", { $: "target_section" } ],
+            [ "div", { $: "select_items" } ]
+        ] ],
         [ "div", { $: "components" } ]
     ]);
 

@@ -243,37 +243,47 @@ input[type="text"], input[type="number"] {
     overflow-x: auto;
     white-space: nowrap;
     margin: 10px 0;
+    margin-top: 20px;
+
+    border-radius: 2px;
+    // border: 1px solid $border-color;
 
     & > .toolbar {
-        border: 1px solid $border-color;
+        position: absolute;
+        left: 0; right: 0; top: 0;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         background-color: $well-color;
         overflow: hidden;
         border-radius: 2px 2px 0 0;
-        margin-right: 362px;
         padding: 4px;
     }
-    & > .panel {
+
+    & > .panel-container {
+        margin-top: 32px;
         float: right;
-        box-shadow: 0 0 2px #444;
-        border: 1px solid #444;
-        border-radius: 2px;
         overflow: hidden;
+        padding: 0 5px;
+        margin-bottom: 10px;
+        background: $well-color;
+
+        & > .panel {
+        }
     }
     & > .chart {
-        margin-right: 362px;
-        border: 1px solid $border-color;
+        margin-top: 32px;
+        margin-right: 370px;
         border-top: none;
         overflow: hidden;
         overflow-x: scroll;
-        border-radius: 0 0 2px 2px;
-        background: #F8F8F8;
         & > .chart-container {
             position: relative;
             box-sizing: content-box;
-            border: 1px solid #888;
-            margin: 5px;
+            border: 1px solid #CCC;
+            margin-left: 0;
+            margin-top: 10px;
+            margin-right: 30px;
+            margin-bottom: 30px;
             background: #FFF;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
             & > .corner-resize {
                 position: absolute;
                 right: 0; bottom: 0;

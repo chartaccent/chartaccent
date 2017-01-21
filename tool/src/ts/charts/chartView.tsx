@@ -173,7 +173,9 @@ export class ChartView extends React.Component<IChartViewProps, IChartViewState>
         return (
             <div>
                 <div className="chart-view" data-intro="Annotate your chart here. <a href='index.html#section-tutorial'>Click to see more details.</a>">
-                    <div ref="panelContainer" className="panel" />
+                    <div className="panel-container">
+                        <div ref="panelContainer" className="panel" />
+                    </div>
                     <div ref="toolbarContainer" className="toolbar" />
                     <div className="chart">
                         <div className="chart-container" style={{ width: this.props.chart.width + "px", height: this.props.chart.height + "px" }}>
