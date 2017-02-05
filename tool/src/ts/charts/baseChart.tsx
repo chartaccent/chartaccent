@@ -2,7 +2,7 @@ import * as React from "react";
 import * as d3 from "d3";
 import * as ChartAccent from "../chartaccent";
 
-import { Chart, Label } from "../model/model";
+import { Chart, Label, Defaults } from "../model/model";
 
 import { ChartLabel, measureTextWidth } from "./elements";
 
@@ -121,7 +121,7 @@ export class BaseChartView extends React.Component<IBaseChartViewProps, {}> {
                 width={chart.width}
                 height={chart.height}
                 style={{
-                    fontFamily: "Helvetica",
+                    fontFamily: Defaults.defaultFont,
                     fontSize: 14
                 }}
             >

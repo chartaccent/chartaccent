@@ -204,9 +204,9 @@ export class ChartView extends React.Component<IChartViewProps, IChartViewState>
         }
         let onMouseUp = () => {
             window.removeEventListener("mousemove", onMouseMove);
-            window.removeEventListener("mouseup", onMouseUp);
+            window.removeEventListener("mouseup", onMouseUp, true);
         }
         window.addEventListener("mousemove", onMouseMove);
-        window.addEventListener("mouseup", onMouseUp);
+        window.addEventListener("mouseup", onMouseUp, true);
     }
 }

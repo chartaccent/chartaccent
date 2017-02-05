@@ -113,6 +113,7 @@ var Images = { };
 })();
 
 var Styles = {
+    fontFamily: "Roboto",
     serializeColorInfo: function(color) {
         if(color == null) return null;
         if(color instanceof RGBColor) {
@@ -161,7 +162,7 @@ var Styles = {
         // if(obj.fill_opacity === undefined) obj.fill_opacity = 1;
         // if(obj.paint_order === undefined) obj.paint_order = "fill";
         // if(obj.blending_mode === undefined) obj.blending_mode = "normal";
-        if(obj.font_family === undefined) obj.font_family = "Helvetica";
+        if(obj.font_family === undefined) obj.font_family = Styles.fontFamily;
         if(obj.font_size === undefined) obj.font_size = 14;
         return obj;
     },
@@ -211,7 +212,7 @@ var Styles = {
                 fill: new RGBColor("#000"),
                 stroke: null,
                 stroke_width: 2,
-                font_family: "Helvetica",
+                font_family: Styles.fontFamily,
                 font_size: 14
             };
         }
@@ -221,7 +222,7 @@ var Styles = {
                 stroke: new RGBColor("#FFF"),
                 stroke_width: 2,
                 paint_order: "stroke",
-                font_family: "Helvetica",
+                font_family: Styles.fontFamily,
                 font_size: 14
             };
         }

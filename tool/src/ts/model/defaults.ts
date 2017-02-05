@@ -36,6 +36,7 @@ export module Defaults {
     export let defaultColors = [ "#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e", "#e6ab02" ];
 
     export let fonts = [
+        "Roboto",
         "Helvetica",
         "Arial",
         "Lucida Grande",
@@ -51,10 +52,12 @@ export module Defaults {
         "Lucida Console"
     ];
 
+    export let defaultFont = "Roboto";
+
     export function label(text: string = "", fontSize: number = 14): Label {
         return {
             text: text,
-            fontFamily: "Arial",
+            fontFamily: Defaults.defaultFont,
             fontSize: fontSize,
             fontStyle: "regular",
             color: "#000000"

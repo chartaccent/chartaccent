@@ -21,7 +21,7 @@ var InputWidgetContext = function(schema) {
 
 var InputWidget = function(container) {
     this.style = {
-        font_family: "Helvetica, Arial, sans-serif",
+        font_family: Styles.fontFamily,
         font_size: 16,
         line_height: 20,
         height: 20,

@@ -625,6 +625,8 @@ var MakeSingleSelectButton = function(sel, text, choices, onchange, clickout_han
 
 var MakeFontSelectButton = function(sel, value, onchange, clickout_handlers) {
     var fonts = [
+        { name: "Roboto", value: "Roboto", font: "Roboto" },
+        { name: "Roboto Mono", value: "Roboto Mono", font: "Roboto Mono" },
         { name: "Helvetica", value: "Helvetica", font: "Helvetica" },
         { name: "Arial", value: "Arial", font: "Arial" },
         { name: "Lucida Grande", value: "Lucida Grande", font: "Lucida Grande" },

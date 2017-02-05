@@ -29,6 +29,7 @@ button {
     margin: 0; padding: 0;
     cursor: pointer;
     background: none;
+    transition: box-shadow 0.2s linear;
 }
 
 button.button-normal {
@@ -61,7 +62,7 @@ button.button-chart-type {
     display: inline-block;
     border-radius: 2px;
     width: 30%;
-    max-width: 150px;
+    max-width: 200px;
     img {
         width: 100%;
     }
@@ -81,6 +82,9 @@ button.button-chart-type {
     &.active {
         background-color: $primary-color;
         span { color: white; }
+        img {
+            opacity: 0.6;
+        }
     }
     &:focus {
         box-shadow: 0 0 5px $primary-color-light;
@@ -206,7 +210,9 @@ input[type="text"], input[type="number"] {
     border: 1px solid #DDD;
     border-radius: 2px;
     width: 100%;
+    height: 25px;
     box-sizing: border-box;
+    transition: box-shadow 0.2s linear, border-color 0.2s linear;
     &:focus {
         border: 1px solid $primary-color;
         box-shadow: 0 0 5px $primary-color-light;
@@ -246,7 +252,6 @@ input[type="text"], input[type="number"] {
     margin-top: 20px;
 
     border-radius: 2px;
-    // border: 1px solid $border-color;
 
     & > .toolbar {
         position: absolute;
@@ -255,7 +260,7 @@ input[type="text"], input[type="number"] {
         background-color: $well-color;
         overflow: hidden;
         border-radius: 2px 2px 0 0;
-        padding: 4px;
+        padding: 4px 0;
     }
 
     & > .panel-container {
@@ -279,6 +284,7 @@ input[type="text"], input[type="number"] {
             position: relative;
             box-sizing: content-box;
             border: 1px solid #CCC;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             margin-left: 0;
             margin-top: 10px;
             margin-right: 30px;

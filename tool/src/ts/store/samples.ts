@@ -30,11 +30,5 @@ export let globalSamples = [
         hint: "try Scatterplot",
         csv: "assets/datasets/gapminder.csv",
         example: "assets/datasets/gapminder.png"
-    },
-    {
-        name: "Orange Sales",
-        hint: "try BarChart/LineChart with error bars",
-        csv: "assets/datasets/oranges.csv",
-        example: "assets/datasets/oranges.png"
     }
 ];

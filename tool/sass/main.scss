@@ -97,7 +97,7 @@ table {
         padding: 4px 8px;
         &.type_number { text-align: right; }
         &.type_text { text-align: left; }
-        min-width: 100px;
+        // min-width: 100px;
         text-align: left;
     }
     td {
@@ -110,5 +110,8 @@ table {
             font-size: 13px;
         }
         &.rowtype-string { text-align: left; }
+    }
+    tr:nth-child(even) td {
+        background: rgba(0, 0, 0, 0.04);
     }
 }
