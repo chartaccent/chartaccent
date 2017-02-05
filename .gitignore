@@ -1,4 +1,7 @@
-build/
+.sass-cache
 node_modules/
-standalone/styles.css
-standalone/chartaccent.js
+website/
+build/
+assets/js/bundle.js*
+assets/css/bundle.css*
+assets/css/chartaccent.css

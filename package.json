@@ -1,48 +1,47 @@
 {
-  "name": "chartaccent",
+  "name": "chartaccent-standalone",
   "version": "0.0.1",
-  "description": "A annotation creation tool.",
+  "description": "ChartAccent Standalone Tool",
   "main": "index.js",
   "scripts": {
-    "build:chartaccent:js": "node chart-accent/compile.js chart-accent/module.js build/chart-accent.js",
-    "build:chartaccent:less": "lessc chart-accent/styles/chart-accent.less build/chart-accent.css",
+    "typings": "typings install",
+    "build:chartaccent:js": "node chart-accent/compile.js chart-accent/module.js build/chartaccent.js",
     "build:chartaccent:pegjs": "pegjs -e Expression.Parser --format globals --allowed-start-rules start,string_start chart-accent/expression/parser.pegjs",
-    "build:chartaccent": "npm run build:chartaccent:js && npm run build:chartaccent:less && npm run build:chartaccent:pegjs",
-    "build:standalone:js": "browserify standalone/js/standalone.js -o standalone/chartaccent.js",
-    "build:standalone:less:pages": "lessc standalone/css/pages.less standalone/pages.css",
-    "build:standalone:less:chartaccent": "lessc standalone/css/styles.less standalone/styles.css",
-    "build:standalone:less": "npm run build:standalone:less:chartaccent && npm run build:standalone:less:pages",
-    "build:standalone": "npm run build:standalone:js && npm run build:standalone:less",
-    "build": "npm run build:chartaccent && npm run build:standalone",
-    "watch": "watchify standalone/js/standalone.js -o standalone/chartaccent.js -v",
-    "preinstall": "npm run build"
+    "build:chartaccent:less": "lessc chart-accent/styles/chart-accent.less assets/css/chartaccent.css",
+    "build:chartaccent": "npm run build:chartaccent:pegjs && npm run build:chartaccent:js && npm run build:chartaccent:less",
+    "build:ts": "tsc -p .",
+    "build:webpack": "webpack",
+    "build:sass": "sass sass/main.scss:assets/css/bundle.css",
+    "build": "npm run build:chartaccent && npm run build:ts && npm run build:webpack && npm run build:sass",
+    "watch:ts": "tsc -w -p .",
+    "watch:webpack": "webpack -w",
+    "watch:sass": "sass -w sass/main.scss:assets/css/bundle.css",
+    "serve": "python -m SimpleHTTPServer",
+    "watch": "multirun-npm watch:ts watch:webpack watch:sass serve"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/chartaccent/chartaccent.git"
-  },
-  "keywords": [
-    "visualization",
-    "annotation"
-  ],
-  "author": "Donghao Ren",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/chartaccent/chartaccent/issues"
-  },
-  "homepage": "https://github.com/chartaccent/chartaccent#readme",
+  "author": "Donghao Ren <donghao.ren+npm@gmail.com> (https://donghaoren.org/)",
+  "license": "BSD-3-Clause",
   "devDependencies": {
-    "browserify": "^13.1.0",
-    "chroma-js": "^1.2.1",
-    "d3": "^3.0.0",
-    "jquery": "^3.1.0",
-    "knockout": "^3.4.0",
     "less": "^2.7.1",
+    "multirun": "^0.2.2",
     "pegjs": "^0.10.0",
-    "typeahead.js-browserify": "^1.0.7",
-    "watchify": "^3.7.0"
+    "source-map-loader": "^0.1.5",
+    "typescript": "^2.1.4",
+    "webpack": "^1.14.0"
   },
   "dependencies": {
-    "bootstrap": "^3.3.7"
+    "@types/d3": "^3.5.36",
+    "@types/fbemitter": "^2.0.32",
+    "@types/flux": "0.0.34",
+    "@types/react": "^0.14.55",
+    "@types/react-dom": "^0.14.20",
+    "chroma-js": "^1.2.1",
+    "d3": "^3.5.17",
+    "fbemitter": "^2.1.1",
+    "flux": "^3.1.2",
+    "jquery": "^3.1.1",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "typeahead.js-browserify": "^1.0.7"
   }
 }

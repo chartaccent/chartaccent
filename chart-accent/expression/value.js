@@ -52,7 +52,7 @@ Expression.Object.prototype.eval = function(context) {
     return this.value;
 };
 Expression.Object.prototype.toString = function() {
-    return "[object]"
+    return "$[" + btoa(JSON.stringify(this.value)) + "]";
 };
 Expression.Object.prototype.clone = function() {
     return new Expression.Object(this.value);

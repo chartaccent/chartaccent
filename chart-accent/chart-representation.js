@@ -131,6 +131,7 @@ var ChartRepresentation = function(owner, info) {
 
     if(info.palette) {
         this.palette = info.palette.map(function(d) { return new RGBColor(d); });
+        Module.setThemeColors(info.palette);
     }
 
     var rect_interaction = this.layer_annotation.append("rect")
@@ -1362,6 +1363,7 @@ ChartRepresentation.prototype.undo = function() {
         }
         this.loadState(previous_state);
         this.redo_history.push(action);
+        this.event_tracker("undo", this.summarizeState(previous_state));
     }
 };
 
@@ -1370,6 +1372,7 @@ ChartRepresentation.prototype.reset = function() {
     this.annotations = [];
     DM.invalidate(this.rendered_annotations);
     DM.validate(this.rendered_annotations);
+    this.event_tracker("reset", "");
 };
 
 ChartRepresentation.prototype.redo = function() {
@@ -1377,6 +1380,7 @@ ChartRepresentation.prototype.redo = function() {
         var action = this.redo_history.splice(this.redo_history.length - 1, 1)[0];
         this.loadState(action.state);
         this.undo_history.push(action);
+        this.event_tracker("redo", this.summarizeState(action.state));
     }
 };
 
@@ -1460,7 +1464,7 @@ ChartRepresentation.prototype.makeAnimation = function(callback) {
     var dataurls = [];
     var gif = new GIF({
         workers: 2,
-        workerScript: "js/gif.worker.js",
+        workerScript: "assets/js/gif.worker.js",
         quality: 10
     });
     gif.on('finished', function(blob) {

@@ -1,3 +1,7 @@
+Module.setThemeColors = function(colors) {
+    Module.theme_colors = colors.slice();
+}
+
 EditorPopups.ColorPicker = function(info, wrapper) {
     wrapper.classed("color-picker", true);
 
@@ -8,6 +12,9 @@ EditorPopups.ColorPicker = function(info, wrapper) {
 
     // The "Theme" colors.
     var main_colors = ["#000", "#FFF",  "#5CA3D1", "#9BBE42", "#F0B04F", "#9F8AC1", "#E16B9E", "#44B29C", "#E27166"];
+    if(Module.theme_colors) {
+        main_colors = ["#000", "#FFF"].concat(Module.theme_colors);
+    }
 
     // for(var i = 0; i < main_colors.length; i++) {
     //     colors = colors.concat(chroma.scale(["#000", main_colors[i]], 'lab').colors(5).slice(1, -1));

@@ -16,3 +16,7 @@ Expression.Subscription.prototype.eval = function(context) {
 Expression.Subscription.prototype.toString = function() {
     return this.data.toString() + "[" + this.filter.toString() + "]";
 };
+
+Expression.Subscription.prototype.clone = function() {
+    return new Expression.Subscription(this.data.clone(), this.filter.clone());
+};

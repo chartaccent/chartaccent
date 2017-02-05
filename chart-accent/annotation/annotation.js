@@ -344,7 +344,7 @@ function CloneAnnotations(annotations) {
             if(obj.clone) {
                 return obj.clone();
             } else {
-                console.log("Warning: incorrect type", obj, obj.constructor);
+                // console.log("Warning: incorrect type", obj, obj.constructor);
                 return obj;
             }
         }

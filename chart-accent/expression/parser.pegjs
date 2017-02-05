@@ -142,6 +142,7 @@ primitive
   = floating_point
   / boolean
   / string
+  / object
 
 floating_point
   = str:([+-]? [0-9]+ ("." [0-9]+)? ([eE] [+-]? [0-9]+)?)
@@ -156,6 +157,10 @@ boolean
 string
   = repr:("\"" [^"]* "\"")
     { var str = JSON.parse(flatten(repr)); return new Expression.String(str); }
+
+object
+  = "$[" base64:([0-9a-zA-Z+/=]*) "]"
+    { return new Expression.Object(JSON.parse(atob(flatten(base64)))); }
 
 kw_name
   = name:([a-zA-Z_][a-zA-Z0-9_]*) { return flatten(name); }
