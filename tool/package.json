@@ -12,7 +12,7 @@
     "build:ts": "tsc -p .",
     "build:webpack": "webpack",
     "build:sass": "sass sass/main.scss:assets/css/bundle.css",
-    "build": "npm run build:ts && npm run build:webpack && npm run build:sass",
+    "build": "npm run build:chartaccent && npm run build:ts && npm run build:webpack && npm run build:sass",
     "watch:ts": "tsc -w -p .",
     "watch:webpack": "webpack -w",
     "watch:sass": "sass -w sass/main.scss:assets/css/bundle.css",

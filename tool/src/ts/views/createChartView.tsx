@@ -87,7 +87,7 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
                         <div className="widget-row widget-row-p">
                             <InputWidgets.ColumnWidget
                                 columnCount={12}
-                                text="Label"
+                                text="X"
                                 title="choose a column for x axis"
                                 column={chart.xColumn}
                                 candidates={xColumnCandidates}
@@ -102,7 +102,7 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
                         <div className="widget-row widget-row-p">
                             <InputWidgets.ColumnsWidget
                                 columnCount={12}
-                                text="Series"
+                                text="Y"
                                 title="choose a column for x axis"
                                 columns={chart.yColumns || []}
                                 candidates={yColumnCandidates}

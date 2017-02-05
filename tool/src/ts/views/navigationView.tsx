@@ -34,7 +34,7 @@ export class NavigationView extends React.Component<{
     public render() {
         return (
             <div className="navigation-view">
-                <a href="index.html" className="title">ChartAccent Home</a>
+                <a href="index.html" className="title" target="_blank">ChartAccent Home</a>
                 {" "}
                 <Button type="text" text="Open..." icon="load" onClick={() => this.onOpenFile()} />
                 {" "}
@@ -47,8 +47,9 @@ export class NavigationView extends React.Component<{
                 }} />
                 <form className="invisible" ref="inputFileForm"><input ref="inputFile" id="loadFile" type="file" /></form>
                 <span className="pull-right">
-                    <Button type="text" text="Feedback..." onClick={() => window.open("https://docs.google.com/forms/d/e/1FAIpQLSf6K0k7frhtSerxEIs4NK2ELzgPoOXMNoRFfJJebeZxn__Zxg/viewform", "_blank")} />
-                    <Button type="text" text="Help..." onClick={() => new Actions.StartIntroduction().dispatch()} />
+                    <Button type="text" text="Feedback" onClick={() => window.location.href = ("mailto:chartaccent@gmail.com")} />
+                    <Button type="text" text="Tutorial" onClick={() => window.open("index.html#session-tutorial")} />
+                    <Button type="text" text="Help" onClick={() => new Actions.StartIntroduction().dispatch()} />
                 </span>
             </div>
         );
