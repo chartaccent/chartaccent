@@ -4,6 +4,7 @@
   "description": "ChartAccent Standalone Tool",
   "main": "index.js",
   "scripts": {
+    "install": "mkdir -p build",
     "typings": "typings install",
     "build:chartaccent:js": "node chart-accent/compile.js chart-accent/module.js build/chartaccent.js",
     "build:chartaccent:pegjs": "pegjs -e Expression.Parser --format globals --allowed-start-rules start,string_start chart-accent/expression/parser.pegjs",
@@ -16,15 +17,17 @@
     "watch:ts": "tsc -w -p .",
     "watch:webpack": "webpack -w",
     "watch:sass": "sass -w sass/main.scss:assets/css/bundle.css",
-    "serve": "python -m SimpleHTTPServer",
+    "serve": "ruby -run -e httpd . -p 8000",
     "watch": "multirun-npm watch:ts watch:webpack watch:sass serve"
   },
   "author": "Donghao Ren <donghao.ren+npm@gmail.com> (https://donghaoren.org/)",
   "license": "BSD-3-Clause",
   "devDependencies": {
+    "@types/sha1": "^1.1.0",
     "less": "^2.7.1",
     "multirun": "^0.2.2",
     "pegjs": "^0.10.0",
+    "sha1": "^1.1.1",
     "source-map-loader": "^0.1.5",
     "typescript": "^2.1.4",
     "webpack": "^1.14.0"

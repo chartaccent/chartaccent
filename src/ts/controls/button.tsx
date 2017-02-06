@@ -13,9 +13,9 @@ export class Button extends React.Component<IButtonProps, {}> {
     public render() {
         return (
             <button
-                className={`button-${this.props.type || "normal"}`}
+                className={`button-${this.props.type || "normal"} ${this.props.disabled ? "disabled" : ""}`}
                 onClick={() => {
-                    if(this.props.onClick != null) {
+                    if(this.props.onClick != null && !this.props.disabled) {
                         this.props.onClick(this);
                     }
                 }}

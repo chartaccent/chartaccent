@@ -67,7 +67,12 @@ export class LoadDataView extends React.Component<{
                         <input ref="inputFile" className="invisible" type="file" accept=".csv" />
                     </form>
                 </p>
-                <p className="note">Your file will not be uploaded to our server.</p>
+                <p className="note"><strong>Privacy Notes</strong></p>
+                <p className="note" style={{ maxWidth: "600px", textAlign: "justify" }}>
+                    While you are using the tool, we log anonymous interaction information to help us improve your experience.
+                    Your data remains on your machine and is not sent to us unless you export the content you create and share it with us.
+                    We will use the anonymous information and the data you share with us for research and may include them in future publications.
+                </p>
                 { this.props.dataset != null ? <ReviewDataView dataset={this.props.dataset} /> : null }
             </section>
         );

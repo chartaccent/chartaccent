@@ -36,9 +36,9 @@ export class NavigationView extends React.Component<{
             <div className="navigation-view">
                 <a href="index.html" className="title" target="_blank">ChartAccent Home</a>
                 {" "}
-                <Button type="text" text="Open..." icon="load" onClick={() => this.onOpenFile()} />
+                <Button type="text" text="Open..." title="open a previously saved project" icon="load" onClick={() => this.onOpenFile()} />
                 {" "}
-                <Button type="text" text="Save" icon="save" onClick={() => {
+                <Button type="text" text="Save" title="save your project as a file" icon="save" onClick={() => {
                     if(this.props.store.chartReady) {
                         new Actions.SaveState().dispatch();
                     } else {
@@ -47,9 +47,11 @@ export class NavigationView extends React.Component<{
                 }} />
                 <form className="invisible" ref="inputFileForm"><input ref="inputFile" id="loadFile" type="file" /></form>
                 <span className="pull-right">
-                    <Button type="text" text="Feedback" onClick={() => window.location.href = ("mailto:chartaccent@gmail.com")} />
-                    <Button type="text" text="Tutorial" onClick={() => window.open("index.html#session-tutorial")} />
-                    <Button type="text" text="Help" onClick={() => new Actions.StartIntroduction().dispatch()} />
+                    <Button type="text" icon="tour" text="" title="start tour" onClick={() => new Actions.StartIntroduction().dispatch()} />
+                    {" "}
+                    <Button type="text" icon="tutorial" text="" title="about & getting started" onClick={() => window.open("index.html#session-tutorial")} />
+                    {" "}
+                    <Button type="text" icon="email" text="" title="contact the project team" onClick={() => window.location.href = ("mailto:chartaccent@gmail.com")} />
                 </span>
             </div>
         );

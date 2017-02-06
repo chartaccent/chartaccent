@@ -56,6 +56,23 @@ button.button-normal {
         box-shadow: 0 0 10px fade($primary-color, 30%);
         border: 1px solid $primary-color-darker;
     }
+    &.disabled {
+        cursor: default;
+        background-color: $gray-color;
+        border: 1px solid $gray-color;
+        &:hover {
+            background-color: $gray-color;
+            border: 1px solid $gray-color;
+        }
+        &:active {
+            background-color: $gray-color;
+            border: 1px solid $gray-color;
+        }
+        &:focus {
+            box-shadow: none;
+            border: 1px solid $gray-color;
+        }
+    }
 }
 
 button.button-chart-type {

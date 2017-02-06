@@ -6,21 +6,21 @@ import { ChartAccent } from "../chartaccent";
 import { globalSamples } from "./samples";
 import { parseDataset } from "../model/utils";
 import { EventEmitter, EventSubscription } from "fbemitter";
-import { ActionLogger } from "./logger";
+import { AppLogger } from "./logger";
 
 export class MainStore extends EventEmitter {
-    private _logger: ActionLogger;
+    private _logger: AppLogger;
     private _dataset: Dataset;
     private _chart: Chart;
     private _samples: typeof globalSamples;
     private _chartAccent: ChartAccent;
-    private _exportAs: (type: string, callback: () => void) => void;
+    private _exportAs: (type: string, callback: (blob: Blob) => void) => void;
 
     public get dataset(): Dataset { return this._dataset; }
     public get chart(): Chart { return this._chart; }
     public get samples(): typeof globalSamples { return this._samples; }
     public get chartAccent(): ChartAccent { return this._chartAccent; }
-    public get logger(): ActionLogger { return this._logger; }
+    public get logger(): AppLogger { return this._logger; }
 
     public get chartReady(): boolean {
         return this._dataset && this._chart && this._chart.type != null;
@@ -30,26 +30,52 @@ export class MainStore extends EventEmitter {
         this._chartAccent = value;
     }
 
-    public setExportAs(func: (type: string, callback: () => void) => void) {
+    public setExportAs(func: (type: string, callback: (blob: Blob) => void) => void) {
         this._exportAs = func;
     }
 
-    public exportAs(type: string, callback: () => void) {
+    public exportAs(type: string, emailAddress: string, shareData: boolean) {
         if(this._exportAs) {
-            this._exportAs(type, callback);
+            let state = this.getState();
+            this._exportAs(type, (blob: Blob) => {
+                if(shareData) {
+                    let reader = new FileReader();
+                    reader.onload = (e) => {
+                        let imageDataURL = reader.result;
+                        let exportData = {
+                            sessionID: this.logger.getSessionID(),
+                            state: state,
+                            imageDataURL: imageDataURL,
+                            emailAddress: emailAddress
+                        }
+                        this.logger.logExport(JSON.stringify(exportData));
+                    }
+                    reader.readAsDataURL(blob);
+                }
+            });
         }
     }
 
     constructor() {
         super();
 
-        this._logger = new ActionLogger;
+        this._logger = new AppLogger();
         this._dataset = null;
         this._chart = Defaults.chart(this._dataset);
         this._samples = globalSamples;
         this._chartAccent = null;
 
         Actions.globalDispatcher.register((action) => this.handleAction(action));
+    }
+
+    public getState() {
+        let state: AppState = {
+            dataset: this._dataset,
+            chart: this._chart,
+            annotations: this._chartAccent.saveAnnotations(),
+            timestamp: new Date().getTime()
+        };
+        return state;
     }
 
     public handleAction(action: Actions.Action) {
@@ -63,7 +89,7 @@ export class MainStore extends EventEmitter {
                 this.emitChartChanged();
             }
 
-            this.logger.log("dataset/load", `N=${this._dataset.rows.length},C=${this._dataset.columns.length}`);
+            this.logger.logAction("dataset/load", `N=${this._dataset.rows.length},C=${this._dataset.columns.length}`);
         }
         if(action instanceof Actions.UpdateChart) {
             this.handleUpdateChartAction(action);
@@ -71,20 +97,14 @@ export class MainStore extends EventEmitter {
         if(action instanceof Actions.SaveState) {
             this._chart.dataset = undefined;
             try {
-                let state: AppState = {
-                    dataset: this._dataset,
-                    chart: this._chart,
-                    annotations: this._chartAccent.saveAnnotations(),
-                    timestamp: new Date().getTime()
-                };
-                let stateJSON = JSON.stringify(state, null, 2);
+                let stateJSON = JSON.stringify(this.getState(), null, 2);
                 var file = new File([ stateJSON ], "chartaccent.json", { type: "application/json" });
                 saveAs(file, "chartaccent.json");
             } catch(e) {
                 console.log(e, e.stack);
             }
             this._chart.dataset = this._dataset;
-            this.logger.log("appstate/save", "");
+            this.logger.logAction("appstate/save", "");
         }
         if(action instanceof Actions.LoadState) {
             this._dataset = action.state.dataset;
@@ -95,7 +115,7 @@ export class MainStore extends EventEmitter {
             this.emitChartChanged();
 
             this._chartAccent.loadAnnotations(action.state.annotations, true);
-            this.logger.log("appstate/load", "");
+            this.logger.logAction("appstate/load", "");
         }
         if(action instanceof Actions.Reset) {
             this._dataset = null;
@@ -103,7 +123,7 @@ export class MainStore extends EventEmitter {
             this._chartAccent = null;
             this.emitDatasetChanged();
             this.emitChartChanged();
-            this.logger.log("appstate/reset", "");
+            this.logger.logAction("appstate/reset", "");
         }
         if(action instanceof Actions.StartIntroduction) {
             if(this._dataset && this._chart && this._chart.type != null) {
@@ -128,7 +148,11 @@ export class MainStore extends EventEmitter {
                 });
             }
         }
-
+        if(action instanceof Actions.ExportAs) {
+            setImmediate(() => {
+                this.exportAs(action.type, action.emailAddress, action.shareData);
+            });
+        }
     }
 
     public handleUpdateChartAction(action: Actions.UpdateChart) {
@@ -155,75 +179,75 @@ export class MainStore extends EventEmitter {
             }
             this._chart = newChart;
             this.emitChartChanged();
-            this.logger.log("chart/type", action.newType);
+            this.logger.logAction("chart/type", action.newType);
         }
         if(action instanceof Actions.UpdateChartTitle) {
             this._chart.title = action.newTitle;
             this.emitChartChanged();
-            this.logger.log("chart/title", `L=${action.newTitle.text.length}`);
+            this.logger.logAction("chart/title", `L=${action.newTitle.text.length}`);
         }
         if(action instanceof Actions.UpdateChartWidthHeight) {
             this._chart.width = action.newWidth;
             this._chart.height = action.newHeight;
             this.emitChartChanged();
-            this.logger.log("chart/size", `W=${action.newWidth},H=${action.newHeight}`);
+            this.logger.logAction("chart/size", `W=${action.newWidth},H=${action.newHeight}`);
         }
         if(action instanceof Actions.UpdateChartXColumn) {
             (this._chart as any).xColumn = action.newXColumn;
             (this._chart as any).xLabel = Defaults.label(action.newXColumn);
             this.emitChartChanged();
-            this.logger.log("chart/xcolumn", "");
+            this.logger.logAction("chart/xcolumn", "");
         }
         if(action instanceof Actions.UpdateChartYColumn) {
             (this._chart as any).yColumn = action.newYColumn;
             (this._chart as any).yLabel = Defaults.label(action.newYColumn);
             this.emitChartChanged();
-            this.logger.log("chart/ycolumn", "");
+            this.logger.logAction("chart/ycolumn", "");
         }
         if(action instanceof Actions.UpdateChartXScale) {
             (this._chart as any).xScale = action.newXScale;
             this.emitChartChanged();
-            this.logger.log("chart/xscale", "");
+            this.logger.logAction("chart/xscale", "");
         }
         if(action instanceof Actions.UpdateChartYScale) {
             (this._chart as any).yScale = action.newYScale;
             this.emitChartChanged();
-            this.logger.log("chart/yscale", "");
+            this.logger.logAction("chart/yscale", "");
         }
         if(action instanceof Actions.UpdateChartGroupColumn) {
             (this._chart as any).groupColumn = action.newGroupColumn;
             this.emitChartChanged();
-            this.logger.log("chart/groupcolumn", "");
+            this.logger.logAction("chart/groupcolumn", "");
         }
         if(action instanceof Actions.UpdateChartSizeColumn) {
             (this._chart as any).sizeColumn = action.newSizeColumn;
             this.emitChartChanged();
-            this.logger.log("chart/sizecolumn", "");
+            this.logger.logAction("chart/sizecolumn", "");
         }
         if(action instanceof Actions.UpdateChartNameColumn) {
             (this._chart as any).nameColumn = action.newNameColumn;
             this.emitChartChanged();
-            this.logger.log("chart/namecolumn", "");
+            this.logger.logAction("chart/namecolumn", "");
         }
         if(action instanceof Actions.UpdateChartYColumns) {
             (this._chart as any).yColumns = action.newYColumns;
             this.emitChartChanged();
-            this.logger.log("chart/ycolumns", `N=${action.newYColumns.length}`);
+            this.logger.logAction("chart/ycolumns", `N=${action.newYColumns.length}`);
         }
         if(action instanceof Actions.UpdateChartXLabel) {
             (this._chart as any).xLabel = action.newXLabel;
             this.emitChartChanged();
-            this.logger.log("chart/xlabel", `L=${action.newXLabel.text.length}`);
+            this.logger.logAction("chart/xlabel", `L=${action.newXLabel.text.length}`);
         }
         if(action instanceof Actions.UpdateChartYLabel) {
             (this._chart as any).yLabel = action.newYLabel;
             this.emitChartChanged();
-            this.logger.log("chart/xlabel", `L=${action.newYLabel.text.length}`);
+            this.logger.logAction("chart/xlabel", `L=${action.newYLabel.text.length}`);
         }
         if(action instanceof Actions.UpdateChartColors) {
             this._chart.colors = action.newColors;
             this.emitChartChanged();
-            this.logger.log("chart/colors", action.newColors.join(","));
+            this.logger.logAction("chart/colors", action.newColors.join(","));
         }
 
     }

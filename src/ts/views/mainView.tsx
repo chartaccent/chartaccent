@@ -5,6 +5,7 @@ import { LoadDataView } from "./loadDataView";
 import { ReviewDataView } from "./reviewDataView";
 import { ChartTypeView, CreateChartView } from "./createChartView";
 import { ChartView } from "../charts/chartView";
+import { ExportView } from "./exportView";
 
 import * as Actions from "../store/actions";
 import { MainStore } from "../store/store";
@@ -67,16 +68,7 @@ export class MainView extends React.Component<IMainViewProps, IMainViewState> {
                     <LoadDataView store={this.props.store} dataset={this.state.dataset} />
                     { this.state.dataset != null && this.state.chart != null ? <ChartTypeView chart={this.state.chart} /> : null }
                     { this.state.dataset != null && this.state.chart != null ? <CreateChartView chart={this.state.chart} store={this.props.store} /> : null }
-                    { this.state.dataset != null && this.state.chart != null && this.state.chart.type != null ? <section className="section-export">
-                        <h2>Export</h2>
-                        <p data-intro="Export the annotated chart to desired format.">
-                            <Button text="PNG" icon="export" onClick={() => this.props.store.exportAs("png", () => {})} />
-                            {" "}
-                            <Button text="SVG" icon="export" onClick={() => this.props.store.exportAs("svg", () => {})} />
-                            {" "}
-                            <Button text="Animated GIF" icon="export" onClick={() => this.props.store.exportAs("gif", () => {})} />
-                        </p>
-                    </section> : null }
+                    { this.state.dataset != null && this.state.chart != null && this.state.chart.type != null ? <ExportView /> : null }
                 </div>
             </div>
         );

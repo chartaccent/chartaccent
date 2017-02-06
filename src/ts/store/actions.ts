@@ -172,3 +172,13 @@ export class LoadState extends Action {
         super();
     }
 };
+
+export class ExportAs extends Action {
+    constructor(
+        public type: string,
+        public emailAddress: string = "",
+        public shareData: boolean = true
+    ) {
+        super();
+    }
+}

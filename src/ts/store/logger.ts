@@ -1,8 +1,14 @@
-export class ActionLogger {
+import { AzureStorageLoggingService } from "../logging/logging";
+
+let service = new AzureStorageLoggingService();
+service.startSession();
+
+export class AppLogger {
     protected _lastAction: string;
     protected _lastLabel: string;
     protected _actions: [ string, string ][];
     protected _sendActionsTimer: number;
+
 
     constructor() {
         this._lastAction = null;
@@ -11,11 +17,15 @@ export class ActionLogger {
         this._sendActionsTimer = null;
     }
 
-    protected sendAction(action: string, label: string) {
-        // Send action to logging service here.
+    public getSessionID() {
+        return service.sessionID;
     }
 
-    public log(action: string, label: string) {
+    protected sendAction(action: string, label: string) {
+        service.logAction(action, label);
+    }
+
+    public logAction(action: string, label: string) {
         if(this._lastAction == action && this._lastLabel == label) {
             // De-duplicate state actions
             if(this._lastAction == "annotation/state") {
@@ -26,5 +36,9 @@ export class ActionLogger {
         console.log("Action", action, label);
         this._lastAction = action;
         this._lastLabel = label;
+    }
+
+    public logExport(data: string) {
+        service.logExport(data);
     }
 }

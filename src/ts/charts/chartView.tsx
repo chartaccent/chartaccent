@@ -130,7 +130,7 @@ export class ChartView extends React.Component<IChartViewProps, IChartViewState>
     }
 
     public trackEvent(type: string, value: string) {
-        this.props.store.logger.log(type, value);
+        this.props.store.logger.logAction(type, value);
     }
 
     public trackChartEvent(type: string, value: string) {
