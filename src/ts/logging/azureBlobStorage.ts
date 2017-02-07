@@ -2,6 +2,11 @@ let sha1 = require("sha1");
 
 let sasURLParameters = "sv=2015-12-11&ss=b&srt=o&sp=wc&se=2021-02-06T06:36:05Z&st=2017-02-05T22:36:05Z&spr=https,http&sig=jk%2FWF4kTSXDtHUCYo12t8JYfOY3zsnXks%2BxOUIUArGc%3D";
 
+let isDevelopmentMode = true;
+if(document.location.hostname == "localhost") {
+    isDevelopmentMode = true;
+}
+
 function encodeJSON(obj: any): string {
     return JSON.stringify(obj);
 }
@@ -10,12 +15,17 @@ function hashJSONString(json: string): string {
     return sha1(json);
 }
 
+function getBlobURL(container: string, blobName: string) {
+    if(isDevelopmentMode) container = "dev-" + container;
+    return `https://chartaccentdev.blob.core.windows.net/${container}/${blobName}?${sasURLParameters}`;
+}
+
 function getSessionBlobURL(sessionID: string) {
-    return `https://chartaccentdev.blob.core.windows.net/sessions/${sessionID}.json?${sasURLParameters}`;
+    return getBlobURL(`sessions`, `${sessionID}.json`);
 }
 
 function getExportBlobURL(sessionID: string, blobHash: string) {
-    return `https://chartaccentdev.blob.core.windows.net/exports/${sessionID}.${blobHash}.json?${sasURLParameters}`;
+    return getBlobURL(`exports`, `${sessionID}.${blobHash}.json`);
 }
 
 function putBlob(blobURL: string, data: string, callback?: (err: string) => void) {
