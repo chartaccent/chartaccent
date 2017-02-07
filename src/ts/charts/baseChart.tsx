@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as d3 from "d3";
 import * as ChartAccent from "../chartaccent";
+import { CSSRoboto } from "../roboto";
 
 import { Chart, Label, Defaults } from "../model/model";
 
@@ -125,6 +126,7 @@ export class BaseChartView extends React.Component<IBaseChartViewProps, {}> {
                     fontSize: 14
                 }}
             >
+                <style>{CSSRoboto}</style>
                 <g ref={(g: SVGGElement) => this._annotationBackgroundLayer = g} />
                 <g ref={(g: SVGGElement) => this._chartLayer = g}>
                     <ChartLabel

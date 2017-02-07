@@ -18,14 +18,24 @@ function getExportBlobURL(sessionID: string, blobHash: string) {
     return `https://chartaccentdev.blob.core.windows.net/exports/${sessionID}.${blobHash}.json?${sasURLParameters}`;
 }
 
-function putBlob(blobURL: string, data: string, callback: (err: string) => void) {
+function putBlob(blobURL: string, data: string, callback?: (err: string) => void) {
     var ajaxRequest = new XMLHttpRequest();
+    ajaxRequest.onreadystatechange = () => {
+        if(ajaxRequest.readyState == XMLHttpRequest.DONE) {
+            if(ajaxRequest.status == 200 || ajaxRequest.status == 201) {
+                callback(null);
+            } else {
+                callback(ajaxRequest.status + " " + ajaxRequest.statusText);
+            }
+        }
+    }
     ajaxRequest.onload = () => {
-        callback(null);
+        if(callback) callback(null);
     }
     ajaxRequest.onerror = () => {
-        callback("ERROR");
+        if(callback) callback(ajaxRequest.statusText);
     }
+    ajaxRequest.timeout = 20 * 1000;
     ajaxRequest.open('PUT', blobURL, true);
     ajaxRequest.setRequestHeader('x-ms-blob-type', 'BlockBlob');
     ajaxRequest.setRequestHeader('x-ms-blob-content-type', 'text/plain; charset=utf-8');

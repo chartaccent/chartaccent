@@ -28,8 +28,12 @@ var Annotation = function(info) {
         }
     });
     if(index_to_highlight !== null) {
+        var should_add_highlight_line = false;
         if(self.target.type == "items") {
-            var should_add_highlight_line = self.target.items.some(function(d) { return d.elements.has_line; });
+            should_add_highlight_line = self.target.items.some(function(d) { return d.elements.has_line; });
+        }
+        if(self.target.type == "range" && self.target_inherit) {
+            should_add_highlight_line = self.target_inherit.serieses.some(function(elements) { return elements.has_line; });
         }
         if(should_add_highlight_line) {
             self.components.splice(index_to_highlight, 0, {

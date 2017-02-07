@@ -6,7 +6,7 @@ import { ChartAccent } from "../chartaccent";
 import { globalSamples } from "./samples";
 import { parseDataset } from "../model/utils";
 import { EventEmitter, EventSubscription } from "fbemitter";
-import { AppLogger } from "./logger";
+import { AppLogger, ExportLogData } from "./logger";
 
 export class MainStore extends EventEmitter {
     private _logger: AppLogger;
@@ -42,13 +42,15 @@ export class MainStore extends EventEmitter {
                     let reader = new FileReader();
                     reader.onload = (e) => {
                         let imageDataURL = reader.result;
-                        let exportData = {
+                        let exportData: ExportLogData = {
+                            timestamp: new Date().getTime(),
                             sessionID: this.logger.getSessionID(),
                             state: state,
+                            imageType: type,
                             imageDataURL: imageDataURL,
                             emailAddress: emailAddress
                         }
-                        this.logger.logExport(JSON.stringify(exportData));
+                        this.logger.logExport(exportData);
                     }
                     reader.readAsDataURL(blob);
                 }
@@ -81,6 +83,9 @@ export class MainStore extends EventEmitter {
     public handleAction(action: Actions.Action) {
         if(action instanceof Actions.LoadData) {
             let dataset = parseDataset(action.fileName, action.raw, action.fileType);
+            if(action.sampleFileName != null) {
+                dataset.sampleFileName = action.sampleFileName;
+            }
             this._dataset = dataset;
             this.emitDatasetChanged();
 
@@ -88,7 +93,6 @@ export class MainStore extends EventEmitter {
                 this._chart = Defaults.chart(this._dataset);
                 this.emitChartChanged();
             }
-
             this.logger.logAction("dataset/load", `N=${this._dataset.rows.length},C=${this._dataset.columns.length}`);
         }
         if(action instanceof Actions.UpdateChart) {

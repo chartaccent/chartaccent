@@ -20,7 +20,8 @@ export class LoadData extends Action {
     constructor(
         public fileName: string,
         public raw: string,
-        public fileType: "csv" | "tsv"
+        public fileType: "csv" | "tsv",
+        public sampleFileName: string = null
     ) {
         super();
     }

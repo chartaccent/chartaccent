@@ -88,7 +88,7 @@ export class ChartView extends React.Component<IChartViewProps, IChartViewState>
             switch(newChartInfo.type) {
                 case "bar-chart":
                 case "line-chart": {
-                    if(this.currentChartInfo.type == "bar-chart" || this.currentChartInfo.type == "line-chart") {
+                    if(this.currentChartInfo.type == newChartInfo.type) {
                         shouldSave =
                             isSameArray(this.currentChartInfo.xColumns, newChartInfo.xColumns) &&
                             isSubset(this.currentChartInfo.yColumns, newChartInfo.yColumns)
@@ -129,12 +129,12 @@ export class ChartView extends React.Component<IChartViewProps, IChartViewState>
         this.props.store.setExportAs(this.exportAs.bind(this));
     }
 
-    public trackEvent(type: string, value: string) {
-        this.props.store.logger.logAction(type, value);
+    public trackEvent(type: string, value: string, savedAnnotations: string) {
+        this.props.store.logger.logAction(type, value, savedAnnotations);
     }
 
     public trackChartEvent(type: string, value: string) {
-        this.trackEvent("annotation/" + type, value);
+        this.trackEvent("annotation/" + type, value, JSON.stringify(this.chartAccent.saveAnnotations()));
     }
 
     public exportAs(type: "svg" | "png" | "gif", callback: (blob: Blob) => void) {
@@ -156,7 +156,7 @@ export class ChartView extends React.Component<IChartViewProps, IChartViewState>
                 do_download(blob);
             });
         }
-        this.trackEvent("export/" + type, this.chartAccent.summarizeState());
+        this.trackEvent("export/" + type, this.chartAccent.summarizeState(), JSON.stringify(this.chartAccent.saveAnnotations()));
     }
 
     public renderChartView() {

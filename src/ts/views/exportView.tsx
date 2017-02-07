@@ -20,7 +20,7 @@ export class ExportView extends React.Component<{}, IExportViewState> {
     constructor(props: {}) {
         super(props);
         this.state = {
-            emailAddress: "",
+            emailAddress: window.localStorage.getItem("chartaccent-emailaddress") || "",
             shareData: true
         }
     }
@@ -40,10 +40,11 @@ export class ExportView extends React.Component<{}, IExportViewState> {
                 <h2>Export</h2>
                 <p className="note"><strong>Email Address</strong></p>
                 <p>
-                    <input ref="inputEmailAddress" style={{ maxWidth: "400px" }} type="text" value={this.state.emailAddress} placeholder="email address" onChange={(e) => {
+                    <input ref="inputEmailAddress" style={{ maxWidth: "400px" }} type="text" value={this.state.emailAddress} placeholder="yourname@example.com" onChange={(e) => {
                         this.setState({
                             emailAddress: this.refs.inputEmailAddress.value
                         });
+                        window.localStorage.setItem("chartaccent-emailaddress", this.refs.inputEmailAddress.value);
                     }} />
                 </p>
                 <p className="note">
@@ -57,7 +58,7 @@ export class ExportView extends React.Component<{}, IExportViewState> {
                     <Button text="Animated GIF" icon="export" disabled={this.shouldDisableButtons()} onClick={() => this.doExportAs("gif")} />
                 </p>
                 <p>
-                    <label><input ref="checkboxShareData" type="checkbox" checked={!this.state.shareData} onChange={(e) => {
+                    <label style={{ cursor: "pointer" }}><input ref="checkboxShareData" type="checkbox" checked={!this.state.shareData} onChange={(e) => {
                         this.setState({
                             shareData: !this.refs.checkboxShareData.checked
                         });

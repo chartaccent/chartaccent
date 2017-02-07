@@ -33,6 +33,7 @@ ChartAccent.prototype.summarizeState = function() {
 };
 
 ChartAccent.prototype.saveAnnotations = function() {
+    if(this.charts.length == 0) return null;
     return deepClone(this.charts[0].serializeAnnotations(this.charts[0].currentState()));
 };
 

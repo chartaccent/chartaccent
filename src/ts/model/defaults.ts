@@ -54,6 +54,17 @@ export module Defaults {
 
     export let defaultFont = "Roboto";
 
+    export function chartTitle(dataset: Dataset = null): string {
+        if(dataset == null) return "Chart";
+        if(dataset.sampleFileName != null) return dataset.sampleFileName;
+        let index = dataset.fileName.lastIndexOf(".");
+        if(index != -1) {
+            return dataset.fileName.slice(0, index);
+        } else {
+            return dataset.fileName
+        }
+    }
+
     export function label(text: string = "", fontSize: number = 14): Label {
         return {
             text: text,
@@ -82,7 +93,7 @@ export module Defaults {
         return {
             dataset: dataset,
             type: "bar-chart",
-            title: Defaults.label(dataset.fileName, 20),
+            title: Defaults.label(chartTitle(dataset), 20),
             width: 700,
             height: 400,
             xColumn: xColumn,
@@ -108,7 +119,7 @@ export module Defaults {
         return {
             dataset: dataset,
             type: "line-chart",
-            title: Defaults.label(dataset.fileName, 20),
+            title: Defaults.label(chartTitle(dataset), 20),
             width: 700,
             height: 400,
             xColumn: xColumn,
@@ -151,7 +162,7 @@ export module Defaults {
         return {
             dataset: dataset,
             type: "scatterplot",
-            title: Defaults.label(dataset.fileName, 20),
+            title: Defaults.label(chartTitle(dataset), 20),
             width: 700,
             height: 400,
             xColumn: xColumn,

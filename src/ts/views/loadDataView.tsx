@@ -55,7 +55,7 @@ export class LoadDataView extends React.Component<{
                                     d3.text(sample.csv, "text/plain", (err, data) => {
                                         if(!err) {
                                             let name = sample.csv.slice(sample.csv.lastIndexOf("/") + 1);
-                                            new Actions.LoadData(name, data, "csv").dispatch();
+                                            new Actions.LoadData(name, data, "csv", sampleName).dispatch();
                                         }
                                     });
                                 }

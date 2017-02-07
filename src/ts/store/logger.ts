@@ -1,44 +1,42 @@
 import { AzureStorageLoggingService } from "../logging/logging";
+import { AppState } from "../model/model";
 
 let service = new AzureStorageLoggingService();
 service.startSession();
 
-export class AppLogger {
-    protected _lastAction: string;
-    protected _lastLabel: string;
-    protected _actions: [ string, string ][];
-    protected _sendActionsTimer: number;
+export interface ExportLogData {
+    timestamp: number;
+    sessionID: string;
+    state: AppState;
+    imageType: string;
+    imageDataURL: string;
+    emailAddress: string;
+    history?: [ number, string, string, any ][];
+}
 
+export class AppLogger {
+    protected _privateActions: [ number, string, string, any ][];
 
     constructor() {
-        this._lastAction = null;
-        this._lastLabel = null;
-        this._actions = [];
-        this._sendActionsTimer = null;
+        this._privateActions = [];
     }
 
     public getSessionID() {
         return service.sessionID;
     }
 
-    protected sendAction(action: string, label: string) {
-        service.logAction(action, label);
-    }
+    public logAction(action: string, label: string, privateData: any = null) {
+        let timestamp = new Date().getTime();
 
-    public logAction(action: string, label: string) {
-        if(this._lastAction == action && this._lastLabel == label) {
-            // De-duplicate state actions
-            if(this._lastAction == "annotation/state") {
-                return;
-            }
-        }
-        this.sendAction(action, label);
+        service.logAction(timestamp, action, label);
+
         console.log("Action", action, label);
-        this._lastAction = action;
-        this._lastLabel = label;
+
+        this._privateActions.push([ timestamp, action, label, privateData ]);
     }
 
-    public logExport(data: string) {
-        service.logExport(data);
+    public logExport(data: ExportLogData) {
+        data.history = this._privateActions;
+        service.logExport(JSON.stringify(data));
     }
 }

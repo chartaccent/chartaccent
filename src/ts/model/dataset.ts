@@ -14,6 +14,7 @@ export interface Row {
 
 export interface Dataset {
     fileName: string;
+    sampleFileName?: string;
     rawFile: string;
     type: FileType;
     columns: Column[];
