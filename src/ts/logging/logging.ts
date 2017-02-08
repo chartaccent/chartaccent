@@ -129,7 +129,7 @@ export class AzureStorageLoggingService extends LoggingService {
                     this.scheduleSendSession();
                 }
             });
-        }, 5000);
+        }, 1000);
     }
 
     public doSendSession() {
@@ -148,7 +148,7 @@ export class AzureStorageLoggingService extends LoggingService {
                 // Try again in 5 seconds
                 setTimeout(() => {
                     this.logExport(data)
-                }, 5000);
+                }, 1000);
             }
         });
     }
