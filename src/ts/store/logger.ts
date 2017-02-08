@@ -5,7 +5,8 @@ let service = new AzureStorageLoggingService();
 service.startSession();
 
 export interface ExportLogData {
-    timestamp: number;
+    timeCreated: number;
+    clientID: string;
     sessionID: string;
     state: AppState;
     imageType: string;
@@ -20,7 +21,9 @@ export class AppLogger {
     constructor() {
         this._privateActions = [];
     }
-
+    public getClientID() {
+        return service.clientID;
+    }
     public getSessionID() {
         return service.sessionID;
     }

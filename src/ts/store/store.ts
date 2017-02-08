@@ -43,7 +43,8 @@ export class MainStore extends EventEmitter {
                     reader.onload = (e) => {
                         let imageDataURL = reader.result;
                         let exportData: ExportLogData = {
-                            timestamp: new Date().getTime(),
+                            clientID: this.logger.getClientID(),
+                            timeCreated: new Date().getTime(),
                             sessionID: this.logger.getSessionID(),
                             state: state,
                             imageType: type,

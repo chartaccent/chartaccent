@@ -19,6 +19,7 @@ export function getClientID(): string {
 }
 
 export abstract class LoggingService {
+    public abstract get clientID(): string;
     public abstract get sessionID(): string;
     public abstract startSession(): void;
     public abstract logAction(timestamp: number, type: string, code: string): void;
@@ -27,12 +28,17 @@ export abstract class LoggingService {
 
 export class NullLoggingService extends LoggingService {
     private _sessionID: string;
+    private _clientID: string;
 
+    public get clientID(): string {
+        return this._clientID;
+    }
     public get sessionID(): string {
         return this._sessionID;
     }
     public startSession(): void {
         this._sessionID = generateSessionID();
+        this._clientID = getClientID();
         console.log("NL.StartSession", this.sessionID);
     }
     public logAction(timestamp: number, type: string, code: string): void {
@@ -79,6 +85,10 @@ export class AzureStorageLoggingService extends LoggingService {
                 this.doSendSession();
             }
         });
+    }
+
+    public get clientID(): string {
+        return this._clientID;
     }
 
     public get sessionID(): string {
