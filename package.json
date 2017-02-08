@@ -36,6 +36,7 @@
     "@types/d3": "^3.5.36",
     "@types/fbemitter": "^2.0.32",
     "@types/flux": "0.0.34",
+    "@types/google.analytics": "0.0.28",
     "@types/react": "^0.14.55",
     "@types/react-dom": "^0.14.20",
     "chroma-js": "^1.2.1",

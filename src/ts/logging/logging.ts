@@ -110,6 +110,8 @@ export class AzureStorageLoggingService extends LoggingService {
             actions: []
         };
         this.doSendSession();
+        ga("send", "event", "session", "clientID", this._clientID);
+        ga("send", "event", "session", "startSession", this._sessionID);
     }
 
     public scheduleSendSession() {
@@ -139,6 +141,10 @@ export class AzureStorageLoggingService extends LoggingService {
     public logAction(timestamp: number, type: string, code: string): void {
         this._sessionData.actions.push([ timestamp, type, code ]);
         this.scheduleSendSession();
+        let category = type.split("/")[0];
+        let action = type.split("/")[1] || "default";
+        ga("send", "event", category, action, code);
+        console.log("GoogleAnalytics", category, action, code);
     }
 
     public logExport(data: string): void {
