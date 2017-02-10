@@ -38,7 +38,7 @@ export class ExportView extends React.Component<{}, IExportViewState> {
         return (
             <section className="section-export">
                 <h2>Export</h2>
-                <p className="note"><strong>Email Address</strong></p>
+                <h3 className="note">Email Address</h3>
                 <p>
                     <input ref="inputEmailAddress" style={{ maxWidth: "400px" }} type="text" value={this.state.emailAddress} placeholder="yourname@example.com" onChange={(e) => {
                         this.setState({
@@ -64,6 +64,13 @@ export class ExportView extends React.Component<{}, IExportViewState> {
                         });
                     }} /> Don't share data with the authors</label>
                 </p>
+                <h3 className="note">Publication</h3>
+                <div className="bibitem note">
+                    <div className="bibitem-title"><strong>ChartAccent: Annotation for Data-Driven Storytelling</strong></div>
+                    <div className="bibitem-authors">Donghao Ren, Matthew Brehmer, Bongshin Lee, Tobias Höllerer, and Eun Kyoung Choe</div>
+                    <div className="bibitem-place">(Accepted) Proceedings of IEEE Pacific Visualization (PacificVis 2017), 2017</div>
+                    <div className="bibitem-links"><a href="publications/chartaccent-pacificvis2017.pdf">Download PDF</a></div>
+                </div>
             </section>
         );
     }

@@ -26,10 +26,26 @@ h3 {
     font-weight: 300;
 }
 
+h3.note {
+    font-weight: 400;
+    margin-top: 20px;
+    font-size: 14px;
+    color: $gray-500;
+}
+
 p {
     margin: 10px 0;
     &.note {
         color: $gray-500;
+    }
+}
+
+.bibitem {
+    &.note {
+        color: $gray-500;
+    }
+    & > div {
+        line-height: 1.3em;
     }
 }
 
