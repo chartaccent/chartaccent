@@ -137,10 +137,11 @@ export class ChartView extends React.Component<IChartViewProps, IChartViewState>
         this.trackEvent("annotation/" + type, value, JSON.stringify(this.chartAccent.saveAnnotations()));
     }
 
-    public exportAs(type: "svg" | "png" | "gif", callback: (blob: Blob) => void) {
+    public exportAs(type: "svg" | "png" | "gif", callback: (blob: Blob, doDownload: () => void) => void) {
         let do_download = (url: Blob) => {
-            saveAs(url, "chartaccent." + type);
-            callback(url);
+            callback(url, () => {
+                saveAs(url, "chartaccent." + type);
+            });
         };
         if(type == "svg") {
             var blob = this.chartAccent.getSVGDataBlob();

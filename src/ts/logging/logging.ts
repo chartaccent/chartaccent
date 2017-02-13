@@ -23,7 +23,7 @@ export abstract class LoggingService {
     public abstract get sessionID(): string;
     public abstract startSession(): void;
     public abstract logAction(timestamp: number, type: string, code: string): void;
-    public abstract logExport(data: string): void;
+    public abstract logExport(data: string, callback: (error: string) => void): void;
 }
 
 export class NullLoggingService extends LoggingService {
@@ -45,8 +45,9 @@ export class NullLoggingService extends LoggingService {
         console.log("NL.Action", type, code);
 
     }
-    public logExport(data: string): void {
+    public logExport(data: string, callback: (error: string) => void): void {
         console.log("NL.Export", data);
+        callback(null);
     }
 }
 
@@ -125,7 +126,7 @@ export class AzureStorageLoggingService extends LoggingService {
         this._sendSessionTimer = setTimeout(() => {
             this._sendSessionTimer = null;
             putSession(this.sessionID, this._sessionDataToSend, (err) => {
-                if(err) {
+                if(err != null) {
                     console.log("Error in putSession: " + err);
                     // Reschedule logging
                     this.scheduleSendSession();
@@ -135,7 +136,13 @@ export class AzureStorageLoggingService extends LoggingService {
     }
 
     public doSendSession() {
-        putSession(this.sessionID, JSON.stringify(this._sessionData), (err) => {});
+        putSession(this.sessionID, JSON.stringify(this._sessionData), (err) => {
+            if(err != null) {
+                console.log("Error in putSession: " + err);
+                // Reschedule logging
+                this.scheduleSendSession();
+            }
+        });
     }
 
     public logAction(timestamp: number, type: string, code: string): void {
@@ -147,14 +154,13 @@ export class AzureStorageLoggingService extends LoggingService {
         console.log("GoogleAnalytics", category, action, code);
     }
 
-    public logExport(data: string): void {
+    public logExport(data: string, callback: (error: string) => void): void {
         putExport(this.sessionID, data, (err) => {
             if(err) {
                 console.log("Error in putExport: " + err);
-                // Try again in 5 seconds
-                setTimeout(() => {
-                    this.logExport(data)
-                }, 1000);
+                callback(err);
+            } else {
+                callback(null);
             }
         });
     }

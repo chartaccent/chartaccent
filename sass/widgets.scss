@@ -51,3 +51,9 @@
     margin: -5px;
     margin-bottom: 0;
 }
+
+.export-buttons {
+    & > span {
+        margin-left: 0.5em;
+    }
+}

@@ -68,7 +68,7 @@ export class MainView extends React.Component<IMainViewProps, IMainViewState> {
                     <LoadDataView store={this.props.store} dataset={this.state.dataset} />
                     { this.state.dataset != null && this.state.chart != null ? <ChartTypeView chart={this.state.chart} /> : null }
                     { this.state.dataset != null && this.state.chart != null ? <CreateChartView chart={this.state.chart} store={this.props.store} /> : null }
-                    { this.state.dataset != null && this.state.chart != null && this.state.chart.type != null ? <ExportView /> : null }
+                    { this.state.dataset != null && this.state.chart != null && this.state.chart.type != null ? <ExportView store={this.props.store} /> : null }
                 </div>
             </div>
         );

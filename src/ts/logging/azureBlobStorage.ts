@@ -32,21 +32,28 @@ function getExportBlobURL(sessionID: string, blobHash: string) {
 }
 
 function putBlob(blobURL: string, data: string, callback?: (err: string) => void) {
-    var ajaxRequest = new XMLHttpRequest();
+    let ajaxRequest = new XMLHttpRequest();
+    let didCallback = false;
     ajaxRequest.onreadystatechange = () => {
         if(ajaxRequest.readyState == XMLHttpRequest.DONE) {
             if(ajaxRequest.status == 200 || ajaxRequest.status == 201) {
-                callback(null);
+                if(!didCallback) {
+                    didCallback = true;
+                    if(callback) callback(null);
+                }
             } else {
-                callback(ajaxRequest.status + " " + ajaxRequest.statusText);
+                if(!didCallback) {
+                    didCallback = true;
+                    if(callback) callback("could not put blob: " + ajaxRequest.status + " " + ajaxRequest.statusText);
+                }
             }
         }
     }
-    ajaxRequest.onload = () => {
-        if(callback) callback(null);
-    }
     ajaxRequest.onerror = () => {
-        if(callback) callback(ajaxRequest.statusText);
+        if(!didCallback) {
+            didCallback = true;
+            if(callback) callback("could not put blob: " + ajaxRequest.statusText);
+        }
     }
     ajaxRequest.timeout = 20 * 1000;
     ajaxRequest.open('PUT', blobURL, true);

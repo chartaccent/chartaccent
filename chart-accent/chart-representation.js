@@ -1470,7 +1470,6 @@ ChartRepresentation.prototype.makeAnimation = function(callback) {
         quality: 10
     });
     gif.on('finished', function(blob) {
-        console.log(blob);
         callback(blob);
     });
     function convertCanvasIndex(i) {

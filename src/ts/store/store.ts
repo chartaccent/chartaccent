@@ -14,7 +14,7 @@ export class MainStore extends EventEmitter {
     private _chart: Chart;
     private _samples: typeof globalSamples;
     private _chartAccent: ChartAccent;
-    private _exportAs: (type: string, callback: (blob: Blob) => void) => void;
+    private _exportAs: (type: string, callback: (blob: Blob, doDownload: () => void) => void) => void;
 
     public get dataset(): Dataset { return this._dataset; }
     public get chart(): Chart { return this._chart; }
@@ -30,14 +30,14 @@ export class MainStore extends EventEmitter {
         this._chartAccent = value;
     }
 
-    public setExportAs(func: (type: string, callback: (blob: Blob) => void) => void) {
+    public setExportAs(func: (type: string, callback: (blob: Blob, doDownload: () => void) => void) => void) {
         this._exportAs = func;
     }
 
-    public exportAs(type: string, emailAddress: string, shareData: boolean) {
+    public exportAs(type: string, emailAddress: string, shareData: boolean, callback: (error: string) => void) {
         if(this._exportAs) {
             let state = this.getState();
-            this._exportAs(type, (blob: Blob) => {
+            this._exportAs(type, (blob: Blob, doDownload: () => void) => {
                 if(shareData) {
                     let reader = new FileReader();
                     reader.onload = (e) => {
@@ -51,9 +51,21 @@ export class MainStore extends EventEmitter {
                             imageDataURL: imageDataURL,
                             emailAddress: emailAddress
                         }
-                        this.logger.logExport(exportData);
+                        this.logger.logExport(exportData, (error) => {
+                            if(error != null) {
+                                callback(error);
+                            } else {
+                                doDownload();
+                                callback(null);
+                            }
+                        });
                     }
                     reader.readAsDataURL(blob);
+                } else {
+                    setTimeout(() => {
+                        doDownload();
+                        callback(null);
+                    }, 1000);
                 }
             });
         }
@@ -152,11 +164,6 @@ export class MainStore extends EventEmitter {
                     }
                 });
             }
-        }
-        if(action instanceof Actions.ExportAs) {
-            setImmediate(() => {
-                this.exportAs(action.type, action.emailAddress, action.shareData);
-            });
         }
     }
 

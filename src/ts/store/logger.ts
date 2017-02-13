@@ -38,8 +38,8 @@ export class AppLogger {
         this._privateActions.push([ timestamp, action, label, privateData ]);
     }
 
-    public logExport(data: ExportLogData) {
+    public logExport(data: ExportLogData, callback: (error: string) => void) {
         data.history = this._privateActions;
-        service.logExport(JSON.stringify(data));
+        service.logExport(JSON.stringify(data), callback);
     }
 }
