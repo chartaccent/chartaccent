@@ -4,6 +4,12 @@ An online tool to help people create and annotate charts.
 
 ## How to build
 
+What you need:
+
+- nodejs 6.0+
+- python
+- ruby
+
 Get the code via github:
 
     git clone https://github.com/chartaccent/chartaccent.git
