@@ -1,6 +1,6 @@
 let sha1 = require("sha1");
 
-let isDevelopmentMode = true;
+let isDevelopmentMode = false;
 
 if(document.location.hostname == "localhost") {
     isDevelopmentMode = true;
