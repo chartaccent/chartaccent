@@ -94,6 +94,15 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
                                 onChange={(newColumn) => new Actions.UpdateChartXColumn(chart, newColumn).dispatch()}
                             />
                         </div>
+                        <div className="widget-row widget-row-p">
+                            <InputWidgets.LabelWidget
+                                columnCount={12}
+                                text="Label"
+                                title="enter the label for x axis"
+                                label={chart.xLabel}
+                                onChange={(newTitle) => new Actions.UpdateChartXLabel(chart, newTitle).dispatch()}
+                            />
+                        </div>
                     </div>
                 </div>
                 <div className="col-6">
@@ -122,7 +131,7 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
                             <InputWidgets.LabelWidget
                                 columnCount={12}
                                 text="Label"
-                                title="enter the label for Y axis"
+                                title="enter the label for y axis"
                                 label={chart.yLabel}
                                 onChange={(newTitle) => new Actions.UpdateChartYLabel(chart, newTitle).dispatch()}
                             />
@@ -185,7 +194,7 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
                                 <InputWidgets.ColumnWidget
                                     columnCount={12}
                                     text="Y"
-                                    title="choose a column for x axis"
+                                    title="choose a column for y axis"
                                     column={chart.yColumn}
                                     candidates={xyColumnCandidates}
                                     onChange={(newColumn) => new Actions.UpdateChartYColumn(chart, newColumn).dispatch()}

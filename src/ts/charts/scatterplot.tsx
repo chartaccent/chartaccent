@@ -101,7 +101,12 @@ export class ScatterplotView extends BaseChartView {
     }
 
     public d3GetXAxisHeight() {
-        return 40;
+        let chart = this.props.chart as Scatterplot;
+        if(chart.xLabel && chart.xLabel.text != "") {
+            return 40;
+        } else {
+            return super.d3GetXAxisHeight();
+        }
     }
 
     public configureChartAccent(chartaccent: ChartAccent.ChartAccent) {

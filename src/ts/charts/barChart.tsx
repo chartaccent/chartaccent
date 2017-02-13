@@ -83,6 +83,15 @@ export class BarChartView extends BaseChartView {
         return d3.max(tickStrings, (d) => measureTextWidth(d, "Arial", 14)) + 30;
     }
 
+    public d3GetXAxisHeight() {
+        let chart = this.props.chart as BarChart;
+        if(chart.xLabel && chart.xLabel.text != "") {
+            return 40;
+        } else {
+            return super.d3GetXAxisHeight();
+        }
+    }
+
     public configureChartAccent(chartaccent: ChartAccent.ChartAccent) {
         let chart = this.props.chart as BarChart;
         let { xScale, xAxis } = this.d3GetXAxis();
@@ -169,6 +178,11 @@ export class BarChartView extends BaseChartView {
                 <ChartLabel
                     transform={`translate(${this._margin.left - this.d3GetYAxisWidth() + 10}, ${(this._margin.top + chart.height - this._margin.bottom) / 2}) rotate(-90)`}
                     label={chart.yLabel}
+                    anchor="middle"
+                />
+                <ChartLabel
+                    transform={`translate(${(this._margin.left + chart.width - this._margin.right) / 2}, ${chart.height - this._margin.bottom + 40})`}
+                    label={chart.xLabel}
                     anchor="middle"
                 />
             </g>

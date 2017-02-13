@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as d3 from "d3";
 
-import { Chart, BarChart, Row } from "../model/model";
+import { Chart, LineChart, Row } from "../model/model";
 import { BaseChartView } from "./baseChart";
 import { ChartLabel, applyAxisStyle, measureTextWidth, findColumnFormat } from "./elements";
 
@@ -16,14 +16,14 @@ export class LineChartView extends BaseChartView {
     private _lineSelections: { line: d3.Selection<any>, dots: d3.Selection<any> }[];
 
     public getLegendItems(): string[] {
-        let chart = this.props.chart as BarChart;
+        let chart = this.props.chart as LineChart;
         return chart.yColumns;
     }
 
     public d3RenderChart() {
         super.d3RenderChart();
 
-        let chart = this.props.chart as BarChart;
+        let chart = this.props.chart as LineChart;
         let sel = d3.select(this._lineChartLayer);
 
         let { xScale, xAxis } = this.d3GetXAxis();
@@ -58,7 +58,7 @@ export class LineChartView extends BaseChartView {
     }
 
     public d3GetXAxis() {
-        let chart = this.props.chart as BarChart;
+        let chart = this.props.chart as LineChart;
         let xValues = chart.dataset.rows.map((d) => d[chart.xColumn].toString());
         let xScale = d3.scale.ordinal()
             .domain(xValues)
@@ -68,7 +68,7 @@ export class LineChartView extends BaseChartView {
     }
 
     public d3GetYAxis() {
-        let chart = this.props.chart as BarChart;
+        let chart = this.props.chart as LineChart;
         let yScale = d3.scale.linear();
         yScale.range([ chart.height - this._margin.bottom, this._margin.top ])
         yScale.domain([
@@ -89,8 +89,17 @@ export class LineChartView extends BaseChartView {
         return d3.max(tickStrings, (d) => measureTextWidth(d, "Arial", 14)) + 30;
     }
 
+    public d3GetXAxisHeight() {
+        let chart = this.props.chart as LineChart;
+        if(chart.xLabel && chart.xLabel.text != "") {
+            return 40;
+        } else {
+            return super.d3GetXAxisHeight();
+        }
+    }
+
     public configureChartAccent(chartaccent: ChartAccent.ChartAccent) {
-        let chart = this.props.chart as BarChart;
+        let chart = this.props.chart as LineChart;
         let { xScale, xAxis } = this.d3GetXAxis();
         let { yScale, yAxis } = this.d3GetYAxis();
 
@@ -167,7 +176,7 @@ export class LineChartView extends BaseChartView {
     }
 
     public renderChart() {
-        let chart = this.props.chart as BarChart;
+        let chart = this.props.chart as LineChart;
         return (
             <g ref={(g: SVGGElement) => this._lineChartLayer = g}>
                 <g ref={(g: SVGGElement) => this._lineChartContent = g} />
@@ -176,6 +185,11 @@ export class LineChartView extends BaseChartView {
                 <ChartLabel
                     transform={`translate(${this._margin.left - this.d3GetYAxisWidth() + 10}, ${(this._margin.top + chart.height - this._margin.bottom) / 2}) rotate(-90)`}
                     label={chart.yLabel}
+                    anchor="middle"
+                />
+                <ChartLabel
+                    transform={`translate(${(this._margin.left + chart.width - this._margin.right) / 2}, ${chart.height - this._margin.bottom + 40})`}
+                    label={chart.xLabel}
                     anchor="middle"
                 />
             </g>
