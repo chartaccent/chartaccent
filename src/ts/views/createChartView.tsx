@@ -12,6 +12,14 @@ import { HorizontalRule } from "../controls/controls";
 import { ChartView } from "../charts/chartView";
 import { MainStore } from "../store/store";
 
+function sortColumnNames(names: string[]): string[] {
+    return names.slice().sort((a, b) => a < b ? -1 : 1);
+}
+
+function prepareColumnNames(names: string[]): string[] {
+    return sortColumnNames(names);
+}
+
 export class ChartTypeView extends React.Component<{
     chart: Chart;
 }, {}> {
@@ -90,7 +98,7 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
                                 text="X"
                                 title="choose a column for x axis"
                                 column={chart.xColumn}
-                                candidates={xColumnCandidates}
+                                candidates={prepareColumnNames(xColumnCandidates)}
                                 onChange={(newColumn) => new Actions.UpdateChartXColumn(chart, newColumn).dispatch()}
                             />
                         </div>
@@ -114,7 +122,7 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
                                 text="Y"
                                 title="choose a column for x axis"
                                 columns={chart.yColumns || []}
-                                candidates={yColumnCandidates}
+                                candidates={prepareColumnNames(yColumnCandidates)}
                                 onChange={(newColumns) => new Actions.UpdateChartYColumns(chart, newColumns).dispatch()}
                             />
                         </div>
@@ -163,7 +171,7 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
                                     text="X"
                                     title="choose a column for x axis"
                                     column={chart.xColumn}
-                                    candidates={xyColumnCandidates}
+                                    candidates={prepareColumnNames(xyColumnCandidates)}
                                     onChange={(newColumn) => new Actions.UpdateChartXColumn(chart, newColumn).dispatch()}
                                 />
                             </div>
@@ -196,7 +204,7 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
                                     text="Y"
                                     title="choose a column for y axis"
                                     column={chart.yColumn}
-                                    candidates={xyColumnCandidates}
+                                    candidates={prepareColumnNames(xyColumnCandidates)}
                                     onChange={(newColumn) => new Actions.UpdateChartYColumn(chart, newColumn).dispatch()}
                                 />
                             </div>
@@ -232,7 +240,7 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
                                     title="choose a column for color"
                                     column={chart.groupColumn}
                                     allowNull={true}
-                                    candidates={groupColumnCandidates}
+                                    candidates={prepareColumnNames(groupColumnCandidates)}
                                     onChange={(newColumn) => new Actions.UpdateChartGroupColumn(chart, newColumn).dispatch()}
                                 />
                                 <InputWidgets.ColumnWidget
@@ -241,7 +249,7 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
                                     title="choose a column for size"
                                     column={chart.sizeColumn}
                                     allowNull={true}
-                                    candidates={xyColumnCandidates}
+                                    candidates={prepareColumnNames(xyColumnCandidates)}
                                     onChange={(newColumn) => new Actions.UpdateChartSizeColumn(chart, newColumn).dispatch()}
                                 />
                                 <InputWidgets.ColumnWidget
@@ -250,7 +258,7 @@ export class CreateChartView extends React.Component<ICreateChartViewProps, {}> 
                                     title="choose a column for name"
                                     allowNull={true}
                                     column={chart.nameColumn}
-                                    candidates={groupColumnCandidates}
+                                    candidates={prepareColumnNames(groupColumnCandidates)}
                                     onChange={(newColumn) => new Actions.UpdateChartNameColumn(chart, newColumn).dispatch()}
                                 />
                             </div>

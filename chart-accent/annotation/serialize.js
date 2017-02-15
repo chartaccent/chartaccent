@@ -107,6 +107,7 @@ Annotation.prototype.serializeComponent = function(ctx, component) {
     };
     if(component.type == "label" || component.type == "item-label") {
         r.text = Expression.toStringExpression(component.text);
+        r.line = component.line;
         r.anchor = deepClone(component.anchor);
         r.anchor_offset = deepClone(component.anchor_offset);
     }
@@ -140,6 +141,7 @@ Annotation.prototype.deserializeComponent = function(ctx, serialized) {
     };
     if(serialized.type == "label" || serialized.type == "item-label") {
         r.text = Expression.parseStringExpression(serialized.text);
+        r.line = serialized.line;
         r.anchor = deepClone(serialized.anchor);
         r.anchor_offset = deepClone(serialized.anchor_offset);
     }

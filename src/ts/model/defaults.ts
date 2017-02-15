@@ -88,6 +88,8 @@ export module Defaults {
         if(xColumnCandidates.length == 0 || yColumnCandidates.length == 0) return null;
 
         let xColumn = xColumnCandidates[0];
+
+        yColumnCandidates.sort((a, b) => a < b ? -1 : 1);
         let yColumns = yColumnCandidates.slice(0, 2);
 
         return {
@@ -114,7 +116,10 @@ export module Defaults {
         if(xColumnCandidates.length == 0 || yColumnCandidates.length == 0) return null;
 
         let xColumn = xColumnCandidates[0];
+
+        yColumnCandidates.sort((a, b) => a < b ? -1 : 1);
         let yColumns = yColumnCandidates.slice(0, 2);
+
 
         return {
             dataset: dataset,
@@ -136,6 +141,7 @@ export module Defaults {
     export function scatterplotChart(dataset: Dataset): Scatterplot {
         let xyColumnCandidates = getColumnsForContinuousAxis(dataset);
         if(xyColumnCandidates.length < 2) return null;
+        xyColumnCandidates.sort((a, b) => a < b ? -1 : 1);
 
         let xColumn = xyColumnCandidates[0];
         let yColumn = xyColumnCandidates[1];
