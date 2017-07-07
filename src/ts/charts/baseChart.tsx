@@ -42,14 +42,6 @@ export class BaseChartView extends React.Component<IBaseChartViewProps, {}> {
             bottom: 50,
             left: 80
         };
-
-        this.componentWillUpdate();
-    }
-
-    public componentWillUpdate() {
-        this._margin.right = this.measureLegend() + 10;
-        this._margin.left = this.d3GetYAxisWidth() + 10;
-        this._margin.bottom = this.d3GetXAxisHeight() + 10;
     }
 
     // Call d3-based render process
@@ -114,6 +106,9 @@ export class BaseChartView extends React.Component<IBaseChartViewProps, {}> {
     }
 
     public render() {
+        this._margin.right = this.measureLegend() + 10;
+        this._margin.left = this.d3GetYAxisWidth() + 10;
+        this._margin.bottom = this.d3GetXAxisHeight() + 10;
         let chart = this.props.chart;
         return (
             <svg

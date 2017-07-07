@@ -10,6 +10,8 @@ declare module ChartAccent {
         toolbar: d3.Selection<HTMLDivElement>
     }): ChartAccent;
 
+    export function setRootContainer(e: Element): void;
+
     export interface SavedAnnotations {
     }
 

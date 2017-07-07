@@ -5,6 +5,18 @@ import "scales.js";
 import "colors.js";
 import "presence.js";
 
+function getRootContainer() {
+    if(Module.rootContainer) {
+        return d3.select(Module.rootContainer);
+    } else {
+        return d3.select(document.body);
+    }
+}
+
+Module.setRootContainer = function(e) {
+    Module.rootContainer = e;
+}
+
 function isArray(o) { return o instanceof Array; }
 function isObject(o) { return o instanceof Object; }
 function isNone(o) { return o === null || o === undefined; }
@@ -167,7 +179,7 @@ var setupExpressionEditor = function(info) {
     var left_offset = 0;
     if(text_anchor == "middle") left_offset = -wrapper_width / 2 + anchor.width / 2;
     if(text_anchor == "end") left_offset = -wrapper_width + anchor.width;
-    var wrapper = d3.select("body").append("div").style({
+    var wrapper = getRootContainer().append("div").style({
         "position": "absolute",
         "z-index": 1000001,
         "width": wrapper_width + "px",
@@ -273,7 +285,7 @@ var setupEasyExpressionEditor = function(info) {
     var left_offset = 0;
     if(text_anchor == "middle") left_offset = -wrapper_width / 2 + anchor.width / 2;
     if(text_anchor == "end") left_offset = -wrapper_width + anchor.width;
-    var wrapper = d3.select("body").append("div").style({
+    var wrapper = getRootContainer().append("div").style({
         "position": "absolute",
         "z-index": 1000001,
         "width": wrapper_width + "px",

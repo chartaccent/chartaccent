@@ -1,7 +1,10 @@
 module.exports = {
-    entry: "./build/main.js",
+    entry: {
+        main: "./build/main.js",
+        component: "./build/component.js"
+    },
     output: {
-        filename: "bundle.js",
+        filename: "[name].bundle.js",
         path: __dirname + "/assets/js"
     },
     // Enable sourcemaps for debugging webpack's output.
@@ -21,8 +24,8 @@ module.exports = {
     // This is important because it allows us to avoid bundling all of our
     // dependencies, which allows browsers to cache those libraries between builds.
     externals: {
-        "react": "React",
-        "react-dom": "ReactDOM",
-        "d3": "d3"
+        // "react": "React",
+        // "react-dom": "ReactDOM",
+        // "d3": "d3"
     },
 };

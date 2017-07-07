@@ -107,7 +107,7 @@ InputWidget.prototype.setContext = function(context) {
 };
 
 InputWidget.prototype._createSuggestionContainers = function() {
-    this.suggestion_container = d3.select("body").append("chartaccent-suggestions")
+    this.suggestion_container = getRootContainer().append("chartaccent-suggestions")
     var left = this.suggestion_container.append("div")
     .style({
         "float": "left"

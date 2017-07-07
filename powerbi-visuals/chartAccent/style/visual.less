@@ -1,0 +1,140 @@
+@import "../../chart-accent/styles/chart-accent.less";
+
+p {
+    font-size: 20px;
+    font-weight: bold;
+    em {
+        background: yellow;
+        padding: 5px;
+
+    }
+}
+
+@well-color: #F8F8F8;
+@primary-color: #fa8119;
+@primary-color-light: #ff9f3b;
+
+.chart-view-container {
+    background: @well-color;
+    padding: 5px;
+}
+
+.chart-view {
+
+    position: relative;
+    overflow-x: auto;
+    white-space: nowrap;
+    border-radius: 2px;
+
+    & > .toolbar {
+        position: absolute;
+        left: 0; right: 0; top: 0;
+        background-color: @well-color;
+        overflow: hidden;
+        border-radius: 2px 2px 0 0;
+        padding: 4px 0;
+    }
+
+    & > .panel-container {
+        margin-top: 32px;
+        float: right;
+        overflow: hidden;
+        padding: 0 5px;
+        margin-bottom: 10px;
+        background: @well-color;
+
+        & > .panel {
+        }
+    }
+    & > .chart {
+        margin-top: 32px;
+        margin-right: 370px;
+        border-top: none;
+        overflow: hidden;
+        overflow-x: scroll;
+        & > .chart-container {
+            position: relative;
+            box-sizing: content-box;
+            border: 1px solid #CCC;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            margin-left: 0;
+            margin-top: 10px;
+            margin-right: 30px;
+            margin-bottom: 30px;
+            background: #FFF;
+            & > .corner-resize {
+                position: absolute;
+                right: 0; bottom: 0;
+                width: 10px;
+                height: 10px;
+                cursor: nwse-resize;
+                img {
+                    position: absolute; left: 0; top: 0;
+                    width: 10px;
+                    height: 10px;
+                }
+            }
+        }
+    }
+}
+
+input[type="color"] {
+    height: 25px;
+    box-sizing: border-box;
+    border-radius: 2px;
+    width: 50px;
+    padding: 1px;
+    background: #FFF;
+    border: 1px solid #DDD;
+    outline: none;
+    &:focus {
+        border: 1px solid @primary-color;
+        box-shadow: 0 0 5px @primary-color-light;
+    }
+}
+
+.label-widget {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+
+    & > input[type="text"] {
+        width: calc(100% - 32px);
+        border-right: none;
+        border-radius: 2px 0 0 2px;
+        &:focus {
+            border-right: 1px solid @primary-color;
+        }
+    }
+    & > .controls {
+        button {
+            width: 32px;
+            padding: 0;
+            text-align: center;
+            border-radius: 0 2px 2px 0 !important;
+            box-shadow: none;
+            &:focus {
+                box-shadow: 0 0 5px @primary-color-light;
+                border: 1px solid @primary-color;
+            }
+        }
+        float: right;
+    }
+    & > .dropdown {
+        display: none;
+        position: absolute;
+        border-radius: 2px;
+        box-shadow: 0 0 2px @primary-color;
+        margin: 0; padding: 0;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        border: 1px solid @primary-color;
+        box-sizing: border-box;
+        outline: none;
+        right: 0px; top: 26px;
+        width: 250px;
+        padding: 0 10px;
+        z-index: 1000000;
+        background: #FFFFFF;
+    }
+}

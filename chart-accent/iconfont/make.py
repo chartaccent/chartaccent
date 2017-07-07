@@ -43,7 +43,9 @@ def CreateIconFont(name, files, target):
       font-weight: normal;
       font-style: normal;
     }
-    """ % (name, base64.b64encode(open(target + ".temp.ttf").read()))
+    """ % (name,
+        base64.b64encode(open(target + ".temp.ttf").read())
+    )
 
     os.unlink(target + ".temp.ttf")
 
@@ -78,4 +80,4 @@ def CreateIconFont(name, files, target):
 
 from os import listdir
 files = map(lambda x: os.path.join("svg", x), listdir("svg"))
-CreateIconFont("chartaccent_icons", files, "iconfont.css")
+CreateIconFont("chartaccent_icons", files, "iconfont.less")

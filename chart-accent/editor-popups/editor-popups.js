@@ -6,7 +6,7 @@ var CreateEditorPopup = function(name, info) {
 };
 
 var MakeEditorPopupWrapper = function(info) {
-    var wrapper = d3.select("body").append("chartaccent-popout");
+    var wrapper = getRootContainer().append("div").classed("chartaccent-popout", true);
 
     var target_rect = info.anchor.getBoundingClientRect();
     var body_rect = document.body.parentNode.getBoundingClientRect();

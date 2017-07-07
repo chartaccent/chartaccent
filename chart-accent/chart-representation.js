@@ -53,7 +53,6 @@ var ChartRepresentation = function(owner, info) {
                 [ "span", { text: " " } ],
                 [ "input", { $: "input_file", attr: { type: "file" }, style: { display: "none" } } ]
                 // [ "span.btn", { $: "export_image", classed: { "btn-toggle": true, "chartaccent-export-button": true }, text: "Export" } ]
-                // [ "span.btn", { $: "export_image_svg", classed: { "btn-toggle": true, "chartaccent-export-button": true }, text: "ExportSVG" } ]
             ]]
         ]);
         var input_file_node = this.panel_shapes_tree.input_file.node();
@@ -66,9 +65,9 @@ var ChartRepresentation = function(owner, info) {
         });
         if(self.panel_controls_tree["btn_reset"]) {
             self.panel_controls_tree["btn_reset"].on("click", function() {
-                if(confirm("Are you willing to reset your annotations?")) {
+                // if(confirm("Are you willing to reset your annotations?")) {
                     self.reset();
-                }
+                // }
             });
         }
 
@@ -101,7 +100,7 @@ var ChartRepresentation = function(owner, info) {
         if(this.panel_shapes_tree.export_image) {
             this.panel_shapes_tree.export_image.on("click", function() {
                 self.owner.getImageDataURL("image/png", 4, function(url) {
-                    var a = d3.select("body").append("a").attr("href", url).attr("target", "_blank").attr("download", self.owner.export_name ? self.owner.export_name : "chart-accent.png");
+                    var a = getRootContainer().append("a").attr("href", url).attr("target", "_blank").attr("download", self.owner.export_name ? self.owner.export_name : "chart-accent.png");
                     a.node().click();
                     a.remove();
                 });
@@ -109,7 +108,7 @@ var ChartRepresentation = function(owner, info) {
         }
         // this.panel_shapes_tree.export_image_svg.on("click", function() {
         //     var url = self.owner.getSVGDataURL();
-        //     var a = d3.select("body").append("a").attr("href", url).attr("target", "_blank").attr("download", self.owner.export_name ? self.owner.export_name : "chart-accent.png");
+        //     var a = getRootContainer().append("a").attr("href", url).attr("target", "_blank").attr("download", self.owner.export_name ? self.owner.export_name : "chart-accent.png");
         //     a.node().click();
         //     a.remove();
         // });
@@ -951,7 +950,7 @@ ChartRepresentation.prototype.setEditingAnnotation = function(annotation) {
                 result = true;
                 break;
             }
-            if(item.tagName == "CHARTACCENT-POPOUT") {
+            if(item.tagName == "CHARTACCENT-POPOUT" || (item.tagName == "DIV" && d3.select(item).classed("chartaccent-popout"))) {
                 result = true;
                 break;
             }

@@ -17,9 +17,28 @@ import * as ChartAccent from "../chartaccent";
 
 import { isSameArray, isSubset } from "../utils/utils";
 
+import { AppLogger } from "../store/logger";
+
+export function createChartView(chart: Chart) {
+    switch(chart.type) {
+        case "bar-chart": return (<BarChartView chart={chart} eventTracker={() => {}} />);
+        case "line-chart": return (<LineChartView chart={chart} eventTracker={() => {}} />);
+        case "scatterplot": return (<ScatterplotView chart={chart} eventTracker={() => {}} />);
+    }
+    return null;
+}
+
+export interface IChartViewStore {
+    setChartAccent(chartaccent: ChartAccent.ChartAccent): void;
+    setExportAs(func: (type: string, callback: (blob: Blob, doDownload: () => void) => void) => void): void;
+    logger: {
+        logAction(action: string, label: string, privateData: any): void;
+    };
+}
+
 export interface IChartViewProps {
     chart: Chart;
-    store: MainStore;
+    store?: IChartViewStore;
 }
 
 export interface IChartViewState {
@@ -125,12 +144,16 @@ export class ChartView extends React.Component<IChartViewProps, IChartViewState>
                 this.componentDidUpdate();
             }
         }
-        this.props.store.setChartAccent(this.chartAccent);
-        this.props.store.setExportAs(this.exportAs.bind(this));
+        if(this.props.store != null) {
+            this.props.store.setChartAccent(this.chartAccent);
+            this.props.store.setExportAs(this.exportAs.bind(this));
+        }
     }
 
     public trackEvent(type: string, value: string, savedAnnotations: string) {
-        this.props.store.logger.logAction(type, value, savedAnnotations);
+        if(this.props.store != null) {
+            this.props.store.logger.logAction(type, value, savedAnnotations);
+        }
     }
 
     public trackChartEvent(type: string, value: string) {
@@ -181,9 +204,11 @@ export class ChartView extends React.Component<IChartViewProps, IChartViewState>
                     <div className="chart">
                         <div className="chart-container" style={{ width: this.props.chart.width + "px", height: this.props.chart.height + "px" }}>
                         { this.renderChartView() }
-                        <div className="corner-resize" onMouseDown={(e) => this.onResizeStart(e)}>
-                            <img src="assets/images/corner.svg" />
-                        </div>
+                        { this.props.store ? (
+                            <div className="corner-resize" onMouseDown={(e) => this.onResizeStart(e)}>
+                                <img src="assets/images/corner.svg" />
+                            </div>
+                        ) : null }
                         </div>
                     </div>
                 </div>
@@ -201,7 +226,9 @@ export class ChartView extends React.Component<IChartViewProps, IChartViewState>
             let nHeight = height0 + e.pageY - y0;
             nWidth = Math.max(300, Math.min(3000, nWidth));
             nHeight = Math.max(200, Math.min(2000, nHeight));
-            new Actions.UpdateChartWidthHeight(this.props.chart, nWidth, nHeight).dispatch();
+            if(this.props.store != null) {
+                new Actions.UpdateChartWidthHeight(this.props.chart, nWidth, nHeight).dispatch();
+            }
         }
         let onMouseUp = () => {
             window.removeEventListener("mousemove", onMouseMove);

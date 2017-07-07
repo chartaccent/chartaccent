@@ -38,7 +38,7 @@ ChartAccent.prototype.saveAnnotations = function() {
 };
 
 ChartAccent.prototype.loadAnnotations = function(saved, logEvent) {
-    let state = this.charts[0].deserializeAnnotations(saved);
+    var state = this.charts[0].deserializeAnnotations(saved);
     this.charts[0].loadState(state);
     if(logEvent) {
         this.charts[0].event_tracker("load", this.summarizeState(state));

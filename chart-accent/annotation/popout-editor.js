@@ -427,7 +427,7 @@ Annotation.prototype.startSelectRangeItems = function(RC, anchor, clickout_handl
 
 Annotation.prototype.renderSelectionBoxHint = function(RC) {
     var bounding_rect = this.getBoundingRect(RC);
-    var selection_box = appendOnlyOnce(d3.select("body"), "div", "chartaccent-selection-hint");
+    var selection_box = appendOnlyOnce(getRootContainer(), "div", "chartaccent-selection-hint");
     if(bounding_rect) {
         selection_box.style({
             "width": (bounding_rect.x2 - bounding_rect.x1) + "px",
@@ -440,7 +440,7 @@ Annotation.prototype.renderSelectionBoxHint = function(RC) {
     }
 };
 Annotation.prototype.removeSelectionBoxHint = function(RC) {
-    var selection_box = appendOnlyOnce(d3.select("body"), "div", "chartaccent-selection-hint");
+    var selection_box = appendOnlyOnce(getRootContainer(), "div", "chartaccent-selection-hint");
     selection_box.remove();
 };
 
@@ -449,7 +449,7 @@ Annotation.prototype.startPopoutEditor = function(RC) {
 
     var bounding_rect = this.getBoundingRect(RC);
 
-    var selection_box = appendOnlyOnce(d3.select("body"), "div", "chartaccent-selection-box");
+    var selection_box = appendOnlyOnce(getRootContainer(), "div", "chartaccent-selection-box");
     if(bounding_rect) {
         selection_box.style({
             "width": (bounding_rect.x2 - bounding_rect.x1) + "px",

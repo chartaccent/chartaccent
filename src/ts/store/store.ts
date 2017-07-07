@@ -106,7 +106,11 @@ export class MainStore extends EventEmitter {
                 this._chart = Defaults.chart(this._dataset);
                 this.emitChartChanged();
             }
-            this.logger.logAction("dataset/load", `N=${this._dataset.rows.length},C=${this._dataset.columns.length}`);
+            if(dataset.sampleFileName != null) {
+                this.logger.logAction("dataset/load", `N=${this._dataset.rows.length},C=${this._dataset.columns.length},SAMPLE=${dataset.sampleFileName}`);
+            } else {
+                this.logger.logAction("dataset/load", `N=${this._dataset.rows.length},C=${this._dataset.columns.length},CUSTOM`);
+            }
         }
         if(action instanceof Actions.UpdateChart) {
             this.handleUpdateChartAction(action);

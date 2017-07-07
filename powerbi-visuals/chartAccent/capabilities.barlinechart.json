@@ -1,0 +1,81 @@
+{
+    "dataRoles": [
+        {
+            "displayName": "Category Data",
+            "name": "category",
+            "kind": "Grouping"
+        },
+        {
+            "displayName": "Measure Data",
+            "name": "measure",
+            "kind": "Measure"
+        }
+    ],
+    "dataViewMappings": [
+        {
+            "conditions": [
+                {
+                    "category": {
+                        "max": 1
+                    }
+                }
+            ],
+            "categorical": {
+                "categories": {
+                    "for": {
+                        "in": "category"
+                    }
+                },
+                "values": {
+                    "select": [
+                        {
+                            "bind": {
+                                "to": "measure"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "objects": {
+        "yAxis": {
+            "displayName": "Y Axis",
+            "properties": {
+                "min": {
+                    "displayName": "Start",
+                    "placeHolderText": "auto",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "max": {
+                    "displayName": "End",
+                    "placeHolderText": "auto",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "text": {
+                    "displayName": "Text",
+                    "placeHolderText": "(none)",
+                    "type": {
+                        "text": true
+                    }
+                }
+            }
+        },
+        "annotations": {
+            "displayName": "Annotations",
+            "properties": {
+                "data": {
+                    "displayName": "JSON Data",
+                    "placeHolderText": "undefined",
+                    "type": {
+                        "text": true
+                    }
+                }
+            }
+        }
+    }
+}

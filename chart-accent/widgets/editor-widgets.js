@@ -1,5 +1,5 @@
 var ExpressionSuggestion = function() {
-    this.tree = appendTreeOnce(d3.select("body"), [
+    this.tree = appendTreeOnce(getRootContainer(), [
         [ "chartaccent-suggestions.chartaccent-edit-widget", { $: "container" }, [
             [ "div.item-list", { $: "items" } ]
         ]]
