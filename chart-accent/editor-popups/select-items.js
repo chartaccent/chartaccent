@@ -49,7 +49,7 @@ EditorPopups.SelectItems = function(info, wrapper) {
     var btn_cancel = footer.append("span").classed("btn", true).text("Cancel");
 
     btn_ok.on("click", function() {
-        Events.raise(self, "selected", include_equal ? selected_mode + "-or-equal" : selected_mode, Array.from(selected_serieses));
+        Events.raise(self, "selected", include_equal ? selected_mode + "-or-equal" : selected_mode, arrayFromSet(selected_serieses));
         info.remove();
     });
 

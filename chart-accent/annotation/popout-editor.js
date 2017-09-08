@@ -458,7 +458,7 @@ Annotation.prototype.startPopoutEditor = function(RC) {
             "top": (bounding_rect.y1 - 4) + "px",
         });
         var cross_button = appendOnlyOnce(selection_box, "span", "cross-button");
-        cross_button.call(IconFont.addIconOnce("cross"));
+        cross_button.html('<svg width="12" height="12"><line x1="3" y1="3" x2="9" y2="9" style="stroke: black;" /><line x1="3" y1="9" x2="9" y2="3" style="stroke: black;" /></svg>');
         cross_button.on("mousedown", function() {
             RC.owner.removeAnnotation(self);
             d3.event.stopPropagation();
@@ -647,11 +647,11 @@ Annotation.prototype.startPopoutEditor = function(RC) {
                     [ "dt", { text: "Line" } ],
                     [ "dd", [
                         [ "span", { $: "input_label_line" } ]
+                    ]],
+                    [ "dt", { text: "Anchor" } ],
+                    [ "dd", [
+                        [ "span", { $: "input_label_anchor" } ]
                     ]]
-                    // [ "dt", { text: "Anchor" } ],
-                    // [ "dd", [
-                    //     [ "span", { $: "input_label_anchor" } ]
-                    // ]]
                 ]]
             ]);
             MakeEasyStringExpressionInput(tree.input_label_text, component.text, function(expr) {
@@ -759,7 +759,7 @@ Annotation.prototype.startPopoutEditor = function(RC) {
                 var color = elements.getItemColor(item);
                 colors.add(color.r + "," + color.g + "," + color.b);
             });
-            return Array.from(colors).map(function(d) { return new RGBColor("rgb(" + d + ")"); });
+            return arrayFromSet(colors).map(function(d) { return new RGBColor("rgb(" + d + ")"); });
         },
         renderItem_Highlight: function(sel, component) {
             var dl = appendOnlyOnce(sel, "dl");

@@ -1,6 +1,7 @@
 // This file is the entry point of the ChartAccent PowerBI custom visual
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import { EventEmitter } from "fbemitter";
 
 import { ChartView, createChartView, IChartViewStore } from "./charts/chartView";
 import { BaseChartView } from "./charts/baseChart";
@@ -86,12 +87,15 @@ export class ChartAccentComponentView extends React.Component<{
     }
 }
 
-export class ChartAccentComponent {
+export class ChartAccentComponent extends EventEmitter {
     public container: HTMLDivElement;
     public chartView: ChartAccentComponentView;
     public chartAccent: ChartAccent.ChartAccent;
+    public nextLoadAnnotations: ChartAccent.SavedAnnotations;
 
     constructor(container: HTMLDivElement) {
+        super();
+
         this.container = container;
 
         ChartAccent.setRootContainer(container);
@@ -99,12 +103,16 @@ export class ChartAccentComponent {
         this.chartView = ReactDOM.render(<ChartAccentComponentView store={{
             setChartAccent: (chartaccent: ChartAccent.ChartAccent) => {
                 this.chartAccent = chartaccent;
+                if(this.nextLoadAnnotations) {
+                    this.chartAccent.loadAnnotations(this.nextLoadAnnotations);
+                    this.nextLoadAnnotations = null;
+                }
             },
             setExportAs: (func: (type: string, callback: (blob: Blob, doDownload: () => void) => void) => void) => {
             },
             logger: {
                 logAction: (action: string, label: string, privateData: any) => {
-
+                    this.emit("action", action, label, privateData);
                 }
             }
         }} />, this.container) as ChartAccentComponentView;
@@ -115,7 +123,11 @@ export class ChartAccentComponent {
     }
 
     public loadAnnotations(data: ChartAccent.SavedAnnotations) {
-        this.chartAccent.loadAnnotations(data);
+        if(this.chartAccent) {
+            this.chartAccent.loadAnnotations(data);
+        } else {
+            this.nextLoadAnnotations = data;
+        }
     }
 
     public update(options: IChartAccentComponentOptions) {

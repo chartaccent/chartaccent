@@ -304,7 +304,7 @@ var ChartRepresentation = function(owner, info) {
             var editing_items = getItems(self.editing_annotation);
             var annotation_items = getItems(annotation);
             // console.log(editing_items, annotation_items);
-            return Array.from(editing_items).every(function(item) {
+            return arrayFromSet(editing_items).every(function(item) {
                 return annotation_items.has(item);
             });
         },

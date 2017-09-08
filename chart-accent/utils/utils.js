@@ -23,6 +23,18 @@ function isNone(o) { return o === null || o === undefined; }
 function isNumber(o) { return typeof(o) == "number"; }
 function isString(o) { return typeof(o) == "string"; }
 
+function arrayFromSet(theset) {
+    if(Array.from) {
+        return Array.from(theset);
+    } else {
+        var result = [];
+        theset.forEach(function(v) {
+            result.push(v);
+        });
+        return result;
+    }
+}
+
 function deepEquals(a, b) {
     if(a === b) return true;
 

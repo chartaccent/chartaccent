@@ -58,18 +58,35 @@ Annotation.prototype.renderComponentItemLabel = function(RC, RC2, component) {
             var label_line = RC2.addElement("fg2", "path", undefined, label_id);
         }
 
+        var label2 = RC2.addElement("fg2", "text", undefined, label_id + "_1");
         var label = RC2.addElement("fg2", "text", undefined, label_id);
+        label2.text(text);
         label.text(text);
+        label2.call(function() { Styles.applyStyle(component.style, this); })
         label.call(function() { Styles.applyStyle(component.style, this); })
-        label.style({
+        label2.style({
             "font-family": component.style.font_family,
             "font-size": component.style.font_size,
-            "paint-order": "stroke",
             "stroke-linecap": "round",
             "stroke-linejoin": "round",
             "cursor": "move",
             "pointer-events": "all"
         });
+        label.style({
+            "font-family": component.style.font_family,
+            "font-size": component.style.font_size,
+            "stroke-linecap": "round",
+            "stroke-linejoin": "round",
+            "cursor": "move",
+            "pointer-events": "all"
+        });
+        label2.style({ "fill": "none" });
+        label.style({ "stroke": "none" });
+
+        var textHeight = component.style.font_size;
+        var dyMiddle = textHeight / 2 - textHeight * 0.15;
+        var dyTop = textHeight - textHeight * 0.15;
+        var dyBottom = -textHeight * 0.15;
 
         if(extent) {
             if(extent.type == "polyline") {
@@ -105,56 +122,77 @@ Annotation.prototype.renderComponentItemLabel = function(RC, RC2, component) {
                     anchor_x = Math.max(extent.rect.x1, extent.rect.x2)
                     label.attr("x", dx + Math.max(extent.rect.x1, extent.rect.x2) + margin);
                     label.style("text-anchor", "start");
+                    label2.attr("x", dx + Math.max(extent.rect.x1, extent.rect.x2) + margin);
+                    label2.style("text-anchor", "start");
                 }
                 if(align_x == "r") {
                     anchor_x = Math.max(extent.rect.x1, extent.rect.x2)
                     label.attr("x", dx + Math.max(extent.rect.x1, extent.rect.x2) - margin);
                     label.style("text-anchor", "end");
+                    label2.attr("x", dx + Math.max(extent.rect.x1, extent.rect.x2) - margin);
+                    label2.style("text-anchor", "end");
                 }
                 if(align_x == "m") {
                     anchor_x = (extent.rect.x1 + extent.rect.x2) / 2;
                     label.attr("x", dx + (extent.rect.x1 + extent.rect.x2) / 2);
                     label.style("text-anchor", "middle");
+                    label2.attr("x", dx + (extent.rect.x1 + extent.rect.x2) / 2);
+                    label2.style("text-anchor", "middle");
                 }
                 if(align_x == "l") {
                     anchor_x = Math.min(extent.rect.x1, extent.rect.x2);
                     label.attr("x", dx + Math.min(extent.rect.x1, extent.rect.x2) + margin);
                     label.style("text-anchor", "start");
+                    label2.attr("x", dx + Math.min(extent.rect.x1, extent.rect.x2) + margin);
+                    label2.style("text-anchor", "start");
                 }
                 if(align_x == "ll") {
                     anchor_x = Math.min(extent.rect.x1, extent.rect.x2);
                     label.attr("x", dx + Math.min(extent.rect.x1, extent.rect.x2) - margin);
                     label.style("text-anchor", "end");
+                    label2.attr("x", dx + Math.min(extent.rect.x1, extent.rect.x2) - margin);
+                    label2.style("text-anchor", "end");
                 }
                 if(align_y == "bb") {
                     anchor_y = Math.max(extent.rect.y1, extent.rect.y2);
-                    label.attr("y", dy + Math.max(extent.rect.y1, extent.rect.y2) + margin);
-                    label.style("dominant-baseline", "text-before-edge");
+                    label.attr("y", dy + Math.max(extent.rect.y1, extent.rect.y2) + margin + dyTop);
+                    label2.attr("y", dy + Math.max(extent.rect.y1, extent.rect.y2) + margin + dyTop);
+                    // label.style("dominant-baseline", "text-before-edge");
+                    // label2.style("dominant-baseline", "text-before-edge");
                 }
                 if(align_y == "b") {
                     anchor_y = Math.max(extent.rect.y1, extent.rect.y2);
-                    label.attr("y", dy + Math.max(extent.rect.y1, extent.rect.y2) - margin);
-                    label.style("dominant-baseline", "text-after-edge");
+                    label.attr("y", dy + Math.max(extent.rect.y1, extent.rect.y2) - margin + dyBottom);
+                    label2.attr("y", dy + Math.max(extent.rect.y1, extent.rect.y2) - margin + dyBottom);
+                    // label.style("dominant-baseline", "text-after-edge");
+                    // label2.style("dominant-baseline", "text-after-edge");
                 }
                 if(align_y == "m") {
                     anchor_y = (extent.rect.y1 + extent.rect.y2) / 2;
-                    label.attr("y", dy + (extent.rect.y1 + extent.rect.y2) / 2);
-                    label.style("dominant-baseline", "middle");
+                    label.attr("y", dy + (extent.rect.y1 + extent.rect.y2) / 2 + dyMiddle);
+                    label2.attr("y", dy + (extent.rect.y1 + extent.rect.y2) / 2 + dyMiddle);
+                    // label.style("dominant-baseline", "middle");
+                    // label2.style("dominant-baseline", "middle");
                 }
                 if(align_y == "t") {
                     anchor_y = Math.min(extent.rect.y1, extent.rect.y2);
-                    label.attr("y", dy + Math.min(extent.rect.y1, extent.rect.y2) + margin);
-                    label.style("dominant-baseline", "text-before-edge");
+                    label.attr("y", dy + Math.min(extent.rect.y1, extent.rect.y2) + margin + dyTop);
+                    label2.attr("y", dy + Math.min(extent.rect.y1, extent.rect.y2) + margin + dyTop);
+                    // label.style("dominant-baseline", "text-before-edge");
+                    // label2.style("dominant-baseline", "text-before-edge");
                 }
                 if(align_y == "tt") {
                     anchor_y = Math.min(extent.rect.y1, extent.rect.y2);
-                    label.attr("y", dy + Math.min(extent.rect.y1, extent.rect.y2) - margin);
-                    label.style("dominant-baseline", "text-after-edge");
+                    label.attr("y", dy + Math.min(extent.rect.y1, extent.rect.y2) - margin + dyBottom);
+                    label2.attr("y", dy + Math.min(extent.rect.y1, extent.rect.y2) - margin + dyBottom);
+                    // label.style("dominant-baseline", "text-after-edge");
+                    // label2.style("dominant-baseline", "text-after-edge");
                 }
             }
         } else {
             console.log("TODO: Unable to draw label without extent.");
             label.remove();
+            label2.remove();
             // TODO...
         }
 

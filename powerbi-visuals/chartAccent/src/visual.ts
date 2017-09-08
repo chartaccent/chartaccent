@@ -19,9 +19,40 @@ module powerbi.extensibility.visual {
             }
         };
 
+        protected chart: string = null;
+        protected annotations: string = null;
+
+        protected throttling_timeout: NodeJS.Timer = null;
+
         constructor(options: VisualConstructorOptions) {
             this.view = new ((window as any).ChartAccentComponent)(options.element);
             this.host = options.host;
+            this.view.addListener("action", (action, type, privateData) => {
+                try {
+                    if (action == "annotation/state" && type == "") return;
+                    if (this.throttling_timeout != null) {
+                        clearTimeout(this.throttling_timeout);
+                    }
+                    this.throttling_timeout = setTimeout(() => {
+                        this.throttling_timeout = null;
+                        let stateString = JSON.stringify(this.view.saveAnnotations());
+                        this.annotations = stateString;
+                        this.host.persistProperties({
+                            replace: [
+                                {
+                                    displayName: "Annotations",
+                                    objectName: "annotations",
+                                    selector: null,
+                                    properties: {
+                                        data: stateString
+                                    }
+                                }
+                            ]
+                        });
+                    }, 500);
+                } catch (e) {
+                }
+            });
         }
 
         public getTitle() {
@@ -110,32 +141,46 @@ module powerbi.extensibility.visual {
                         selector: null
                     });
                 } break;
-                case "annotations": {
-                    objectEnumeration.push({
-                        objectName: objectName,
-                        properties: {
-                            data: JSON.stringify(this.view.saveAnnotations())
-                        },
-                        selector: null
-                    });
-                } break;
             };
 
             return objectEnumeration;
         }
 
-        public chartUpdate(options: VisualUpdateOptions) {
+        public getChart(options): any {
+        }
+
+        public chartUpdate(options: VisualUpdateOptions, annotations?: string) {
+            let chart = this.getChart(options);
+            let chartJSON = JSON.stringify(chart);
+            if (chartJSON != this.chart) {
+                console.log("view.update");
+                this.view.update({ chart: chart, mode: "editing" });
+                this.chart = chartJSON;
+            }
+            if (annotations != null) {
+                if (this.annotations != annotations) {
+                    this.view.loadAnnotations(JSON.parse(annotations));
+                    this.annotations = annotations;
+                }
+            }
         }
 
         public update(options: VisualUpdateOptions) {
+            console.log("update", options);
             try {
                 if (!options.dataViews || !options.dataViews[0]) {
-                    this.view.update({ chart: null });
+                    // this.view.update({ chart: null });
                     return;
                 }
                 let objects = options.dataViews[0].metadata.objects;
-                let annotations = null;
+                let annotations: string = null;
                 if (objects) {
+                    if (objects["annotations"]) {
+                        let data = objects["annotations"]["data"] as string;
+                        if (data != null && data != "") {
+                            annotations = data;
+                        }
+                    }
                     if (objects["title"]) {
                         this.settings.title = objects["title"]["titleText"] as string;
                     }
@@ -149,22 +194,8 @@ module powerbi.extensibility.visual {
                         this.settings.yAxis.max = objects["yAxis"]["max"] as number;
                         this.settings.yAxis.text = objects["yAxis"]["text"] as string;
                     }
-                    if (objects["annotations"]) {
-                        let data = objects["annotations"]["data"] as string;
-                        console.log("Load: ", data);
-                        try {
-                            if (data != null) {
-                                annotations = JSON.parse(data);
-                            }
-                        } catch (e) {
-                            console.log(e, e.stack);
-                        }
-                    }
                 }
-                this.chartUpdate(options);
-                if (annotations != null) {
-                    this.view.loadAnnotations(annotations);
-                }
+                this.chartUpdate(options, annotations);
             } catch (e) {
                 this.view.update({
                     chart: null,
@@ -179,16 +210,13 @@ module powerbi.extensibility.visual {
             super(options);
         }
 
-        public chartUpdate(options: VisualUpdateOptions) {
+        public getChart(options) {
             let r = makeDatasetBarLineChart(options);
             if (!r) {
-                this.view.update({ chart: null });
-                return;
+                return null;
             }
             let [dataset, xColumn, yColumns] = r;
-            let mode = "editing";
             let [width, height] = getSizeEditingMode(options.viewport.width, options.viewport.height);
-
             let chart = {
                 dataset: dataset,
                 type: "bar-chart",
@@ -204,7 +232,7 @@ module powerbi.extensibility.visual {
                 legendLabel: null,
                 colors: this.getColors()
             };
-            this.view.update({ chart: chart, mode: mode });
+            return chart;
         }
     }
 
@@ -213,14 +241,12 @@ module powerbi.extensibility.visual {
             super(options);
         }
 
-        public chartUpdate(options: VisualUpdateOptions) {
+        public getChart(options: VisualUpdateOptions) {
             let r = makeDatasetBarLineChart(options);
             if (!r) {
-                this.view.update({ chart: null });
-                return;
+                return null;
             }
             let [dataset, xColumn, yColumns] = r;
-            let mode = "editing";
             let [width, height] = getSizeEditingMode(options.viewport.width, options.viewport.height);
 
             let chart = {
@@ -238,7 +264,7 @@ module powerbi.extensibility.visual {
                 legendLabel: null,
                 colors: this.getColors()
             };
-            this.view.update({ chart: chart, mode: mode });
+            return chart;
         }
     }
 
@@ -249,14 +275,12 @@ module powerbi.extensibility.visual {
             this.settings.yAxis.min = null;
         }
 
-        public chartUpdate(options: VisualUpdateOptions) {
+        public getChart(options: VisualUpdateOptions) {
             let r = makeDatasetScatterplot(options);
             if (!r) {
-                this.view.update({ chart: null });
-                return;
+                return null;
             }
             let [dataset, nameColumn, xColumn, yColumn, groupColumn, sizeColumn] = r;
-            let mode = "editing";
             let [width, height] = getSizeEditingMode(options.viewport.width, options.viewport.height);
 
             let chart = {
@@ -277,7 +301,7 @@ module powerbi.extensibility.visual {
                 legendLabel: null,
                 colors: this.getColors()
             };
-            this.view.update({ chart: chart, mode: mode });
+            return chart;
         }
     }
 }

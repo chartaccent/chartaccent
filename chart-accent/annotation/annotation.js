@@ -159,7 +159,7 @@ Annotation.prototype.toString = function() {
         });
         var series_names = getObjectKeys(serieses).sort();
         var itemnames = series_names.map(function(x) {
-            return x + ": " + Array.from(serieses[x]).sort().join(", ");
+            return x + ": " + arrayFromSet(serieses[x]).sort().join(", ");
         }).join("; ");
         if(this.target_inherit == "trendline") {
             return "Trendline: " + itemnames;
@@ -219,7 +219,7 @@ Annotation.prototype.getAllItems = function() {
         var elements = desc.elements;
         items.forEach(function(item) { data_items.add(item); });
     });
-    return Array.from(data_items);
+    return arrayFromSet(data_items);
 };
 
 Annotation.prototype.render = function(RC) {

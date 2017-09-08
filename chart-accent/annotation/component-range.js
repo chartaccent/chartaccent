@@ -24,7 +24,7 @@ var MakeFGPath = function(RC2, owner, fgpathclass, mode, x1, y1, x2, y2, draggab
                     var px1 = d3.event.pageX;
                     var py1 = d3.event.pageY;
                     mouse_moved = true;
-                    mousemove(px1 - px0, py1 - py0);
+                    if(mousemove) mousemove(px1 - px0, py1 - py0);
                 },
                 mouseup: function() {
                     click();

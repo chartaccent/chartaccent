@@ -53,7 +53,8 @@ export class MainStore extends EventEmitter {
                         }
                         this.logger.logExport(exportData, (error) => {
                             if(error != null) {
-                                callback(error);
+                                doDownload();
+                                callback(null);
                             } else {
                                 doDownload();
                                 callback(null);
