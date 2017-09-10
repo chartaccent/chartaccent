@@ -76,10 +76,12 @@ export class ChartView extends React.Component<IChartViewProps, IChartViewState>
 
     public componentDidUpdate() {
         let chart = this.props.chart;
-        if(this.chart === chart) {
-            return;
+        if(!(this.props.store instanceof MainStore)) {
+            if(this.chart === chart) {
+                return;
+            }
+            this.chart = chart;
         }
-        this.chart = chart;
 
         d3.select(this.refs.chartView.getAnnotationBackgroundLayer()).selectAll("*").remove();
         d3.select(this.refs.chartView.getAnnotationLayer()).selectAll("*").remove();
