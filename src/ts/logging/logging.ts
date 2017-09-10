@@ -10,12 +10,16 @@ export function generateSessionID(): string {
 }
 
 export function getClientID(): string {
-    let id = window.localStorage.getItem("chartaccnet-clientid");
-    if(id == null) {
-        id = guid();
-        window.localStorage.setItem("chartaccnet-clientid", id);
+    try {
+        let id = window.localStorage.getItem("chartaccnet-clientid");
+        if(id == null) {
+            id = guid();
+            window.localStorage.setItem("chartaccnet-clientid", id);
+        }
+        return id;
+    } catch(e) {
+        return "sandboxed";
     }
-    return id;
 }
 
 export abstract class LoggingService {

@@ -1,8 +1,7 @@
 import { AzureStorageLoggingService } from "../logging/logging";
 import { AppState } from "../model/model";
 
-let service = new AzureStorageLoggingService();
-service.startSession();
+
 
 export interface ExportLogData {
     timeCreated: number;
@@ -17,21 +16,23 @@ export interface ExportLogData {
 
 export class AppLogger {
     protected _privateActions: [ number, string, string, any ][];
+    protected service = new AzureStorageLoggingService();
 
     constructor() {
+        this.service.startSession();
         this._privateActions = [];
     }
     public getClientID() {
-        return service.clientID;
+        return this.service.clientID;
     }
     public getSessionID() {
-        return service.sessionID;
+        return this.service.sessionID;
     }
 
     public logAction(action: string, label: string, privateData: any = null) {
         let timestamp = new Date().getTime();
 
-        service.logAction(timestamp, action, label);
+        this.service.logAction(timestamp, action, label);
 
         console.log("Action", action, label);
 
@@ -40,6 +41,6 @@ export class AppLogger {
 
     public logExport(data: ExportLogData, callback: (error: string) => void) {
         data.history = this._privateActions;
-        service.logExport(JSON.stringify(data), callback);
+        this.service.logExport(JSON.stringify(data), callback);
     }
 }

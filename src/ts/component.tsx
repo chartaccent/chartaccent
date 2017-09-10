@@ -76,17 +76,16 @@ export class ChartAccentComponentView extends React.Component<{
     }
 
     public componentDidUpdate() {
-        if (this.state.mode == "viewing") {
-            console.log("Viewing mode!");
-            if (this.chartView) {
-                let blob = this.chartView.getSVGDataBlob();
-                console.log("exported!");
-                if (this.overlay) {
+        requestAnimationFrame(() => {
+            if (this.state.mode == "viewing") {
+                if (this.chartView && this.overlay) {
+                    let blob = this.chartView.getSVGDataBlob();
                     this.overlay.setState({ url: window.URL.createObjectURL(blob) });
                 }
             }
-        }
+        });
     }
+
 
     // public renderConsole() {
     //     return (<div>
@@ -147,6 +146,7 @@ export class ChartAccentComponent extends EventEmitter {
                 this.chartAccent = chartaccent;
                 if (this.nextLoadAnnotations) {
                     this.chartAccent.loadAnnotations(this.nextLoadAnnotations);
+                    this.chartView.componentDidUpdate();
                     this.nextLoadAnnotations = null;
                 }
             },
@@ -167,6 +167,7 @@ export class ChartAccentComponent extends EventEmitter {
     public loadAnnotations(data: ChartAccent.SavedAnnotations) {
         if (this.chartAccent) {
             this.chartAccent.loadAnnotations(data);
+            this.chartView.componentDidUpdate();
         } else {
             this.nextLoadAnnotations = data;
         }

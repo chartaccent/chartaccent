@@ -27,7 +27,7 @@ var MakeEditorPopupWrapper = function(info) {
     }
     wrapper.style({
         "position": "absolute",
-        "z-index": "1000000",
+        "z-index": "100",
         "background": "white",
         "border": "1px solid #444",
         "box-shadow": "0 0 2px rgba(0,0,0,0.3)"

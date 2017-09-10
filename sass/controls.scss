@@ -255,7 +255,7 @@ input[type="text"], input[type="number"] {
         outline: none;
         left: 0px; top: 26px;
         width: 100%;
-        z-index: 1000000;
+        z-index: 100;
         background: #FFFFFF;
     }
 }
@@ -378,7 +378,7 @@ input[type="color"] {
         right: 0px; top: 26px;
         width: 250px;
         padding: 0 10px;
-        z-index: 1000000;
+        z-index: 100;
         background: #FFFFFF;
     }
 }

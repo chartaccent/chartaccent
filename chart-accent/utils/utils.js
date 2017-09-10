@@ -193,7 +193,7 @@ var setupExpressionEditor = function(info) {
     if(text_anchor == "end") left_offset = -wrapper_width + anchor.width;
     var wrapper = getRootContainer().append("div").style({
         "position": "absolute",
-        "z-index": 1000001,
+        "z-index": 110,
         "width": wrapper_width + "px",
         "font-family": font_family,
         "font-size": font_size + "px",
@@ -299,7 +299,7 @@ var setupEasyExpressionEditor = function(info) {
     if(text_anchor == "end") left_offset = -wrapper_width + anchor.width;
     var wrapper = getRootContainer().append("div").style({
         "position": "absolute",
-        "z-index": 1000001,
+        "z-index": 110,
         "width": wrapper_width + "px",
         "font-family": font_family,
         "font-size": font_size + "px",
