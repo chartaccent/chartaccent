@@ -55,7 +55,11 @@ function putBlob(blobURL: string, data: string, callback?: (err: string) => void
             if(callback) callback("could not put blob: " + ajaxRequest.statusText);
         }
     }
-    ajaxRequest.timeout = 20 * 1000;
+    try {
+        ajaxRequest.timeout = 20 * 1000;
+    } catch(e) {
+        // IE will go here
+    }
     ajaxRequest.open('PUT', blobURL, true);
     ajaxRequest.setRequestHeader('x-ms-blob-type', 'BlockBlob');
     ajaxRequest.setRequestHeader('x-ms-blob-content-type', 'text/plain; charset=utf-8');

@@ -35,8 +35,8 @@ export class ChartTypeView extends React.Component<{
                 <h2>Choose a Chart</h2>
                 <p data-intro="Choose a chart that best suits your dataset. Non-suitable chart types are disabled.">
                 {
-                    chartTypes.map((item) => (
-                        <button
+                    chartTypes.map((item, index) => (
+                        <button key={`m${index}`}
                             className={`button-chart-type ${item.type == this.props.chart.type ? "active" : ""} ${Defaults.isChartValid(this.props.chart.dataset, item.type) ? "" : "disabled" }`}
                             onClick={() => {
                                 if(Defaults.isChartValid(this.props.chart.dataset, item.type)) {

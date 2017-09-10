@@ -13,13 +13,13 @@ def ResolveFontAsBase64(m):
     print(m.group(1))
     res = requests.get(m.group(1))
     data = res.content
-    dataurl = "data:font/ttf;base64," + str(base64.b64encode(data))
+    dataurl = "data:font/ttf;base64," + base64.b64encode(data)
     return "url(%s)" % dataurl
 
-code = re.sub(re_url, ResolveFontAsBase64, str(res.content))
+code = re.sub(re_url, ResolveFontAsBase64, res.content)
 
 with open("assets/css/roboto.css", "wb") as f:
-    f.write(code.encode("utf8"))
+    f.write(code)
 
 with open("build/roboto.js", "wb") as f:
-    f.write(("exports.CSSRoboto = %s" % json.dumps(code)).encode("utf8"))
+    f.write(("exports.CSSRoboto = %s" % json.dumps(code)))

@@ -100,7 +100,7 @@ export class LabelWidget extends RowWidget<ILabelWidgetProps, {
                                         this.sendEvent();
                                     }}
                                 >
-                                { Defaults.fonts.map(f => <option value={f}>{f}</option>) }
+                                { Defaults.fonts.map(f => <option key={f} value={f}>{f}</option>) }
                                 </select>
                             </div>
                         </div>
@@ -395,8 +395,8 @@ export class ColorsWidget extends DropdownListWidget<IColorsWidgetProps, {}> {
         return true;
     }
     public renderColors(colors: string[]) {
-        return colors.slice(0, 6).map((c) => (
-            <span style={{ backgroundColor: c, display: "inline-block", width: "10px", height: "1em", margin: "0 2px", verticalAlign: "middle", outline: "1px solid white" }}></span>
+        return colors.slice(0, 6).map((c, index) => (
+            <span key={`m${index}`} style={{ backgroundColor: c, display: "inline-block", width: "10px", height: "1em", margin: "0 2px", verticalAlign: "middle", outline: "1px solid white" }}></span>
         ));
     }
     public renderButton() {
