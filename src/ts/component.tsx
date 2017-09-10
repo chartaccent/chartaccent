@@ -19,7 +19,7 @@ export interface IChartAccentComponentOptions {
 export class ChartAccentComponentView extends React.Component<{
     store: IChartViewStore
 }, IChartAccentComponentOptions> {
-    constructor(props: {}) {
+    constructor(props: { store: IChartViewStore }) {
         super(props);
         this.state = {
             messages: []

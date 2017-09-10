@@ -24,7 +24,7 @@ export class ExportView extends React.Component<{
         checkboxShareDataYes: HTMLInputElement;
         checkboxShareDataNo: HTMLInputElement;
     }
-    constructor(props: {}) {
+    constructor(props: { store: MainStore }) {
         super(props);
         this.state = {
             emailAddress: null,
