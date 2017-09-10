@@ -18,7 +18,7 @@
     "watch:webpack": "webpack -w",
     "watch:sass": "sass -w sass/main.scss:assets/css/bundle.css",
     "serve": "ruby -run -e httpd . -p 8000",
-    "watch": "multirun-npm watch:ts watch:webpack watch:sass serve"
+    "watch": "multirun --npm watch:ts watch:webpack watch:sass serve"
   },
   "author": "Donghao Ren <donghao.ren+npm@gmail.com> (https://donghaoren.org/)",
   "license": "BSD-3-Clause",
@@ -27,12 +27,13 @@
     "@types/react-dom": "^15.5.4",
     "@types/sha1": "^1.1.0",
     "less": "^2.7.1",
-    "multirun": "^0.2.2",
+    "multirun": "^1.0.0",
     "pegjs": "^0.10.0",
     "react": "^15.6.1",
     "sha1": "^1.1.1",
     "source-map-loader": "^0.1.5",
     "typescript": "^2.1.4",
+    "url-loader": "^0.5.9",
     "webpack": "^1.14.0"
   },
   "dependencies": {

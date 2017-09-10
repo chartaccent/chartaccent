@@ -16,16 +16,47 @@ export interface IChartAccentComponentOptions {
     error?: string;
 }
 
+export class ImageOverlayView extends React.Component<{}, { url: string }> {
+    constructor(props: {}) {
+        super(props);
+        this.state = {
+            url: null
+        }
+    }
+    public render() {
+        return (
+            <div style={{
+                position: "fixed", left: "0", right: "0", top: "0", bottom: "0", zIndex: 10000,
+                background: "#ffffff",
+                pointerEvents: "all",
+                cursor: "default"
+            }}>
+                <div style={{
+                    backgroundImage: "url(" + this.state.url + ")",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                    backgroundSize: "contain",
+                    position: "absolute",
+                    left: "0", right: "0", top: "0", bottom: "0"
+                }} />
+            </div>
+        );
+    }
+}
+
 export class ChartAccentComponentView extends React.Component<{
     store: IChartViewStore
 }, IChartAccentComponentOptions> {
+    chartView: ChartView;
+    overlay: ImageOverlayView;
+
     constructor(props: { store: IChartViewStore }) {
         super(props);
         this.state = {
             messages: []
         };
     }
-    public renderChart() {
+    public render() {
         if (this.state.error != null) {
             return (<pre style={{
                 whiteSpace: "pre-wrap",
@@ -33,58 +64,68 @@ export class ChartAccentComponentView extends React.Component<{
             }}>{this.state.error}</pre>);
         }
         if (this.state.chart) {
-            if (this.state.mode == "viewing") {
-                return createChartView(this.state.chart);
-            } else {
-                return (
-                    <div className="chart-view-container">
-                        <ChartView chart={this.state.chart} store={this.props.store} />
-                    </div>
-                );
-            }
+            return (
+                <div className="chart-view-container">
+                    <ChartView chart={this.state.chart} ref={(view) => { this.chartView = view; }} store={this.props.store} />
+                    {this.state.mode == "viewing" ? <ImageOverlayView ref={(overlay) => { this.overlay = overlay; }} /> : null}
+                </div>
+            );
         } else {
             return (<div>Please specify the chart options</div>);
         }
     }
 
-    public renderConsole() {
-        return (<div>
-            <div style={{
-                maxHeight: "300px",
-                overflowY: "scroll"
-            }}>{this.state.messages.map(m => <pre style={{
-                whiteSpace: "pre-wrap",
-                wordWrap: "break-word"
-            }}>{m}</pre>)}</div>
-            <p>
-                <input ref="commandInput" type="text" />
-                <button onClick={() => {
-                    let cmd = ((this.refs as any).commandInput).value;
-                    let result = "";
-                    try {
-                        result = eval(cmd).toString();
-                    } catch (e) {
-                        result = e.message + "\n" + e.stack;
-                    }
-                    this.state.messages.push(result);
-                    this.setState({ messages: this.state.messages });
-                }}>Run</button>
-            </p>
-        </div>)
-    }
-
-    public render() {
-        if (this.state.showConsole) {
-            return (
-                <div>
-                    {this.renderConsole()}
-                    {this.renderChart()}
-                </div>
-            );
-        } else {
-            return this.renderChart();
+    public componentDidUpdate() {
+        if (this.state.mode == "viewing") {
+            console.log("Viewing mode!");
+            if (this.chartView) {
+                let blob = this.chartView.getSVGDataBlob();
+                console.log("exported!");
+                if (this.overlay) {
+                    this.overlay.setState({ url: window.URL.createObjectURL(blob) });
+                }
+            }
         }
     }
+
+    // public renderConsole() {
+    //     return (<div>
+    //         <div style={{
+    //             maxHeight: "300px",
+    //             overflowY: "scroll"
+    //         }}>{this.state.messages.map(m => <pre style={{
+    //             whiteSpace: "pre-wrap",
+    //             wordWrap: "break-word"
+    //         }}>{m}</pre>)}</div>
+    //         <p>
+    //             <input ref="commandInput" type="text" />
+    //             <button onClick={() => {
+    //                 let cmd = ((this.refs as any).commandInput).value;
+    //                 let result = "";
+    //                 try {
+    //                     result = eval(cmd).toString();
+    //                 } catch (e) {
+    //                     result = e.message + "\n" + e.stack;
+    //                 }
+    //                 this.state.messages.push(result);
+    //                 this.setState({ messages: this.state.messages });
+    //             }}>Run</button>
+    //         </p>
+    //     </div>)
+    // }
+
+    // public render() {
+    //     if (this.state.showConsole) {
+    //         return (
+    //             <div>
+    //                 {this.renderConsole()}
+    //                 {this.renderChart()}
+    //             </div>
+    //         );
+    //     } else {
+    //         return this.renderChart();
+    //     }
+    // }
 }
 
 export class ChartAccentComponent extends EventEmitter {
@@ -101,9 +142,10 @@ export class ChartAccentComponent extends EventEmitter {
         ChartAccent.setRootContainer(container);
 
         this.chartView = ReactDOM.render(<ChartAccentComponentView store={{
+            disableResize: true,
             setChartAccent: (chartaccent: ChartAccent.ChartAccent) => {
                 this.chartAccent = chartaccent;
-                if(this.nextLoadAnnotations) {
+                if (this.nextLoadAnnotations) {
                     this.chartAccent.loadAnnotations(this.nextLoadAnnotations);
                     this.nextLoadAnnotations = null;
                 }
@@ -123,7 +165,7 @@ export class ChartAccentComponent extends EventEmitter {
     }
 
     public loadAnnotations(data: ChartAccent.SavedAnnotations) {
-        if(this.chartAccent) {
+        if (this.chartAccent) {
             this.chartAccent.loadAnnotations(data);
         } else {
             this.nextLoadAnnotations = data;

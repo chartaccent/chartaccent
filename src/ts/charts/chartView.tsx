@@ -19,11 +19,13 @@ import { isSameArray, isSubset } from "../utils/utils";
 
 import { AppLogger } from "../store/logger";
 
-export function createChartView(chart: Chart) {
+let cornerSVG = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNi4wLjUsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IuWbvuWxgl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgd2lkdGg9IjEwcHgiIGhlaWdodD0iMTBweCIgdmlld0JveD0iMCAwIDEwIDEwIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAxMCAxMCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8Zz4NCgk8cG9seWdvbiBmaWxsPSIjQ0NDQ0NDIiBwb2ludHM9IjEwLDAuMDY4MzU5NCAwLjA2ODM1OTQsMTAgMi4xODk0NTMxLDEwIDEwLDIuMTg5NDUzMSAJIi8+DQoJPHBvbHlnb24gZmlsbD0iI0NDQ0NDQyIgcG9pbnRzPSIxMCw0LjI1MTk1MzEgNC4yNTE5NTMxLDEwIDYuMzczMDQ2OSwxMCAxMCw2LjM3MzA0NjkgCSIvPg0KCTxwb2x5Z29uIGZpbGw9IiNDQ0NDQ0MiIHBvaW50cz0iMTAsOC40NzI2NTYyIDguNDcyNjU2MiwxMCAxMCwxMCAJIi8+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPC9zdmc+DQo=";
+
+export function createChartView(chart: Chart, ref?: (view: BaseChartView) => void) {
     switch(chart.type) {
-        case "bar-chart": return (<BarChartView chart={chart} eventTracker={() => {}} />);
-        case "line-chart": return (<LineChartView chart={chart} eventTracker={() => {}} />);
-        case "scatterplot": return (<ScatterplotView chart={chart} eventTracker={() => {}} />);
+        case "bar-chart": return (<BarChartView ref={ref} chart={chart} eventTracker={() => {}} />);
+        case "line-chart": return (<LineChartView ref={ref} chart={chart} eventTracker={() => {}} />);
+        case "scatterplot": return (<ScatterplotView ref={ref} chart={chart} eventTracker={() => {}} />);
     }
     return null;
 }
@@ -31,6 +33,7 @@ export function createChartView(chart: Chart) {
 export interface IChartViewStore {
     setChartAccent(chartaccent: ChartAccent.ChartAccent): void;
     setExportAs(func: (type: string, callback: (blob: Blob, doDownload: () => void) => void) => void): void;
+    disableResize?: boolean;
     logger: {
         logAction(action: string, label: string, privateData: any): void;
     };
@@ -59,6 +62,7 @@ export class ChartView extends React.Component<IChartViewProps, IChartViewState>
         toolbarContainer: HTMLDivElement;
     }
 
+    protected chart: Chart;
     protected chartAccent: ChartAccent.ChartAccent;
     protected currentChartInfo: ChartInfo;
 
@@ -71,12 +75,18 @@ export class ChartView extends React.Component<IChartViewProps, IChartViewState>
     }
 
     public componentDidUpdate() {
+        let chart = this.props.chart;
+        if(this.chart === chart) {
+            return;
+        }
+        this.chart = chart;
+
         d3.select(this.refs.chartView.getAnnotationBackgroundLayer()).selectAll("*").remove();
         d3.select(this.refs.chartView.getAnnotationLayer()).selectAll("*").remove();
         d3.select(this.refs.panelContainer).selectAll("*").remove();
         d3.select(this.refs.toolbarContainer).selectAll("*").remove();
 
-        let chart = this.props.chart;
+
         let newChartInfo: ChartInfo;
         switch(this.props.chart.type) {
             case "bar-chart":
@@ -183,6 +193,10 @@ export class ChartView extends React.Component<IChartViewProps, IChartViewState>
         this.trackEvent("export/" + type, this.chartAccent.summarizeState(), JSON.stringify(this.chartAccent.saveAnnotations()));
     }
 
+    public getSVGDataBlob() {
+        return this.chartAccent.getSVGDataBlob();
+    }
+
     public renderChartView() {
         let chart = this.props.chart;
         switch(chart.type) {
@@ -204,9 +218,9 @@ export class ChartView extends React.Component<IChartViewProps, IChartViewState>
                     <div className="chart">
                         <div className="chart-container" style={{ width: this.props.chart.width + "px", height: this.props.chart.height + "px" }}>
                         { this.renderChartView() }
-                        { this.props.store ? (
+                        { this.props.store && !this.props.store.disableResize ? (
                             <div className="corner-resize" onMouseDown={(e) => this.onResizeStart(e)}>
-                                <img src="assets/images/corner.svg" />
+                                <img src={cornerSVG} />
                             </div>
                         ) : null }
                         </div>
