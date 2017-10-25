@@ -45,11 +45,19 @@ Annotation.prototype.serializeTarget = function(ctx, target) {
         axis: target.axis ? ctx.getChartElementsID(target.axis) : undefined,
         range: target.range ? target.range.toString() : undefined,
         items: target.items ? target.items.map(function(item) {
+            var itemIDs = item.items.map(function(d) {
+                return ctx.getDataItemID(d);
+            });
+            if(item.itemsSaved != null) {
+                item.itemsSaved.forEach(function(id) {
+                    if(itemIDs.indexOf(id) < 0) {
+                        itemIDs.push(id);
+                    }
+                });
+            }
             return {
                 elements: ctx.getChartElementsID(item.elements),
-                items: item.items.map(function(d) {
-                    return ctx.getDataItemID(d);
-                })
+                items: itemIDs
             };
         }) : undefined
     }
@@ -173,7 +181,8 @@ Annotation.deserialize = function(ctx, serialized) {
                 elements: ctx.getChartElementsByID(item.elements),
                 items: item.items.map(function(d) {
                     return ctx.getDataItemByID(d);
-                })
+                }).filter(function(x) { return x != null; }), // make sure non-existant items are excluded
+                itemsSaved: item.items // keep the original unfiltered items so we can serialize it back
             };
         }) : undefined
     });
