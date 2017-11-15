@@ -64,6 +64,29 @@ ChartAccent.prototype.getSVGDataBlob = function() {
     return blob;
 };
 
+function b64EncodeUnicode(str) {
+    // first we use encodeURIComponent to get percent-encoded UTF-8,
+    // then we convert the percent encodings into raw bytes which
+    // can be fed into btoa.
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+        function toSolidBytes(match, p1) {
+            return String.fromCharCode('0x' + p1);
+    }));
+}
+
+ChartAccent.prototype.getSVGDataURLBase64 = function() {
+    var s = new XMLSerializer();
+    var str = s.serializeToString(this.svg);
+    var additional_css = ".chartaccent-edit-widget { visibility: hidden; }";
+    var p_insert = str.indexOf(">") + 1;
+    str = str.slice(0, p_insert) + '<defs><style type="text/css"><![CDATA[' + additional_css + ']]></style></defs>' + str.slice(p_insert);
+    // create a file blob of our SVG.
+    var doctype = '<?xml version="1.0" standalone="no"?>'
+                + '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';
+    var dataurl = "data:image/svg+xml;base64," + b64EncodeUnicode(doctype + str);
+    return dataurl;
+};
+
 ChartAccent.prototype.getSVGDataURL = function() {
     var blob = this.getSVGDataBlob();
     var url = window.URL.createObjectURL(blob);

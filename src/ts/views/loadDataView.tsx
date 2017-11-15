@@ -82,10 +82,13 @@ export class LoadDataView extends React.Component<ILoadDataViewProps, {
                 { this.state.showDetailedPrivacyNotes ? (<div>
                     <h3 className="note">Privacy Agreement</h3>
                     <p className="note" style={{ maxWidth: "600px", textAlign: "justify" }}>
-                        While you are using ChartAccent, we log anonymous interaction information to help us improve your experience.
-                        Your data remains on your machine and is not sent to us unless you export the chart you create.
-                        When you export, if you do not wish to share your chart and data, you may choose the option “no, please keep my chart and data private”.
-                        We will use the anonymous information and the data you share with us for research and may include them in future publications.
+                        While you are using ChartAccent, we log anonymous interaction information to help us
+                        improve your experience. Your data remains on your machine and is not sent to us unless
+                        you export the chart you create. When you export, you may share your chart and data with
+                        us if you are age 18 or older by choosing the "Yes, share my chart with the authors.
+                        I'm 18 years or older, I consent that the authors may use my chart and the associated
+                        data for research and future publications" option.We will use the anonymous information
+                        and the data you share with us for research and may include them in future publications.
                     </p>
                 </div>) : null }
                 { this.props.dataset != null ? <ReviewDataView dataset={this.props.dataset} /> : null }

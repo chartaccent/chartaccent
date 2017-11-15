@@ -195,8 +195,8 @@ export class ChartView extends React.Component<IChartViewProps, IChartViewState>
         this.trackEvent("export/" + type, this.chartAccent.summarizeState(), JSON.stringify(this.chartAccent.saveAnnotations()));
     }
 
-    public getSVGDataBlob() {
-        return this.chartAccent.getSVGDataBlob();
+    public getSVGDataURLBase64() {
+        return this.chartAccent.getSVGDataURLBase64();
     }
 
     public renderChartView() {

@@ -13,17 +13,18 @@ var MakeEditorPopupWrapper = function(info) {
 
     wrapper.style({
         "left": (target_rect.left - body_rect.left) + "px",
-        "top": (target_rect.top - body_rect.top + target_rect.height + 6) + "px"
+        // "top": (target_rect.top - body_rect.top + target_rect.height + 6) + "px"
+        "bottom": (body_rect.height - target_rect.top + 6) + "px"
     });
 
-    var border_triangle = wrapper.append("div").classed("border-triangle", true);
+    // var border_triangle = wrapper.append("div").classed("border-triangle", true);
 
     if(info.align == "right") {
         wrapper.style({
             "right": -(target_rect.right - body_rect.right) + "px",
             "left": null
         });
-        border_triangle.classed("align-right", true);
+        // border_triangle.classed("align-right", true);
     }
     wrapper.style({
         "position": "absolute",

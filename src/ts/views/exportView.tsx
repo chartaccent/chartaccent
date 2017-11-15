@@ -69,7 +69,7 @@ export class ExportView extends React.Component<{
                             this.setState({
                                 shareData: this.refs.checkboxShareDataYes.checked
                             });
-                        }} /> Yes, share my chart with the authors. I consent that the authors may use my chart and the associated data for research and future publications.</label>
+                        }} /> Yes, share my chart with the authors. I'm 18 years or older, I consent that the authors may use my chart and the associated data for research and future publications.</label>
                     </p>
                     <p>
                         <label style={{ cursor: "pointer" }}><input ref="checkboxShareDataNo" type="radio" checked={!this.state.shareData} onChange={(e) => {

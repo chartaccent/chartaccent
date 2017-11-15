@@ -38,6 +38,7 @@ declare module ChartAccent {
         public loadAnnotations(annotations: SavedAnnotations, logEvent?: boolean): void;
 
         public getSVGDataBlob(): Blob;
+        public getSVGDataURLBase64(): string;
         public getImageDataBlob(mineType: string, scaleFactor: number, callback: (blob: Blob) => void): void;
         public getAnimatedGIFImages(callback: (blob: Blob) => void): void;
         public summarizeState(): string;

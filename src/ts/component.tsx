@@ -79,8 +79,8 @@ export class ChartAccentComponentView extends React.Component<{
         requestAnimationFrame(() => {
             if (this.state.mode == "viewing") {
                 if (this.chartView && this.overlay) {
-                    let blob = this.chartView.getSVGDataBlob();
-                    this.overlay.setState({ url: window.URL.createObjectURL(blob) });
+                    let dataurl = this.chartView.getSVGDataURLBase64();
+                    this.overlay.setState({ url: dataurl });
                 }
             }
         });
@@ -175,6 +175,22 @@ export class ChartAccentComponent extends EventEmitter {
 
     public update(options: IChartAccentComponentOptions) {
         this.chartView.setState(options);
+    }
+
+    public getWidth() {
+        if(this.chartView.state.chart) {
+            return this.chartView.state.chart.width;
+        } else {
+            return null;
+        }
+    }
+
+    public getHeight() {
+        if(this.chartView.state.chart) {
+            return this.chartView.state.chart.height;
+        } else {
+            return null;
+        }
     }
 
     public destroy() {
