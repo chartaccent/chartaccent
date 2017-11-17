@@ -349,7 +349,7 @@ var MakeNumberInputFontSize = function(sel, number, tick, range, onchange, click
     sel.classed("input-fontsize", true);
     var tree = appendTreeOnce(sel, [
         [ "input", { style: { width: "30px", "text-align": "right" }, $: "input" } ],
-        [ "span.dropdown", { $: "btn_dropdown" }, [ IconFont.iconDesc("arrow-down") ] ],
+        [ "span.dropdown", { $: "btn_dropdown" }, [ IconFont.iconDesc("arrow-updown") ] ],
         [ "span.btn", { $: "btn_up" }, [ IconFont.iconDesc("font-larger") ] ],
         [ "span.btn", { $: "btn_down" }, [ IconFont.iconDesc("font-smaller") ] ]
     ]);
@@ -576,7 +576,7 @@ var MakeSelectButton = function(sel, value, choices, onchange, clickout_handlers
             [ "span", { $: "icon" } ]
         ]]
     ]);
-    tree["icon"].call(IconFont.addIconOnce("arrow-down"));
+    tree["icon"].call(IconFont.addIconOnce("arrow-updown"));
     tree["btn"].on("click", function() {
         var select = CreateEditorPopup("Select", {
             anchor: this,
@@ -605,7 +605,7 @@ var MakeSingleSelectButton = function(sel, text, choices, onchange, clickout_han
             [ "span", { $: "icon" } ]
         ]]
     ]);
-    tree["icon"].call(IconFont.addIconOnce("arrow-down"));
+    tree["icon"].call(IconFont.addIconOnce("arrow-updown"));
     tree["btn"].on("click", function() {
         var select = CreateEditorPopup("Select", {
             anchor: this,
@@ -665,7 +665,7 @@ var MakeLabelAnchorSelectButton = function(sel, value, onchange, clickout_handle
             [ "span", { $: "icon" } ]
         ]]
     ]);
-    tree["icon"].call(IconFont.addIconOnce("arrow-down"));
+    tree["icon"].call(IconFont.addIconOnce("arrow-updown"));
 
     tree["btn"].on("click", function() {
         var select = CreateEditorPopup("LabelAnchorSelect", {

@@ -277,7 +277,7 @@ var ChartRepresentation = function(owner, info) {
     this.render_context = {
         owner: this,
         context: self.context,
-        svg: owner.svg,
+        svg: d3.select(owner.svg),
         layers: self.layers,
         isEditing: true,
         validate: function() {

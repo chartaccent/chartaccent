@@ -1,8 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.5, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
-<path d="M21,10.75H3c-0.6904297,0-1.25,0.5595703-1.25,1.25S2.3095703,13.25,3,13.25h18c0.6904297,0,1.25-0.5595703,1.25-1.25
-	S21.6904297,10.75,21,10.75z"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>chartaccent-icons</title><path d="M21,10.75H3a1.25,1.25,0,0,0,0,2.5H21a1.25,1.25,0,0,0,0-2.5Z"/></svg>

@@ -1,12 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.5, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
-<g>
-	<polygon points="6.0410156,13.2675781 5.1601562,18.9296875 10.4453125,16.7197266 	"/>
-	<path d="M19.0820312,5.7001953l-4.4042969-3.4511719L6.6582031,12.4804688L11.0625,15.9326172L19.0820312,5.7001953z
-		 M8.0097656,12.2695312l6.7851562-8.6582031l0.734375,0.5751953L8.7441406,12.84375L8.0097656,12.2695312z"/>
-	<rect x="2" y="20" width="20" height="2"/>
-</g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>chartaccent-icons</title><polygon points="6.041 13.268 5.16 18.93 10.445 16.72 6.041 13.268"/><path d="M19.082,5.7002,14.6777,2.249,6.6582,12.4805l4.4043,3.4521ZM8.0098,12.2695l6.7851-8.6582.7344.5752L8.7441,12.8438Z"/><rect x="2" y="20" width="20" height="2"/></svg>

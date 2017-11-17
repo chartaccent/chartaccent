@@ -427,7 +427,7 @@ Annotation.prototype.startSelectRangeItems = function(RC, anchor, clickout_handl
 
 Annotation.prototype.renderSelectionBoxHint = function(RC) {
     var bounding_rect = this.getBoundingRect(RC);
-    var selection_box = appendOnlyOnce(RC.svg.parent(), "div", "chartaccent-selection-hint");
+    var selection_box = appendOnlyOnce(d3.select(RC.svg.node().parentNode), "div", "chartaccent-selection-hint");
     if(bounding_rect) {
         selection_box.style({
             "width": (bounding_rect.x2 - bounding_rect.x1) + "px",
@@ -440,7 +440,7 @@ Annotation.prototype.renderSelectionBoxHint = function(RC) {
     }
 };
 Annotation.prototype.removeSelectionBoxHint = function(RC) {
-    var selection_box = appendOnlyOnce(RC.svg.parent(), "div", "chartaccent-selection-hint");
+    var selection_box = appendOnlyOnce(d3.select(RC.svg.node().parentNode), "div", "chartaccent-selection-hint");
     selection_box.remove();
 };
 
@@ -449,7 +449,7 @@ Annotation.prototype.startPopoutEditor = function(RC) {
 
     var bounding_rect = this.getBoundingRect(RC);
 
-    var selection_box = appendOnlyOnce(RC.svg.parent(), "div", "chartaccent-selection-box");
+    var selection_box = appendOnlyOnce(d3.select(RC.svg.node().parentNode), "div", "chartaccent-selection-box");
     if(bounding_rect) {
         selection_box.style({
             "width": (bounding_rect.x2 - bounding_rect.x1) + "px",
@@ -900,7 +900,7 @@ Annotation.prototype.startPopoutEditor = function(RC) {
                 [ "span.btn", { $: "select_range", text: select_items_text + " " } ]
             ]]
         ]);
-        tree.select_range.call(IconFont.addIconOnce("arrow-down"));
+        tree.select_range.call(IconFont.addIconOnce("arrow-updown"));
 
         tree.select_range.on("click", function() {
             this.startSelectRangeItems(RC, tree.select_range, clickout_handlers);

@@ -1,13 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.5, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
-<g>
-	<path d="M3,3.0004883v18h18v-18H3z M19,5.0004883v9.7856445L14.75,15.8125L11.4375,12.5l-1.25,0.9375L7.625,8.75L5,14.03125
-		V5.0004883H19z"/>
-	<path d="M15.28125,13.0625c0.6992188,0,1.3320312-0.2832031,1.7900391-0.7412109S17.8125,11.2304688,17.8125,10.53125
-		s-0.2832031-1.3320312-0.7412109-1.7900391S15.9804688,8,15.28125,8s-1.3320312,0.2832031-1.7900391,0.7412109
-		S12.75,9.8320312,12.75,10.53125s0.2832031,1.3320312,0.7412109,1.7900391S14.5820312,13.0625,15.28125,13.0625z"/>
-</g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>chartaccent-icons</title><path d="M3,3.0005v18H21v-18Zm16,2v9.7856l-4.25,1.0264L11.4375,12.5l-1.25.9375L7.625,8.75,5,14.0312V5.0005Z"/><path d="M15.2812,13.0625a2.53062,2.53062,0,1,0-1.79-.7412A2.52333,2.52333,0,0,0,15.2812,13.0625Z"/></svg>
