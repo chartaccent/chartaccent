@@ -20,6 +20,23 @@ export class BarChartView extends BaseChartView {
         return chart.yColumns;
     }
 
+    public xAxisRotateInfo(): [boolean, boolean, number] {
+        let { xScale, xAxis } = this.d3GetXAxis();
+        let bandSize = xScale.rangeBand() / 0.6;
+
+        let chart = this.props.chart as BarChart
+        let xValues = chart.dataset.rows.map((d) => d[chart.xColumn].toString());;
+        let maxWidth = d3.max(xValues, d => measureTextWidth(d, "Roboto", 14));
+        if(bandSize < 10) {
+            return [ false, false, maxWidth ];
+        }
+        if (maxWidth > bandSize - 5) {
+            return [true, true, maxWidth];
+        } else {
+            return [true, false, maxWidth];
+        }
+    }
+
     public d3RenderChart() {
         super.d3RenderChart();
 
@@ -29,22 +46,36 @@ export class BarChartView extends BaseChartView {
         let { xScale, xAxis } = this.d3GetXAxis();
         let { yScale, yAxis } = this.d3GetYAxis();
 
-        d3.select(this._barChartXAxis).call(xAxis).call(applyAxisStyle);
+        d3.select(this._barChartXAxis).selectAll("*").remove();
+        let xAxisSelection = d3.select(this._barChartXAxis).call(xAxis).call(applyAxisStyle);
+        let [shouldShow, shouldRotate, maxWidth] = this.xAxisRotateInfo();
+        if(!shouldShow) {
+            xAxisSelection.selectAll("text").remove();
+        } else if (shouldRotate) {
+            xAxisSelection.selectAll("text")
+                .style("text-anchor", "end")
+                .attr("dx", "-.8em")
+                .attr("dy", ".15em")
+                .attr("transform", function (d) {
+                    return "rotate(-45)"
+                });
+        }
+
         d3.select(this._barChartYAxis).call(yAxis).call(applyAxisStyle);
 
         d3.select(this._barChartContent).selectAll("*").remove();
         this._rectSelections = chart.yColumns.map((column, i) => {
-            var spacing = Math.round(xScale.rangeBand() / chart.yColumns.length);
-            var border = 2;
+            var spacing = xScale.rangeBand() / chart.yColumns.length;
+            var border = Math.min(spacing * 0.1, 2);
 
             var bars = d3.select(this._barChartContent).append("g");
 
             var rects = bars.selectAll("rect").data(chart.dataset.rows);
             rects.enter().append("rect")
-                .attr("x", d => Math.round(xScale(d[chart.xColumn].toString())) + spacing * i + border / 2)
+                .attr("x", d => (xScale(d[chart.xColumn].toString())) + spacing * i + border / 2)
                 .attr("width", spacing - border)
-                .attr("y", d => Math.round(yScale(+d[column])))
-                .attr("height", d => chart.height - this._margin.bottom - Math.round(yScale(+d[column])))
+                .attr("y", d => (yScale(+d[column])))
+                .attr("height", d => chart.height - this._margin.bottom - (yScale(+d[column])))
                 .style("fill", chart.colors[i % chart.colors.length]);
 
             return rects;
@@ -56,7 +87,7 @@ export class BarChartView extends BaseChartView {
         let xValues = chart.dataset.rows.map((d) => d[chart.xColumn].toString());
         let xScale = d3.scale.ordinal()
             .domain(xValues)
-            .rangeRoundBands([ this._margin.left, chart.width - this._margin.right ], 0.4);
+            .rangeBands([this._margin.left, chart.width - this._margin.right], 0.4);
         let xAxis = d3.svg.axis().scale(xScale).orient("bottom");
         return { xScale, xAxis };
     }
@@ -64,12 +95,12 @@ export class BarChartView extends BaseChartView {
     public d3GetYAxis() {
         let chart = this.props.chart as BarChart;
         let yScale = d3.scale.linear();
-        yScale.range([ chart.height - this._margin.bottom, this._margin.top ])
+        yScale.range([chart.height - this._margin.bottom, this._margin.top])
         yScale.domain([
             chart.yScale.min != null ? chart.yScale.min : d3.min(chart.yColumns, (d) => d3.min(chart.dataset.rows, (r) => +r[d])),
             chart.yScale.max != null ? chart.yScale.max : d3.max(chart.yColumns, (d) => d3.max(chart.dataset.rows, (r) => +r[d]))
         ]);
-        if(chart.yScale.min == null && chart.yScale.max == null) {
+        if (chart.yScale.min == null && chart.yScale.max == null) {
             yScale.nice();
         }
         let yAxis = d3.svg.axis().scale(yScale).orient("left");
@@ -85,10 +116,15 @@ export class BarChartView extends BaseChartView {
 
     public d3GetXAxisHeight() {
         let chart = this.props.chart as BarChart;
-        if(chart.xLabel && chart.xLabel.text != "") {
-            return 40;
+        let height = super.d3GetXAxisHeight();
+        let [shouldShow, shouldRotate, maxWidth] = this.xAxisRotateInfo();
+        if (shouldRotate) {
+            height = Math.min(150, maxWidth / Math.sqrt(2) + 20);
+        }
+        if (chart.xLabel && chart.xLabel.text != "") {
+            return 20 + height;
         } else {
-            return super.d3GetXAxisHeight();
+            return height;
         }
     }
 
@@ -98,7 +134,7 @@ export class BarChartView extends BaseChartView {
         let { yScale, yAxis } = this.d3GetYAxis();
 
         let valueFormat = ".1f";
-        if(chart.yColumns && chart.yColumns.length > 0) {
+        if (chart.yColumns && chart.yColumns.length > 0) {
             valueFormat = findColumnFormat(chart.dataset, chart.yColumns[0]);
         }
         let valueFormatExpression = 'format("' + valueFormat + '", value)';
@@ -138,15 +174,15 @@ export class BarChartView extends BaseChartView {
                 name: yColumn,
                 selection: sel,
                 default_label: valueFormatExpression,
-                getAxisValue: function(d, axis) {
-                    if(axis == "x") return d[chart.xColumn];
-                    if(axis == "y") return d[yColumn];
+                getAxisValue: function (d, axis) {
+                    if (axis == "x") return d[chart.xColumn];
+                    if (axis == "y") return d[yColumn];
                 },
-                getValue: function(d) {
+                getValue: function (d) {
                     return d[yColumn];
                 },
                 itemToString: (d) => d3.format(valueFormat)(d[yColumn]),
-                visibility: function(f) {
+                visibility: function (f) {
                     sel.style("visibility", (d) => f(d) ? "visible" : "hidden");
                 }
             });
@@ -156,10 +192,10 @@ export class BarChartView extends BaseChartView {
             items: legendItems.map((d, index) => {
                 return {
                     name: d,
-                    items: [ {
+                    items: [{
                         series: d,
                         items: chart.dataset.rows
-                    } ],
+                    }],
                     selection: d3.select(this._legendSelection[0][index])
                 };
             }),

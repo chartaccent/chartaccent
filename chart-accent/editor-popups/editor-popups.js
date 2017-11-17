@@ -9,7 +9,7 @@ var MakeEditorPopupWrapper = function(info) {
     var wrapper = getRootContainer().append("div").classed("chartaccent-popout", true);
 
     var target_rect = info.anchor.getBoundingClientRect();
-    var body_rect = document.body.parentNode.getBoundingClientRect();
+    var body_rect = getRootContainer().node().getBoundingClientRect();
 
     wrapper.style({
         "left": (target_rect.left - body_rect.left) + "px",

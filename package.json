@@ -23,16 +23,15 @@
   "author": "Donghao Ren <donghao.ren+npm@gmail.com> (https://donghaoren.org/)",
   "license": "BSD-3-Clause",
   "devDependencies": {
-    "@types/react": "^16.0.5",
-    "@types/react-dom": "^15.5.4",
+    "@types/react": "^16.0.0",
+    "@types/react-dom": "^16.0.0",
     "@types/sha1": "^1.1.0",
     "less": "^2.7.1",
     "multirun": "^1.0.0",
     "pegjs": "^0.10.0",
-    "react": "^15.6.1",
     "sha1": "^1.1.1",
     "source-map-loader": "^0.1.5",
-    "typescript": "^2.1.4",
+    "typescript": "^2.5.0",
     "url-loader": "^0.5.9",
     "webpack": "^1.14.0"
   },
@@ -46,7 +45,8 @@
     "fbemitter": "^2.1.1",
     "flux": "^3.1.2",
     "jquery": "^3.1.1",
-    "react-dom": "^15.6.1",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
     "typeahead.js-browserify": "^1.0.7"
   }
 }

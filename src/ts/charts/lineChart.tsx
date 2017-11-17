@@ -20,6 +20,23 @@ export class LineChartView extends BaseChartView {
         return chart.yColumns;
     }
 
+    public xAxisRotateInfo(): [boolean, boolean, number] {
+        let { xScale, xAxis } = this.d3GetXAxis();
+        let bandSize = xScale.rangeBand() / 0.6;
+
+        let chart = this.props.chart as LineChart;
+        let xValues = chart.dataset.rows.map((d) => d[chart.xColumn].toString());;
+        let maxWidth = d3.max(xValues, d => measureTextWidth(d, "Roboto", 14));
+        if(bandSize < 10) {
+            return [ false, false, maxWidth ];
+        }
+        if (maxWidth > bandSize - 5) {
+            return [true, true, maxWidth];
+        } else {
+            return [true, false, maxWidth];
+        }
+    }
+
     public d3RenderChart() {
         super.d3RenderChart();
 
@@ -29,7 +46,21 @@ export class LineChartView extends BaseChartView {
         let { xScale, xAxis } = this.d3GetXAxis();
         let { yScale, yAxis } = this.d3GetYAxis();
 
-        d3.select(this._lineChartXAxis).call(xAxis).call(applyAxisStyle);
+        d3.select(this._lineChartXAxis).selectAll("*").remove();
+        let xAxisSelection = d3.select(this._lineChartXAxis).call(xAxis).call(applyAxisStyle);
+        let [shouldShow, shouldRotate, maxWidth] = this.xAxisRotateInfo();
+        if(!shouldShow) {
+            xAxisSelection.selectAll("text").remove();
+        } else if (shouldRotate) {
+            xAxisSelection.selectAll("text")
+                .style("text-anchor", "end")
+                .attr("dx", "-.8em")
+                .attr("dy", ".15em")
+                .attr("transform", function (d) {
+                    return "rotate(-45)"
+                });
+        }
+
         d3.select(this._lineChartYAxis).call(yAxis).call(applyAxisStyle);
 
         d3.select(this._lineChartContent).selectAll("*").remove();
@@ -62,7 +93,7 @@ export class LineChartView extends BaseChartView {
         let xValues = chart.dataset.rows.map((d) => d[chart.xColumn].toString());
         let xScale = d3.scale.ordinal()
             .domain(xValues)
-            .rangeRoundBands([ this._margin.left, chart.width - this._margin.right ], 0.4);
+            .rangeBands([ this._margin.left, chart.width - this._margin.right ], 0.4);
         let xAxis = d3.svg.axis().scale(xScale).orient("bottom");
         return { xScale, xAxis };
     }
@@ -91,12 +122,18 @@ export class LineChartView extends BaseChartView {
 
     public d3GetXAxisHeight() {
         let chart = this.props.chart as LineChart;
-        if(chart.xLabel && chart.xLabel.text != "") {
-            return 40;
+        let height = super.d3GetXAxisHeight();
+        let [shouldShow, shouldRotate, maxWidth] = this.xAxisRotateInfo();
+        if (shouldRotate) {
+            height = Math.min(150, maxWidth / Math.sqrt(2) + 20);
+        }
+        if (chart.xLabel && chart.xLabel.text != "") {
+            return 20 + height;
         } else {
-            return super.d3GetXAxisHeight();
+            return height;
         }
     }
+
 
     public configureChartAccent(chartaccent: ChartAccent.ChartAccent) {
         let chart = this.props.chart as LineChart;

@@ -13,13 +13,11 @@ export function measureTextWidth(text: string, fontFamily: string, fontSize: num
 export function applyAxisStyle(sel: d3.Selection<any>) {
     sel.selectAll("path").style({
         "fill": "none",
-        "stroke": "black",
-        "shape-rendering": "crispEdges"
+        "stroke": "black"
     });
     sel.selectAll("line").style({
         "fill": "none",
-        "stroke": "black",
-        "shape-rendering": "crispEdges"
+        "stroke": "black"
     });
 }
 
