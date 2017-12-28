@@ -7,8 +7,8 @@ An online tool to help people create and annotate charts. See <https://chartacce
 What you need:
 
 - nodejs 6.0+
-- python 2.7
-- ruby
+- python 2.7+
+- ruby 2.4+
 
 Get the code via github:
 
@@ -21,7 +21,13 @@ Install required nodejs packages:
 
 Install python modules
 
+    # requests >= 2.18.4
     pip2.7 install requests
+    
+Install ruby modules
+
+    # sass >= 3.5.4
+    gem install sass
 
 Build the project:
 
